@@ -4,6 +4,7 @@ import { useSiteContent } from "@/contexts/SiteContentContext";
 import courseDesign from "@/assets/course-design.jpg";
 
 const course: CourseData = {
+  slug: "design",
   title: "DESIGN GRÁFICO",
   banner: courseDesign,
   age: "A partir de 14 anos",
