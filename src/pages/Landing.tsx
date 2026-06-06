@@ -165,7 +165,23 @@ function Header() {
       {open && (
         <div className="flex flex-col gap-4 border-t border-[#39ff14]/20 bg-black/95 px-4 py-5 lg:hidden">
           {navLinks.map((l) =>
-            l.isRoute ? (
+            l.dropdown ? (
+              <div key={l.label} className="flex flex-col gap-2">
+                <span className="text-sm font-medium text-white/80">{l.label}</span>
+                <div className="ml-3 flex flex-col gap-2 border-l border-[#39ff14]/20 pl-3">
+                  {courseMenu.map((c) => (
+                    <Link
+                      key={c.to}
+                      to={c.to}
+                      onClick={() => setOpen(false)}
+                      className="text-sm text-white/70 hover:text-[#39ff14]"
+                    >
+                      {c.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : l.isRoute ? (
               <Link
                 key={l.label}
                 to={l.href}
