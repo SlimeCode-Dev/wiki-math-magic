@@ -138,8 +138,8 @@ export default function Loja() {
           {/* Secondary header: search + pills */}
           <section id="produtos" className="mx-auto max-w-7xl px-4 pt-10 md:px-8">
             <div className="mb-5 flex items-center gap-3">
-              <h2 className="text-2xl font-extrabold md:text-3xl">
-                Nossos <span className="slime-neon">Produtos</span>
+              <h2 className="text-2xl font-extrabold md:text-3xl slime-neon">
+                <T id="loja.produtos.heading">Nossos Produtos</T>
               </h2>
               <span className="h-px flex-1 bg-[#3ddc84]/20" />
             </div>
