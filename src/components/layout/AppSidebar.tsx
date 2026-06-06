@@ -129,6 +129,17 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         </ul>
       </nav>
 
+      {/* Theme toggle */}
+      <div className="px-4 pt-4">
+        <button
+          onClick={toggleTheme}
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-secondary hover:text-foreground"
+        >
+          <Palette className="h-5 w-5" />
+          {theme === 'cyber' ? 'Tema clássico' : 'Tema cyberpunk'}
+        </button>
+      </div>
+
       {/* Logout */}
       <div className="p-4 border-t border-border">
         <button
