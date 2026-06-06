@@ -249,6 +249,44 @@ export default function AdminStorePanel() {
           />
         </div>
 
+        <div>
+          <label className="mb-1 block text-xs font-semibold text-white/60">
+            Tamanhos (separados por vírgula)
+          </label>
+          <input
+            value={form.sizes}
+            onChange={(e) => set({ sizes: e.target.value })}
+            placeholder="P, M, G, GG"
+            className={inputCls}
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold text-white/60">
+            Cores (nome:hex, separadas por vírgula)
+          </label>
+          <input
+            value={form.colors}
+            onChange={(e) => set({ colors: e.target.value })}
+            placeholder="Preto:#0a0a0a, Verde Neon:#39ff14"
+            className={inputCls}
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold text-white/60">
+            Destaques (separados por vírgula)
+          </label>
+          <input
+            value={form.highlights}
+            onChange={(e) => set({ highlights: e.target.value })}
+            placeholder="100% algodão, Estampa exclusiva"
+            className={inputCls}
+          />
+        </div>
+
+
+
         <button
           type="submit"
           className="slime-glow-btn flex w-full items-center justify-center gap-2 rounded-xl bg-[#39ff14] px-6 py-3.5 font-bold text-black"
