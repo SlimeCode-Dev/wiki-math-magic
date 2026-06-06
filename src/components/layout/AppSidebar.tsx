@@ -58,6 +58,7 @@ const alunoNav: NavItem[] = [
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const { currentUser, logout } = useLMS();
+  const { theme, toggleTheme } = useTheme();
 
   if (!currentUser) return null;
 
