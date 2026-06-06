@@ -70,22 +70,22 @@ export default function Loja() {
           <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
             <div className="max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#3ddc84]/50 bg-black/40 px-4 py-1.5 text-xs font-semibold slime-neon backdrop-blur">
-                <Sparkles className="h-3.5 w-3.5" /> COLEÇÃO GAMER & TECH
+                <Sparkles className="h-3.5 w-3.5" /> <T id="loja.banner.badge">COLEÇÃO GAMER & TECH</T>
               </span>
-              <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-5xl">
-                LOJA <span className="slime-neon">SLIME CODE</span>
+              <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-5xl slime-neon">
+                <T id="loja.banner.title">LOJA SLIME CODE</T>
               </h1>
-              <p className="mt-4 max-w-lg text-white/70">
+              <T as="p" className="mt-4 max-w-lg text-white/70" id="loja.banner.description" multiline>
                 Camisas personalizadas, mochilas, mouse pads e PCs montados com a
                 identidade neon da Slime Code. Estilo, performance e qualidade
                 para o seu setup.
-              </p>
+              </T>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
                   href="#produtos"
                   className="slime-glow-btn inline-flex items-center gap-2 rounded-xl bg-[#3ddc84] px-6 py-3 font-bold text-black"
                 >
-                  <StoreIcon className="h-5 w-5" /> Ver produtos
+                  <StoreIcon className="h-5 w-5" /> <T id="loja.banner.cta">Ver produtos</T>
                 </a>
                 {isAdmin && (
                   <button
