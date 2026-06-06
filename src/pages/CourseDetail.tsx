@@ -159,12 +159,12 @@ export default function CourseDetail({ course }: { course: CourseData }) {
           {/* Fale conosco */}
           <Reveal>
             <div className="slime-card rounded-3xl p-6 md:p-8">
-              <h2 className="text-2xl font-extrabold uppercase">
-                FALE <span className="slime-neon">CONOSCO</span>
+              <h2 className="text-2xl font-extrabold uppercase slime-neon">
+                <T id="course.faleConosco.title">FALE CONOSCO</T>
               </h2>
-              <p className="mt-2 text-white/60">
+              <T as="p" className="mt-2 text-white/60" id="course.faleConosco.subtitle" multiline>
                 Entre em contato para tirar dúvidas ou saber mais sobre o curso.
-              </p>
+              </T>
               <form
                 className="mt-6 grid gap-4 sm:grid-cols-2"
                 onSubmit={(e) => e.preventDefault()}
