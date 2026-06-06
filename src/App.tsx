@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LMSProvider, useLMS } from "@/contexts/LMSContext";
 import { SiteContentProvider } from "@/contexts/SiteContentContext";
 import { StoreProvider } from "@/contexts/StoreContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 // Pages
 import Login from "./pages/Login";
