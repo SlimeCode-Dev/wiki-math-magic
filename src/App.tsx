@@ -7,6 +7,7 @@ import { LMSProvider, useLMS } from "@/contexts/LMSContext";
 
 // Pages
 import Login from "./pages/Login";
+import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
 // Admin Pages
@@ -38,11 +39,11 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode;
   const { currentUser } = useLMS();
   
   if (!currentUser) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
   
   if (!allowedRoles.includes(currentUser.role)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
   
   return <>{children}</>;
@@ -53,10 +54,13 @@ function AppRoutes() {
 
   return (
     <Routes>
+      {/* Landing Page */}
+      <Route path="/" element={<Landing />} />
+
       {/* Login */}
-      <Route 
-        path="/" 
-        element={currentUser ? <Navigate to={`/${currentUser.role}`} replace /> : <Login />} 
+      <Route
+        path="/login"
+        element={currentUser ? <Navigate to={`/${currentUser.role}`} replace /> : <Login />}
       />
 
       {/* Admin Routes */}

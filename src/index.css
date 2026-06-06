@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -179,5 +180,48 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+/* ===================== Slime Code Landing ===================== */
+@layer utilities {
+  .slime-font {
+    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  }
+
+  .slime-neon {
+    color: #39ff14;
+  }
+
+  .slime-text-glow {
+    text-shadow: 0 0 12px rgba(57, 255, 20, 0.55), 0 0 32px rgba(57, 255, 20, 0.25);
+  }
+
+  .slime-glow-btn {
+    box-shadow: 0 0 0 rgba(57, 255, 20, 0);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .slime-glow-btn:hover {
+    box-shadow: 0 0 18px rgba(57, 255, 20, 0.65), 0 0 40px rgba(57, 255, 20, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .slime-card {
+    background: linear-gradient(180deg, rgba(13, 20, 13, 0.7) 0%, rgba(5, 8, 5, 0.85) 100%);
+    border: 1px solid rgba(57, 255, 20, 0.35);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .slime-card:hover {
+    border-color: rgba(57, 255, 20, 0.9);
+    box-shadow: 0 0 24px rgba(57, 255, 20, 0.25);
+    transform: translateY(-4px);
+  }
+
+  .slime-scanlines {
+    background-color: #05070a;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(57, 255, 20, 0.04) 0px, rgba(57, 255, 20, 0.04) 1px, transparent 1px, transparent 8px),
+      radial-gradient(circle at 20% 10%, rgba(57, 255, 20, 0.08) 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(57, 255, 20, 0.07) 0%, transparent 45%);
   }
 }
