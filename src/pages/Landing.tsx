@@ -411,14 +411,11 @@ function Apresentacao() {
       <div className="space-y-16">
         <CourseFeature
           to="/cursos/desenvolvimento-de-jogos"
-          image={courseGames}
+          courseKey="games"
           alt="Aluno criando jogos com a Slime Code"
           badge="DESENVOLVIMENTO DE JOGOS"
           age="A partir de 10 anos"
           icon={<Gamepad2 className="h-4 w-4" />}
-          title="Desenvolvimento de Jogos"
-          subtitle="CRIE SEUS JOGOS. CONSTRUA MUNDOS."
-          description="Do zero ao avançado: o aluno aprende lógica de programação criando seus próprios jogos 2D e 3D com projetos reais a cada aula."
           learn={[
             "Lógica de programação e pensamento computacional",
             "Criação de jogos 2D com Construct 3",
@@ -431,14 +428,11 @@ function Apresentacao() {
         <CourseFeature
           to="/cursos/design-grafico"
           reverse
-          image={courseDesign}
+          courseKey="design"
           alt="Aluno criando design gráfico com a Slime Code"
           badge="DESIGN GRÁFICO"
           age="A partir de 14 anos"
           icon={<Palette className="h-4 w-4" />}
-          title="Design Gráfico"
-          subtitle="CRIE. COMUNIQUE. IMPACTE."
-          description="O aluno domina as ferramentas do mercado criativo, da edição de imagem e vídeo à criação de identidades visuais profissionais."
           learn={[
             "Edição e tratamento de imagem no Photoshop",
             "Criação vetorial e logotipos no Illustrator",
