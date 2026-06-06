@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Search, ArrowLeft, ShieldCheck, Store as StoreIcon } from "lucide-react";
+import { Search, ArrowLeft, ShieldCheck, Store as StoreIcon, Sparkles } from "lucide-react";
 import { useLMS } from "@/contexts/LMSContext";
 import { useStore, PRODUCT_CATEGORIES, Product } from "@/contexts/StoreContext";
 import ProductCard from "@/components/store/ProductCard";
