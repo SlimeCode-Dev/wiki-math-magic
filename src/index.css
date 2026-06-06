@@ -225,3 +225,26 @@
       radial-gradient(circle at 85% 90%, rgba(57, 255, 20, 0.07) 0%, transparent 45%);
   }
 }
+
+@layer utilities {
+  @keyframes slime-marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .slime-marquee-track {
+    animation: slime-marquee 28s linear infinite;
+  }
+  .slime-outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(57, 255, 20, 0.85);
+  }
+  .slime-input {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(57, 255, 20, 0.35);
+  }
+  .slime-input:focus {
+    outline: none;
+    border-color: rgba(57, 255, 20, 0.9);
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.3);
+  }
+}
