@@ -65,6 +65,11 @@ const navLinks = [
   { label: "CONTATO", href: "#contato" },
 ];
 
+const courseMenu = [
+  { label: "Desenvolvimento de Jogos", to: "/cursos/desenvolvimento-de-jogos" },
+  { label: "Design Gráfico", to: "/cursos/design-grafico" },
+];
+
 /* ------------------------------ Sections ------------------------------ */
 
 function Header() {
