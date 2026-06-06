@@ -1,5 +1,6 @@
 import { Palette } from "lucide-react";
 import CourseDetail, { type CourseData } from "./CourseDetail";
+import { useSiteContent } from "@/contexts/SiteContentContext";
 import courseDesign from "@/assets/course-design.jpg";
 
 const course: CourseData = {
@@ -61,5 +62,10 @@ const course: CourseData = {
 };
 
 export default function CursoDesignGrafico() {
-  return <CourseDetail course={course} />;
+  const { content } = useSiteContent();
+  return (
+    <CourseDetail
+      course={{ ...course, banner: content.design.image, title: content.design.title.toUpperCase() }}
+    />
+  );
 }
