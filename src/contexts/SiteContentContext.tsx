@@ -15,6 +15,8 @@ export interface SiteContent {
   heroDescription: string;
   games: CourseContent;
   design: CourseContent;
+  /** Arbitrary text overrides keyed by a stable id (used by the <T> component) */
+  texts: Record<string, string>;
 }
 
 const STORAGE_KEY = "slime_site_content";
