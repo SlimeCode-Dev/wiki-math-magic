@@ -190,7 +190,7 @@ export default function AdminEntregas() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => handleDownload(submission.fileName)}
+                                onClick={() => handleDownload(submission)}
                               >
                                 <Download className="mr-1 h-4 w-4" />
                                 Baixar
