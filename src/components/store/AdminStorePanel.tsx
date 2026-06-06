@@ -166,18 +166,48 @@ export default function AdminStorePanel() {
           </select>
         </div>
 
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-white/60">
+              Preço (R$)
+            </label>
+            <input
+              required
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.price}
+              onChange={(e) => set({ price: e.target.value })}
+              placeholder="0.00"
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-white/60">
+              Preço antigo (R$)
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.oldPrice}
+              onChange={(e) => set({ oldPrice: e.target.value })}
+              placeholder="opcional"
+              className={inputCls}
+            />
+          </div>
+        </div>
+
         <div>
           <label className="mb-1 block text-xs font-semibold text-white/60">
-            Preço (R$)
+            Estoque (quantidade)
           </label>
           <input
-            required
             type="number"
-            step="0.01"
             min="0"
-            value={form.price}
-            onChange={(e) => set({ price: e.target.value })}
-            placeholder="0.00"
+            value={form.stock}
+            onChange={(e) => set({ stock: e.target.value })}
+            placeholder="opcional"
             className={inputCls}
           />
         </div>
