@@ -91,7 +91,7 @@ function Header() {
         </a>
 
         {/* Center nav */}
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav className="hidden items-center gap-7 md:flex">
           {navLinks.map((l) =>
             l.dropdown ? (
               <div key={l.label} className="group relative">
@@ -152,7 +152,7 @@ function Header() {
             LOGIN
           </Link>
           <button
-            className="text-[#39ff14] lg:hidden"
+            className="text-[#39ff14] md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >
@@ -162,7 +162,7 @@ function Header() {
       </div>
 
       {open && (
-        <div className="flex flex-col gap-4 border-t border-[#39ff14]/20 bg-black/95 px-4 py-5 lg:hidden">
+        <div className="flex flex-col gap-4 border-t border-[#39ff14]/20 bg-black/95 px-4 py-5 md:hidden">
           {navLinks.map((l) =>
             l.dropdown ? (
               <div key={l.label} className="flex flex-col gap-2">
