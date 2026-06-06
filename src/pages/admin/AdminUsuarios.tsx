@@ -481,6 +481,7 @@ export default function AdminUsuarios() {
       email: formData.email,
       password: formData.password,
       cpf: formData.cpf,
+      role: formData.role,
       turmaId: formData.role === 'aluno' ? formData.turmaId : undefined,
       turmaIds: formData.role === 'professor' ? formData.turmaIds : undefined,
       courseStartDate: formData.role === 'aluno' ? formData.courseStartDate : undefined,
