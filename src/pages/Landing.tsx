@@ -241,10 +241,83 @@ function Marquee() {
   );
 }
 
+function CourseFeature({
+  reverse,
+  image,
+  alt,
+  badge,
+  age,
+  icon,
+  title,
+  subtitle,
+  description,
+  learn,
+}: {
+  reverse?: boolean;
+  image: string;
+  alt: string;
+  badge: string;
+  age: string;
+  icon: ReactNode;
+  title: string;
+  subtitle: string;
+  description: string;
+  learn: string[];
+}) {
+  return (
+    <div className="grid items-center gap-8 md:grid-cols-2">
+      <Reveal className={reverse ? "md:order-2" : ""}>
+        <div className="relative">
+          <div className="absolute -inset-3 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
+          <img
+            src={image}
+            alt={alt}
+            loading="lazy"
+            className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
+          />
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.1} className={reverse ? "md:order-1" : ""}>
+        <div className="slime-card rounded-3xl p-6 md:p-8">
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#39ff14]/50 px-3 py-1 text-xs font-semibold slime-neon">
+              {icon} {badge}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#39ff14] px-3 py-1 text-xs font-bold text-black">
+              <Users className="h-3.5 w-3.5" /> {age}
+            </span>
+          </div>
+
+          <h3 className="text-2xl font-extrabold md:text-3xl">{title}</h3>
+          <p className="mt-1 font-semibold slime-neon">{subtitle}</p>
+          <p className="mt-4 text-white/70">{description}</p>
+
+          <ul className="mt-6 space-y-3">
+            {learn.map((item) => (
+              <li key={item} className="flex items-start gap-3 text-white/85">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 slime-neon" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <Link
+            to="/login"
+            className="slime-glow-btn mt-7 inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-7 py-3.5 font-bold text-black"
+          >
+            Saiba mais
+          </Link>
+        </div>
+      </Reveal>
+    </div>
+  );
+}
+
 function Apresentacao() {
   return (
     <section id="apresentacao" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
-      <Reveal className="mx-auto mb-12 max-w-2xl text-center">
+      <Reveal className="mx-auto mb-14 max-w-2xl text-center">
         <h2 className="text-3xl font-extrabold md:text-4xl">
           SUA JORNADA COMEÇA AQUI!{" "}
           <span className="slime-neon">CRIE SEUS JOGOS</span>
@@ -254,39 +327,49 @@ function Apresentacao() {
         </p>
       </Reveal>
 
-      <div className="grid auto-rows-[200px] grid-cols-2 gap-4 md:grid-cols-4">
-        <Reveal className="col-span-2 row-span-2">
-          <img
-            src={mascotGames}
-            alt="Aluno feliz criando jogos"
-            loading="lazy"
-            className="h-full w-full rounded-3xl border border-[#39ff14]/30 object-cover"
-          />
-        </Reveal>
-        <Reveal delay={0.1} className="col-span-2">
-          <div className="flex h-full items-center justify-center rounded-3xl slime-card p-6 text-center">
-            <p className="text-xl font-bold">
-              Projetos <span className="slime-neon">reais</span> desde a primeira aula
-            </p>
-          </div>
-        </Reveal>
-        <Reveal delay={0.15}>
-          <img
-            src={mascotDesign}
-            alt="Aluno criando design gráfico"
-            loading="lazy"
-            className="h-full w-full rounded-3xl border border-[#39ff14]/30 object-cover"
-          />
-        </Reveal>
-        <Reveal delay={0.2}>
-          <div className="flex h-full items-center justify-center rounded-3xl bg-[#39ff14] p-6 text-center">
-            <p className="text-2xl font-extrabold text-black">+100 alunos</p>
-          </div>
-        </Reveal>
+      <div className="space-y-16">
+        <CourseFeature
+          image={mascotGames}
+          alt="Aluno criando jogos com a Slime Code"
+          badge="DESENVOLVIMENTO DE JOGOS"
+          age="A partir de 10 anos"
+          icon={<Gamepad2 className="h-4 w-4" />}
+          title="Desenvolvimento de Jogos"
+          subtitle="CRIE SEUS JOGOS. CONSTRUA MUNDOS."
+          description="Do zero ao avançado: o aluno aprende lógica de programação criando seus próprios jogos 2D e 3D com projetos reais a cada aula."
+          learn={[
+            "Lógica de programação e pensamento computacional",
+            "Criação de jogos 2D com Construct 3",
+            "Programação e jogos 3D na Unity (C#)",
+            "Modelagem e animação 3D com Blender",
+            "Publicação do seu próprio jogo",
+          ]}
+        />
+
+        <CourseFeature
+          reverse
+          image={mascotDesign}
+          alt="Aluno criando design gráfico com a Slime Code"
+          badge="DESIGN GRÁFICO"
+          age="A partir de 14 anos"
+          icon={<Palette className="h-4 w-4" />}
+          title="Design Gráfico"
+          subtitle="CRIE. COMUNIQUE. IMPACTE."
+          description="O aluno domina as ferramentas do mercado criativo, da edição de imagem e vídeo à criação de identidades visuais profissionais."
+          learn={[
+            "Edição e tratamento de imagem no Photoshop",
+            "Criação vetorial e logotipos no Illustrator",
+            "Edição de vídeo e motion com Premiere & After Effects",
+            "UX/UI e prototipagem no Figma",
+            "Criação de conteúdo para social media",
+          ]}
+        />
       </div>
     </section>
   );
 }
+
+
 
 function Ferramentas() {
   const tools = [
