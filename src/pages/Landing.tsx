@@ -499,8 +499,8 @@ function Modulos() {
     <section className="mx-auto max-w-4xl px-4 py-20 md:px-8">
       <Reveal className="mb-12 text-center">
         <h2 className="text-2xl font-extrabold md:text-3xl">
-          A IMPORTÂNCIA DE UM CURSO DE DESENVOLVIMENTO DE JOGOS NA{" "}
-          <span className="slime-neon">SLIME CODE</span>
+          <T id="mod.title1">A IMPORTÂNCIA DE UM CURSO DE DESENVOLVIMENTO DE JOGOS NA </T>
+          <span className="slime-neon"><T id="mod.title2">SLIME CODE</T></span>
         </h2>
       </Reveal>
 
@@ -515,8 +515,8 @@ function Modulos() {
                   className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
                 >
                   <span className="text-lg font-bold">
-                    {m.title}{" "}
-                    <span className="font-normal text-white/50">| {m.sub}</span>
+                    <T id={`mod.${i}.title`}>{m.title}</T>{" "}
+                    <span className="font-normal text-white/50">| <T id={`mod.${i}.sub`}>{m.sub}</T></span>
                   </span>
                   <span className="slime-neon">
                     {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
@@ -524,8 +524,9 @@ function Modulos() {
                 </button>
                 {isOpen && (
                   <div className="px-6 pb-5 text-white/70">
-                    Trilha completa de <strong className="slime-neon">{m.sub}</strong>, com
-                    aulas práticas, projetos guiados e desafios para fixar o aprendizado.
+                    <T id={`mod.${i}.desc`} multiline>
+                      Trilha completa com aulas práticas, projetos guiados e desafios para fixar o aprendizado.
+                    </T>
                   </div>
                 )}
               </div>
