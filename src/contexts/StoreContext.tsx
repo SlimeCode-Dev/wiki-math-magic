@@ -129,6 +129,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>(defaultProducts);
 
   useEffect(() => {
+    const VERSION_KEY = "slime_store_version";
+    const CURRENT_VERSION = "2";
+    const storedVersion = localStorage.getItem(VERSION_KEY);
+
+    if (storedVersion !== CURRENT_VERSION) {
+      // New product fields added — refresh with enriched defaults
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
+      localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+      setProducts(defaultProducts);
+      return;
+    }
+
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
