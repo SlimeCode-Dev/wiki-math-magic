@@ -1,122 +1,108 @@
-@import url('https://fonts.googleapis.com/css2?family=Linux+Libertine&family=Source+Sans+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @layer base {
   :root {
-    /* Wikipedia-inspired color palette */
-    --background: 40 23% 97%;
-    --foreground: 0 0% 13%;
+    --background: 220 20% 97%;
+    --foreground: 224 71% 4%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 13%;
+    --card-foreground: 224 71% 4%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 13%;
+    --popover-foreground: 224 71% 4%;
 
-    /* Wikipedia blue */
-    --primary: 220 90% 34%;
+    --primary: 238 84% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 40 20% 94%;
-    --secondary-foreground: 0 0% 20%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 224 71% 4%;
 
-    --muted: 40 15% 92%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 220 70% 45%;
+    --accent: 174 62% 47%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 85%;
-    --input: 0 0% 85%;
-    --ring: 220 90% 34%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 238 84% 60%;
 
-    --radius: 0.25rem;
+    --radius: 0.75rem;
 
-    /* Calculator specific */
-    --calc-display: 40 30% 98%;
-    --calc-display-text: 0 0% 10%;
-    --calc-btn-number: 0 0% 100%;
-    --calc-btn-number-hover: 40 20% 96%;
-    --calc-btn-operator: 220 30% 96%;
-    --calc-btn-operator-hover: 220 35% 92%;
-    --calc-btn-function: 40 25% 95%;
-    --calc-btn-function-hover: 40 30% 90%;
-    --calc-btn-clear: 0 65% 95%;
-    --calc-btn-clear-hover: 0 70% 90%;
-    --calc-btn-equals: 220 90% 34%;
-    --calc-btn-equals-hover: 220 85% 28%;
+    /* Custom LMS tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(238 84% 60%) 0%, hsl(280 70% 55%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(174 62% 47%) 0%, hsl(200 80% 55%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(20 90% 55%) 100%);
+    --shadow-soft: 0 4px 20px -4px hsl(238 84% 60% / 0.15);
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-elevated: 0 10px 40px -10px hsl(238 84% 60% / 0.2);
 
-    /* Fonts */
-    --font-serif: 'Linux Libertine', 'Georgia', serif;
-    --font-sans: 'Source Sans Pro', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 224 71% 4%;
+    --sidebar-primary: 238 84% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 224 71% 4%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 238 84% 60%;
   }
 
   .dark {
-    --background: 0 0% 10%;
-    --foreground: 40 20% 90%;
+    --background: 224 71% 4%;
+    --foreground: 210 20% 98%;
 
-    --card: 0 0% 14%;
-    --card-foreground: 40 20% 90%;
+    --card: 224 71% 8%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 0 0% 14%;
-    --popover-foreground: 40 20% 90%;
+    --popover: 224 71% 8%;
+    --popover-foreground: 210 20% 98%;
 
-    --primary: 220 80% 60%;
-    --primary-foreground: 0 0% 10%;
+    --primary: 238 84% 65%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 18%;
-    --secondary-foreground: 40 20% 85%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 20% 98%;
 
-    --muted: 0 0% 20%;
-    --muted-foreground: 40 10% 60%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 217 10% 64%;
 
-    --accent: 220 70% 55%;
+    --accent: 174 62% 47%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
+    --success: 142 76% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 220 80% 60%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 238 84% 65%;
 
-    --calc-display: 0 0% 8%;
-    --calc-display-text: 40 20% 95%;
-    --calc-btn-number: 0 0% 18%;
-    --calc-btn-number-hover: 0 0% 22%;
-    --calc-btn-operator: 220 20% 20%;
-    --calc-btn-operator-hover: 220 25% 25%;
-    --calc-btn-function: 0 0% 16%;
-    --calc-btn-function-hover: 0 0% 20%;
-    --calc-btn-clear: 0 40% 20%;
-    --calc-btn-clear-hover: 0 45% 25%;
-    --calc-btn-equals: 220 80% 50%;
-    --calc-btn-equals-hover: 220 75% 45%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 224 71% 6%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 238 84% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 215 28% 17%;
+    --sidebar-ring: 238 84% 65%;
   }
 }
 
@@ -126,62 +112,72 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans);
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif);
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 }
 
-@layer components {
-  .calc-display {
-    @apply bg-[hsl(var(--calc-display))] text-[hsl(var(--calc-display-text))];
-    font-family: var(--font-mono);
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
   }
 
-  .calc-btn {
-    @apply transition-all duration-150 ease-in-out;
-    @apply border border-border rounded-sm;
-    @apply font-medium text-foreground;
-    @apply active:scale-95;
+  .gradient-accent {
+    background: var(--gradient-accent);
   }
 
-  .calc-btn-number {
-    @apply bg-[hsl(var(--calc-btn-number))] hover:bg-[hsl(var(--calc-btn-number-hover))];
+  .gradient-warm {
+    background: var(--gradient-warm);
   }
 
-  .calc-btn-operator {
-    @apply bg-[hsl(var(--calc-btn-operator))] hover:bg-[hsl(var(--calc-btn-operator-hover))];
-    @apply text-primary font-semibold;
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
   }
 
-  .calc-btn-function {
-    @apply bg-[hsl(var(--calc-btn-function))] hover:bg-[hsl(var(--calc-btn-function-hover))];
-    @apply text-sm;
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
   }
 
-  .calc-btn-clear {
-    @apply bg-[hsl(var(--calc-btn-clear))] hover:bg-[hsl(var(--calc-btn-clear-hover))];
-    @apply text-destructive;
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
   }
 
-  .calc-btn-equals {
-    @apply bg-[hsl(var(--calc-btn-equals))] hover:bg-[hsl(var(--calc-btn-equals-hover))];
-    @apply text-primary-foreground font-bold;
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
   }
 
-  .wiki-link {
-    @apply text-primary hover:underline cursor-pointer;
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
   }
+}
 
-  .wiki-heading {
-    @apply border-b border-border pb-1 mb-3;
-    font-family: var(--font-serif);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
+  to {
+    opacity: 1;
+  }
+}
 
-  .wiki-infobox {
-    @apply border border-border bg-card p-4 rounded-sm;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
