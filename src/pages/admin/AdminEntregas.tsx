@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Check, Clock, Download, FileText, Upload, User, ChevronDown, ChevronRight } from 'lucide-react';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { useLMS } from '@/contexts/LMSContext';
+import { StudentSubmission } from '@/types/lms';
 import { Button } from '@/components/ui/button';
 import {
   Select,
