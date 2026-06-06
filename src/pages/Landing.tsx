@@ -246,13 +246,13 @@ function Hero() {
             href="#apresentacao"
             className="slime-glow-btn inline-flex items-center justify-center rounded-xl bg-[#3ddc84] px-7 py-3.5 font-bold text-black"
           >
-            SAIBA MAIS
+            <T id="hero.btnPrimary">SAIBA MAIS</T>
           </a>
           <a
             href="#contato"
             className="inline-flex items-center justify-center rounded-xl border border-[#3ddc84] px-7 py-3.5 font-semibold text-[#3ddc84] transition-colors hover:bg-[#3ddc84]/10"
           >
-            ENTRE EM CONTATO
+            <T id="hero.btnSecondary">ENTRE EM CONTATO</T>
           </a>
         </div>
       </Reveal>
