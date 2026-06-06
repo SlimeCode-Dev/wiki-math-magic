@@ -70,10 +70,10 @@ export default function CourseDetail({ course }: { course: CourseData }) {
   return (
     <main className="min-h-screen bg-black text-white">
       {/* Top bar */}
-      <header className="sticky top-0 z-50 border-b border-[#39ff14]/20 bg-black/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-[#3ddc84]/20 bg-black/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
           <Link to="/" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#39ff14] font-extrabold text-black">
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#3ddc84] font-extrabold text-black">
               S
             </span>
             <span className="text-lg font-extrabold tracking-wide">
@@ -83,13 +83,13 @@ export default function CourseDetail({ course }: { course: CourseData }) {
           <div className="flex items-center gap-4">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14]"
+              className="inline-flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-[#3ddc84]"
             >
               <Home className="h-4 w-4" /> Início
             </Link>
             <Link
               to="/login"
-              className="slime-glow-btn rounded-xl bg-[#39ff14] px-5 py-2.5 text-sm font-bold text-black"
+              className="slime-glow-btn rounded-xl bg-[#3ddc84] px-5 py-2.5 text-sm font-bold text-black"
             >
               LOGIN
             </Link>
@@ -98,16 +98,16 @@ export default function CourseDetail({ course }: { course: CourseData }) {
       </header>
 
       {/* Hero banner */}
-      <section className="border-b border-[#39ff14]/20 bg-gradient-to-b from-[#39ff14]/10 to-transparent py-12 md:py-16">
+      <section className="border-b border-[#3ddc84]/20 bg-gradient-to-b from-[#3ddc84]/10 to-transparent py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <Link
             to="/"
-            className="mb-6 inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#39ff14]"
+            className="mb-6 inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#3ddc84]"
           >
             <ArrowLeft className="h-4 w-4" /> Voltar para a home
           </Link>
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#39ff14]/50 px-4 py-1.5 text-xs font-semibold slime-neon">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#3ddc84]/50 px-4 py-1.5 text-xs font-semibold slime-neon">
               <Icon className="h-4 w-4" /> CURSO SLIME CODE
             </span>
             <h1 className="mt-5 text-4xl font-extrabold uppercase leading-tight md:text-6xl">
@@ -116,7 +116,7 @@ export default function CourseDetail({ course }: { course: CourseData }) {
                 {title.split(" ").slice(-1)}
               </span>
             </h1>
-            <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-[#39ff14] px-3 py-1 text-xs font-bold text-black">
+            <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-[#3ddc84] px-3 py-1 text-xs font-bold text-black">
               <Users className="h-3.5 w-3.5" /> {age}
             </span>
           </Reveal>
@@ -129,12 +129,12 @@ export default function CourseDetail({ course }: { course: CourseData }) {
         <div className="space-y-12 lg:col-span-2">
           <Reveal>
             <div className="relative">
-              <div className="absolute -inset-3 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
+              <div className="absolute -inset-3 rounded-3xl bg-[#3ddc84]/10 blur-2xl" />
               <img
                 src={banner}
                 alt={`Curso de ${title} da Slime Code`}
                 loading="lazy"
-                className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
+                className="relative w-full rounded-3xl border border-[#3ddc84]/40 object-cover"
               />
             </div>
             <p className="mt-6 text-lg text-white/75">{intro}</p>
@@ -174,23 +174,23 @@ export default function CourseDetail({ course }: { course: CourseData }) {
                   type="text"
                   placeholder="Seu nome"
                   maxLength={100}
-                  className="rounded-xl border border-[#39ff14]/30 bg-black/60 px-4 py-3 text-sm outline-none placeholder:text-white/40 focus:border-[#39ff14]"
+                  className="rounded-xl border border-[#3ddc84]/30 bg-black/60 px-4 py-3 text-sm outline-none placeholder:text-white/40 focus:border-[#3ddc84]"
                 />
                 <input
                   type="email"
                   placeholder="Seu email"
                   maxLength={255}
-                  className="rounded-xl border border-[#39ff14]/30 bg-black/60 px-4 py-3 text-sm outline-none placeholder:text-white/40 focus:border-[#39ff14]"
+                  className="rounded-xl border border-[#3ddc84]/30 bg-black/60 px-4 py-3 text-sm outline-none placeholder:text-white/40 focus:border-[#3ddc84]"
                 />
                 <textarea
                   placeholder="Digite sua mensagem"
                   maxLength={1000}
                   rows={4}
-                  className="rounded-xl border border-[#39ff14]/30 bg-black/60 px-4 py-3 text-sm outline-none placeholder:text-white/40 focus:border-[#39ff14] sm:col-span-2"
+                  className="rounded-xl border border-[#3ddc84]/30 bg-black/60 px-4 py-3 text-sm outline-none placeholder:text-white/40 focus:border-[#3ddc84] sm:col-span-2"
                 />
                 <button
                   type="submit"
-                  className="slime-glow-btn inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-7 py-3.5 font-bold text-black sm:col-span-2"
+                  className="slime-glow-btn inline-flex items-center justify-center rounded-xl bg-[#3ddc84] px-7 py-3.5 font-bold text-black sm:col-span-2"
                 >
                   Enviar mensagem
                 </button>
@@ -215,7 +215,7 @@ export default function CourseDetail({ course }: { course: CourseData }) {
                     <span className="text-sm font-bold uppercase">{m.title}</span>
                     <ChevronRight className="h-4 w-4 slime-neon" />
                   </div>
-                  <span className="mt-2 inline-block rounded-full border border-[#39ff14]/40 px-2.5 py-0.5 text-[11px] font-semibold slime-neon">
+                  <span className="mt-2 inline-block rounded-full border border-[#3ddc84]/40 px-2.5 py-0.5 text-[11px] font-semibold slime-neon">
                     {m.tag}
                   </span>
                   <ul className="mt-3 space-y-2">
@@ -239,7 +239,7 @@ export default function CourseDetail({ course }: { course: CourseData }) {
               </div>
               <Link
                 to="/login"
-                className="slime-glow-btn mt-4 flex w-full items-center justify-center rounded-xl bg-[#39ff14] px-5 py-3 font-bold text-black"
+                className="slime-glow-btn mt-4 flex w-full items-center justify-center rounded-xl bg-[#3ddc84] px-5 py-3 font-bold text-black"
               >
                 Matricule-se
               </Link>
@@ -249,22 +249,22 @@ export default function CourseDetail({ course }: { course: CourseData }) {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-[#39ff14]/20 bg-black/80 py-10">
+      <footer className="border-t border-[#3ddc84]/20 bg-black/80 py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 text-center md:px-8">
           <span className="text-lg font-extrabold">
             SLIME <span className="slime-neon">CODE</span>
           </span>
           <div className="flex flex-wrap items-center justify-center gap-5 text-sm text-white/70">
-            <a href="tel:+5500000000000" className="inline-flex items-center gap-2 hover:text-[#39ff14]">
+            <a href="tel:+5500000000000" className="inline-flex items-center gap-2 hover:text-[#3ddc84]">
               <Phone className="h-4 w-4" /> Contato
             </a>
-            <a href="mailto:contato@slimecode.com.br" className="inline-flex items-center gap-2 hover:text-[#39ff14]">
+            <a href="mailto:contato@slimecode.com.br" className="inline-flex items-center gap-2 hover:text-[#3ddc84]">
               <Mail className="h-4 w-4" /> contato@slimecode.com.br
             </a>
-            <a href="https://instagram.com/slimecode" className="inline-flex items-center gap-2 hover:text-[#39ff14]">
+            <a href="https://instagram.com/slimecode" className="inline-flex items-center gap-2 hover:text-[#3ddc84]">
               <Instagram className="h-4 w-4" /> @slimecode
             </a>
-            <a href="https://slimecode.com.br" className="inline-flex items-center gap-2 hover:text-[#39ff14]">
+            <a href="https://slimecode.com.br" className="inline-flex items-center gap-2 hover:text-[#3ddc84]">
               <Globe className="h-4 w-4" /> slimecode.com.br
             </a>
           </div>

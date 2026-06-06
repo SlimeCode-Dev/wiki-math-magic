@@ -13,7 +13,7 @@ export default function ProductCard({
       : 0;
 
   return (
-    <div className="slime-card group flex flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_28px_rgba(57,255,20,0.18)]">
+    <div className="slime-card group flex flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_28px_rgba(61,220,132,0.18)]">
       <div className="relative aspect-square overflow-hidden bg-[#1a1a1a]">
         <img
           src={product.image || PLACEHOLDER_IMAGE}
@@ -24,7 +24,7 @@ export default function ProductCard({
           }}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <span className="absolute left-3 top-3 rounded-full border border-[#39ff14]/40 bg-black/70 px-3 py-1 text-[10px] font-semibold slime-neon backdrop-blur">
+        <span className="absolute left-3 top-3 rounded-full border border-[#3ddc84]/40 bg-black/70 px-3 py-1 text-[10px] font-semibold slime-neon backdrop-blur">
           {product.category}
         </span>
         {discount > 0 && (
@@ -73,7 +73,7 @@ export default function ProductCard({
 
         <button
           onClick={() => onView(product)}
-          className="mt-4 w-full rounded-xl border border-[#39ff14] px-4 py-2.5 text-sm font-bold text-[#39ff14] transition-all hover:bg-[#39ff14]/10 hover:shadow-[0_0_18px_rgba(57,255,20,0.45)]"
+          className="mt-4 w-full rounded-xl border border-[#3ddc84] px-4 py-2.5 text-sm font-bold text-[#3ddc84] transition-all hover:bg-[#3ddc84]/10 hover:shadow-[0_0_18px_rgba(61,220,132,0.45)]"
         >
           Ver Detalhes
         </button>
