@@ -14,10 +14,12 @@ import {
   Code,
   UserCog,
   Megaphone,
-  CalendarCheck
+  CalendarCheck,
+  Palette
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLMS } from '@/contexts/LMSContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
