@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, ArrowLeft, ShieldCheck, Store as StoreIcon, Sparkles } from "lucide-react";
 import { useLMS } from "@/contexts/LMSContext";
 import { useStore, PRODUCT_CATEGORIES, Product } from "@/contexts/StoreContext";
+import { T } from "@/components/landing/Editable";
 import ProductCard from "@/components/store/ProductCard";
 import ProductDetailsModal from "@/components/store/ProductDetailsModal";
 import AdminStorePanel from "@/components/store/AdminStorePanel";
