@@ -215,6 +215,10 @@ function Header() {
 }
 
 function Hero() {
+  const { currentUser } = useLMS();
+  const { content, updateContent } = useSiteContent();
+  const canEdit = currentUser?.role === "admin";
+
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
       <Reveal>
@@ -222,12 +226,21 @@ function Hero() {
           CURSO DE PROGRAMAÇÃO DE JOGOS E DESIGN GRÁFICO
         </span>
         <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-6xl">
-          DESENVOLVIMENTO DE JOGOS E{" "}
-          <span className="slime-neon slime-text-glow">DESIGN</span>
+          <EditableText
+            as="span"
+            canEdit={canEdit}
+            value={content.heroTitle}
+            onChange={(v) => updateContent({ heroTitle: v })}
+          />
         </h1>
         <p className="mt-5 max-w-md text-white/70">
-          Aprenda a criar jogos e artes digitais do zero ao avançado com projetos
-          reais e mentores experientes.
+          <EditableText
+            as="span"
+            multiline
+            canEdit={canEdit}
+            value={content.heroDescription}
+            onChange={(v) => updateContent({ heroDescription: v })}
+          />
         </p>
         <div className="mt-8 flex flex-col gap-4 sm:flex-row">
           <a
@@ -246,20 +259,17 @@ function Hero() {
       </Reveal>
 
       <Reveal delay={0.15}>
-        <div className="relative">
-          <div className="absolute -inset-4 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
-          <img
-            src={heroGraphic}
-            alt="Mascote Slime Code desenvolvendo jogos"
-            width={1024}
-            height={1024}
-            className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
-          />
-        </div>
+        <EditableVideo
+          className="relative"
+          canEdit={canEdit}
+          url={content.heroVideoUrl}
+          onChange={(v) => updateContent({ heroVideoUrl: v })}
+        />
       </Reveal>
     </section>
   );
 }
+
 
 function Marquee() {
   const items = [
