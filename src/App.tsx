@@ -7,6 +7,7 @@ import { LMSProvider, useLMS } from "@/contexts/LMSContext";
 
 // Pages
 import Login from "./pages/Login";
+import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
 // Admin Pages
