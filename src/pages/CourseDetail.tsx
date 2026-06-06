@@ -28,6 +28,7 @@ export interface CourseModule {
 }
 
 export interface CourseData {
+  slug: string;
   title: string;
   banner: string;
   age: string;
