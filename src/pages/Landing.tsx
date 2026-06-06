@@ -29,7 +29,7 @@ import {
 
 import { useLMS } from "@/contexts/LMSContext";
 import { useSiteContent } from "@/contexts/SiteContentContext";
-import { EditableText, EditableImage, EditableVideo } from "@/components/landing/Editable";
+import { EditableText, EditableImage, EditableVideo, T } from "@/components/landing/Editable";
 
 /* ------------------------------ Helpers ------------------------------ */
 
@@ -77,12 +77,12 @@ function Header() {
   return (
     <header
       id="home"
-      className="sticky top-0 z-50 border-b border-[#39ff14]/20 bg-black/80 backdrop-blur-md"
+      className="sticky top-0 z-50 border-b border-[#3ddc84]/20 bg-black/80 backdrop-blur-md"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
         {/* Logo */}
         <a href="#home" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#39ff14] font-extrabold text-black">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#3ddc84] font-extrabold text-black">
             S
           </span>
           <span className="text-lg font-extrabold tracking-wide">
@@ -97,18 +97,18 @@ function Header() {
               <div key={l.label} className="group relative">
                 <a
                   href={l.href}
-                  className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14] group-hover:text-[#39ff14]"
+                  className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-[#3ddc84] group-hover:text-[#3ddc84]"
                 >
                   {l.label}
                   <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
                 </a>
                 <div className="invisible absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                  <div className="overflow-hidden rounded-2xl border border-[#39ff14]/30 bg-black/95 p-2 shadow-[0_0_30px_rgba(57,255,20,0.15)] backdrop-blur-md">
+                  <div className="overflow-hidden rounded-2xl border border-[#3ddc84]/30 bg-black/95 p-2 shadow-[0_0_30px_rgba(61,220,132,0.15)] backdrop-blur-md">
                     {courseMenu.map((c) => (
                       <Link
                         key={c.to}
                         to={c.to}
-                        className="block rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-[#39ff14]/10 hover:text-[#39ff14]"
+                        className="block rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-[#3ddc84]/10 hover:text-[#3ddc84]"
                       >
                         {c.label}
                       </Link>
@@ -120,7 +120,7 @@ function Header() {
               <Link
                 key={l.label}
                 to={l.href}
-                className="text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14]"
+                className="text-sm font-medium text-white/80 transition-colors hover:text-[#3ddc84]"
               >
                 {l.label}
               </Link>
@@ -128,7 +128,7 @@ function Header() {
               <a
                 key={l.label}
                 href={l.href}
-                className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14]"
+                className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-[#3ddc84]"
               >
                 {l.label}
               </a>
@@ -139,20 +139,20 @@ function Header() {
 
         {/* Right actions */}
         <div className="flex items-center gap-4">
-          <button aria-label="Buscar" className="text-white/80 hover:text-[#39ff14]">
+          <button aria-label="Buscar" className="text-white/80 hover:text-[#3ddc84]">
             <Search className="h-5 w-5" />
           </button>
-          <Link to="/loja" aria-label="Loja" className="text-white/80 hover:text-[#39ff14]">
+          <Link to="/loja" aria-label="Loja" className="text-white/80 hover:text-[#3ddc84]">
             <ShoppingBag className="h-5 w-5" />
           </Link>
           <Link
             to="/login"
-            className="slime-glow-btn hidden rounded-xl bg-[#39ff14] px-5 py-2.5 text-sm font-bold text-black sm:inline-flex"
+            className="slime-glow-btn hidden rounded-xl bg-[#3ddc84] px-5 py-2.5 text-sm font-bold text-black sm:inline-flex"
           >
             LOGIN
           </Link>
           <button
-            className="text-[#39ff14] md:hidden"
+            className="text-[#3ddc84] md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
           >
@@ -162,18 +162,18 @@ function Header() {
       </div>
 
       {open && (
-        <div className="flex flex-col gap-4 border-t border-[#39ff14]/20 bg-black/95 px-4 py-5 md:hidden">
+        <div className="flex flex-col gap-4 border-t border-[#3ddc84]/20 bg-black/95 px-4 py-5 md:hidden">
           {navLinks.map((l) =>
             l.dropdown ? (
               <div key={l.label} className="flex flex-col gap-2">
                 <span className="text-sm font-medium text-white/80">{l.label}</span>
-                <div className="ml-3 flex flex-col gap-2 border-l border-[#39ff14]/20 pl-3">
+                <div className="ml-3 flex flex-col gap-2 border-l border-[#3ddc84]/20 pl-3">
                   {courseMenu.map((c) => (
                     <Link
                       key={c.to}
                       to={c.to}
                       onClick={() => setOpen(false)}
-                      className="text-sm text-white/70 hover:text-[#39ff14]"
+                      className="text-sm text-white/70 hover:text-[#3ddc84]"
                     >
                       {c.label}
                     </Link>
@@ -185,7 +185,7 @@ function Header() {
                 key={l.label}
                 to={l.href}
                 onClick={() => setOpen(false)}
-                className="text-sm font-medium text-white/80 hover:text-[#39ff14]"
+                className="text-sm font-medium text-white/80 hover:text-[#3ddc84]"
               >
                 {l.label}
               </Link>
@@ -194,7 +194,7 @@ function Header() {
                 key={l.label}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="text-sm font-medium text-white/80 hover:text-[#39ff14]"
+                className="text-sm font-medium text-white/80 hover:text-[#3ddc84]"
               >
                 {l.label}
               </a>
@@ -203,7 +203,7 @@ function Header() {
           <Link
             to="/login"
             onClick={() => setOpen(false)}
-            className="rounded-xl bg-[#39ff14] px-5 py-2.5 text-center text-sm font-bold text-black"
+            className="rounded-xl bg-[#3ddc84] px-5 py-2.5 text-center text-sm font-bold text-black"
           >
             LOGIN
           </Link>
@@ -221,8 +221,8 @@ function Hero() {
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
       <Reveal>
-        <span className="inline-block rounded-full border border-[#39ff14]/50 px-4 py-1.5 text-xs font-semibold tracking-wide slime-neon">
-          CURSO DE PROGRAMAÇÃO DE JOGOS E DESIGN GRÁFICO
+        <span className="inline-block rounded-full border border-[#3ddc84]/50 px-4 py-1.5 text-xs font-semibold tracking-wide slime-neon">
+          <T id="hero.badge">CURSO DE PROGRAMAÇÃO DE JOGOS E DESIGN GRÁFICO</T>
         </span>
         <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-6xl">
           <EditableText
@@ -244,15 +244,15 @@ function Hero() {
         <div className="mt-8 flex flex-col gap-4 sm:flex-row">
           <a
             href="#apresentacao"
-            className="slime-glow-btn inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-7 py-3.5 font-bold text-black"
+            className="slime-glow-btn inline-flex items-center justify-center rounded-xl bg-[#3ddc84] px-7 py-3.5 font-bold text-black"
           >
-            SAIBA MAIS
+            <T id="hero.btnPrimary">SAIBA MAIS</T>
           </a>
           <a
             href="#contato"
-            className="inline-flex items-center justify-center rounded-xl border border-[#39ff14] px-7 py-3.5 font-semibold text-[#39ff14] transition-colors hover:bg-[#39ff14]/10"
+            className="inline-flex items-center justify-center rounded-xl border border-[#3ddc84] px-7 py-3.5 font-semibold text-[#3ddc84] transition-colors hover:bg-[#3ddc84]/10"
           >
-            ENTRE EM CONTATO
+            <T id="hero.btnSecondary">ENTRE EM CONTATO</T>
           </a>
         </div>
       </Reveal>
@@ -279,7 +279,7 @@ function Marquee() {
   const sequence = [...items, ...items, ...items, ...items];
 
   return (
-    <div className="overflow-hidden border-y border-[#39ff14]/20 bg-black/60 py-6">
+    <div className="overflow-hidden border-y border-[#3ddc84]/20 bg-black/60 py-6">
       <div className="slime-marquee-track flex w-max items-center gap-8 whitespace-nowrap">
         {sequence.map((text, i) => (
           <span key={i} className="flex items-center gap-8">
@@ -322,7 +322,7 @@ function CourseFeature({
     <div className="grid items-center gap-8 md:grid-cols-2">
       <Reveal className={reverse ? "md:order-2" : ""}>
         <div className="relative">
-          <div className="absolute -inset-3 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
+          <div className="absolute -inset-3 rounded-3xl bg-[#3ddc84]/10 blur-2xl" />
           <EditableImage
             canEdit={canEdit}
             src={course.image}
@@ -333,7 +333,7 @@ function CourseFeature({
               src={course.image}
               alt={alt}
               loading="lazy"
-              className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
+              className="relative w-full rounded-3xl border border-[#3ddc84]/40 object-cover"
             />
           </EditableImage>
         </div>
@@ -342,11 +342,11 @@ function CourseFeature({
       <Reveal delay={0.1} className={reverse ? "md:order-1" : ""}>
         <div className="slime-card rounded-3xl p-6 md:p-8">
           <div className="mb-4 flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#39ff14]/50 px-3 py-1 text-xs font-semibold slime-neon">
-              {icon} {badge}
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#3ddc84]/50 px-3 py-1 text-xs font-semibold slime-neon">
+              {icon} <T id={`${courseKey}.badge`}>{badge}</T>
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#39ff14] px-3 py-1 text-xs font-bold text-black">
-              <Users className="h-3.5 w-3.5" /> {age}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#3ddc84] px-3 py-1 text-xs font-bold text-black">
+              <Users className="h-3.5 w-3.5" /> <T id={`${courseKey}.age`}>{age}</T>
             </span>
           </div>
 
@@ -374,19 +374,19 @@ function CourseFeature({
           </p>
 
           <ul className="mt-6 space-y-3">
-            {learn.map((item) => (
+            {learn.map((item, i) => (
               <li key={item} className="flex items-start gap-3 text-white/85">
                 <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 slime-neon" />
-                <span>{item}</span>
+                <T id={`${courseKey}.learn.${i}`}>{item}</T>
               </li>
             ))}
           </ul>
 
           <Link
             to={to}
-            className="slime-glow-btn mt-7 inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-7 py-3.5 font-bold text-black"
+            className="slime-glow-btn mt-7 inline-flex items-center justify-center rounded-xl bg-[#3ddc84] px-7 py-3.5 font-bold text-black"
           >
-            Saiba mais
+            <T id={`${courseKey}.cta`}>Saiba mais</T>
           </Link>
         </div>
       </Reveal>
@@ -400,11 +400,11 @@ function Apresentacao() {
     <section id="apresentacao" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
       <Reveal className="mx-auto mb-14 max-w-2xl text-center">
         <h2 className="text-3xl font-extrabold md:text-4xl">
-          SUA JORNADA COMEÇA AQUI!{" "}
-          <span className="slime-neon">CRIE SEUS JOGOS</span>
+          <T id="apres.title1">SUA JORNADA COMEÇA AQUI! </T>
+          <span className="slime-neon"><T id="apres.title2">CRIE SEUS JOGOS</T></span>
         </h2>
         <p className="mt-4 text-white/70">
-          APRENDA PROGRAMAÇÃO ENQUANTO SE DIVERTE CRIANDO SEUS PRÓPRIOS JOGOS.
+          <T id="apres.subtitle" multiline>APRENDA PROGRAMAÇÃO ENQUANTO SE DIVERTE CRIANDO SEUS PRÓPRIOS JOGOS.</T>
         </p>
       </Reveal>
 
@@ -464,7 +464,7 @@ function Ferramentas() {
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
       <Reveal className="mb-12 text-center">
         <h2 className="text-3xl font-extrabold md:text-4xl">
-          FERRAMENTAS <span className="slime-neon">UTILIZADAS</span>
+          <T id="tools.title1">FERRAMENTAS </T><span className="slime-neon"><T id="tools.title2">UTILIZADAS</T></span>
         </h2>
       </Reveal>
 
@@ -472,11 +472,11 @@ function Ferramentas() {
         {tools.map((t, i) => (
           <Reveal key={t.name} delay={(i % 4) * 0.08}>
             <div className="slime-card h-full rounded-2xl p-6">
-              <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#39ff14]/40 slime-neon">
+              <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#3ddc84]/40 slime-neon">
                 {t.icon}
               </span>
-              <h3 className="text-lg font-bold slime-neon">{t.name}</h3>
-              <p className="mt-2 text-sm text-white/70">{t.desc}</p>
+              <h3 className="text-lg font-bold slime-neon"><T id={`tool.${i}.name`}>{t.name}</T></h3>
+              <p className="mt-2 text-sm text-white/70"><T id={`tool.${i}.desc`} multiline>{t.desc}</T></p>
             </div>
           </Reveal>
         ))}
@@ -499,8 +499,8 @@ function Modulos() {
     <section className="mx-auto max-w-4xl px-4 py-20 md:px-8">
       <Reveal className="mb-12 text-center">
         <h2 className="text-2xl font-extrabold md:text-3xl">
-          A IMPORTÂNCIA DE UM CURSO DE DESENVOLVIMENTO DE JOGOS NA{" "}
-          <span className="slime-neon">SLIME CODE</span>
+          <T id="mod.title1">A IMPORTÂNCIA DE UM CURSO DE DESENVOLVIMENTO DE JOGOS NA </T>
+          <span className="slime-neon"><T id="mod.title2">SLIME CODE</T></span>
         </h2>
       </Reveal>
 
@@ -515,8 +515,8 @@ function Modulos() {
                   className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
                 >
                   <span className="text-lg font-bold">
-                    {m.title}{" "}
-                    <span className="font-normal text-white/50">| {m.sub}</span>
+                    <T id={`mod.${i}.title`}>{m.title}</T>{" "}
+                    <span className="font-normal text-white/50">| <T id={`mod.${i}.sub`}>{m.sub}</T></span>
                   </span>
                   <span className="slime-neon">
                     {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
@@ -524,8 +524,9 @@ function Modulos() {
                 </button>
                 {isOpen && (
                   <div className="px-6 pb-5 text-white/70">
-                    Trilha completa de <strong className="slime-neon">{m.sub}</strong>, com
-                    aulas práticas, projetos guiados e desafios para fixar o aprendizado.
+                    <T id={`mod.${i}.desc`} multiline>
+                      Trilha completa com aulas práticas, projetos guiados e desafios para fixar o aprendizado.
+                    </T>
                   </div>
                 )}
               </div>
@@ -542,26 +543,26 @@ function Beneficios() {
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
       <Reveal className="mb-12 text-center">
         <h2 className="text-3xl font-extrabold md:text-4xl">
-          SOBRE O <span className="slime-neon">CURSO</span>
+          <T id="benef.title1">SOBRE O </T><span className="slime-neon"><T id="benef.title2">CURSO</T></span>
         </h2>
       </Reveal>
       <div className="grid gap-6 md:grid-cols-2">
         <Reveal>
           <div className="slime-card h-full rounded-3xl p-8">
-            <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[#39ff14]/40 slime-neon">
+            <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[#3ddc84]/40 slime-neon">
               <Trophy className="h-7 w-7" />
             </span>
-            <h3 className="text-xl font-bold slime-neon">APRENDIZADO PROGRESSIVO</h3>
-            <p className="mt-2 text-white/70">Do básico ao avançado.</p>
+            <h3 className="text-xl font-bold slime-neon"><T id="benef.card1.title">APRENDIZADO PROGRESSIVO</T></h3>
+            <p className="mt-2 text-white/70"><T id="benef.card1.desc" multiline>Do básico ao avançado.</T></p>
           </div>
         </Reveal>
         <Reveal delay={0.1}>
           <div className="slime-card h-full rounded-3xl p-8">
-            <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[#39ff14]/40 slime-neon">
+            <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[#3ddc84]/40 slime-neon">
               <Target className="h-7 w-7" />
             </span>
-            <h3 className="text-xl font-bold slime-neon">AULAS PRÁTICAS E OBJETIVAS</h3>
-            <p className="mt-2 text-white/70">Aprenda fazendo, com foco no que importa.</p>
+            <h3 className="text-xl font-bold slime-neon"><T id="benef.card2.title">AULAS PRÁTICAS E OBJETIVAS</T></h3>
+            <p className="mt-2 text-white/70"><T id="benef.card2.desc" multiline>Aprenda fazendo, com foco no que importa.</T></p>
           </div>
         </Reveal>
       </div>
@@ -576,10 +577,10 @@ function Contato() {
     <section id="contato" className="mx-auto max-w-3xl px-4 py-20 md:px-8">
       <Reveal className="mb-10 text-center">
         <h2 className="text-3xl font-extrabold md:text-4xl">
-          FALE <span className="slime-neon">CONOSCO</span>
+          <T id="contato.title1">FALE </T><span className="slime-neon"><T id="contato.title2">CONOSCO</T></span>
         </h2>
         <p className="mt-3 text-white/70">
-          Entre em contato para tirar dúvidas ou saber mais sobre o curso.
+          <T id="contato.subtitle" multiline>Entre em contato para tirar dúvidas ou saber mais sobre o curso.</T>
         </p>
       </Reveal>
 
@@ -611,9 +612,9 @@ function Contato() {
           />
           <button
             type="submit"
-            className="slime-glow-btn w-full rounded-xl bg-[#39ff14] px-6 py-3.5 font-bold text-black"
+            className="slime-glow-btn w-full rounded-xl bg-[#3ddc84] px-6 py-3.5 font-bold text-black"
           >
-            ENVIAR MENSAGEM
+            <T id="contato.btn">ENVIAR MENSAGEM</T>
           </button>
           {sent && (
             <p className="text-center text-sm slime-neon">
@@ -628,13 +629,13 @@ function Contato() {
 
 function Footer() {
   return (
-    <footer id="blog" className="border-t border-[#39ff14]/20 bg-black/80">
+    <footer id="blog" className="border-t border-[#3ddc84]/20 bg-black/80">
       {/* Newsletter */}
-      <div className="border-b border-[#39ff14]/20">
+      <div className="border-b border-[#3ddc84]/20">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 py-12 text-center md:flex-row md:justify-between md:px-8 md:text-left">
           <h3 className="max-w-md text-2xl font-extrabold">
-            SIGN UP TODAY TO GET THE LATEST{" "}
-            <span className="slime-neon">INSPIRATION</span>
+            <T id="footer.news1">SIGN UP TODAY TO GET THE LATEST </T>
+            <span className="slime-neon"><T id="footer.news2">INSPIRATION</T></span>
           </h3>
           <form
             onSubmit={(e) => e.preventDefault()}
@@ -645,8 +646,8 @@ function Footer() {
               placeholder="Email"
               className="slime-input w-full rounded-xl px-4 py-3 text-white placeholder:text-white/40"
             />
-            <button className="slime-glow-btn whitespace-nowrap rounded-xl bg-[#39ff14] px-5 py-3 font-bold text-black">
-              SUBSCRIBE NOW
+            <button className="slime-glow-btn whitespace-nowrap rounded-xl bg-[#3ddc84] px-5 py-3 font-bold text-black">
+              <T id="footer.subscribe">SUBSCRIBE NOW</T>
             </button>
           </form>
         </div>
@@ -656,7 +657,7 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-4 md:px-8">
         <div>
           <div className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#39ff14] font-extrabold text-black">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#3ddc84] font-extrabold text-black">
               S
             </span>
             <span className="font-extrabold">
@@ -664,38 +665,38 @@ function Footer() {
             </span>
           </div>
           <p className="mt-4 text-sm text-white/60">
-            Cursos de tecnologia, jogos e design que preparam para o amanhã.
+            <T id="footer.about" multiline>Cursos de tecnologia, jogos e design que preparam para o amanhã.</T>
           </p>
         </div>
 
         <div>
-          <h4 className="mb-4 font-bold slime-neon">SOBRE O CURSO</h4>
+          <h4 className="mb-4 font-bold slime-neon"><T id="footer.col1.title">SOBRE O CURSO</T></h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><a href="#cursos" className="hover:text-[#39ff14]">Cursos</a></li>
-            <li><a href="#apresentacao" className="hover:text-[#39ff14]">Metodologia</a></li>
-            <li><a href="#contato" className="hover:text-[#39ff14]">Contato</a></li>
+            <li><a href="#cursos" className="hover:text-[#3ddc84]"><T id="footer.col1.l1">Cursos</T></a></li>
+            <li><a href="#apresentacao" className="hover:text-[#3ddc84]"><T id="footer.col1.l2">Metodologia</T></a></li>
+            <li><a href="#contato" className="hover:text-[#3ddc84]"><T id="footer.col1.l3">Contato</T></a></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="mb-4 font-bold slime-neon">PÁGINAS ÚTEIS</h4>
+          <h4 className="mb-4 font-bold slime-neon"><T id="footer.col2.title">PÁGINAS ÚTEIS</T></h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><a href="#" className="hover:text-[#39ff14]">Termos de Uso</a></li>
-            <li><a href="#" className="hover:text-[#39ff14]">Política de Privacidade</a></li>
+            <li><a href="#" className="hover:text-[#3ddc84]"><T id="footer.col2.l1">Termos de Uso</T></a></li>
+            <li><a href="#" className="hover:text-[#3ddc84]"><T id="footer.col2.l2">Política de Privacidade</T></a></li>
           </ul>
         </div>
 
         <div>
           <h4 className="mb-4 font-bold slime-neon">BAIXE O APP</h4>
           <div className="space-y-3">
-            <a href="#" className="flex items-center gap-3 rounded-xl border border-[#39ff14]/40 px-4 py-2.5">
+            <a href="#" className="flex items-center gap-3 rounded-xl border border-[#3ddc84]/40 px-4 py-2.5">
               <Globe className="h-6 w-6 slime-neon" />
               <span className="text-sm">
                 <span className="block text-[10px] text-white/50">GET IT ON</span>
                 Google Play
               </span>
             </a>
-            <a href="#" className="flex items-center gap-3 rounded-xl border border-[#39ff14]/40 px-4 py-2.5">
+            <a href="#" className="flex items-center gap-3 rounded-xl border border-[#3ddc84]/40 px-4 py-2.5">
               <ShoppingBag className="h-6 w-6 slime-neon" />
               <span className="text-sm">
                 <span className="block text-[10px] text-white/50">DOWNLOAD ON THE</span>
@@ -710,13 +711,13 @@ function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-6 text-sm text-white/50 md:flex-row md:justify-between md:px-8">
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a href="tel:+5571981971680" className="flex items-center gap-1.5 hover:text-[#39ff14]">
+            <a href="tel:+5571981971680" className="flex items-center gap-1.5 hover:text-[#3ddc84]">
               <Phone className="h-4 w-4" /> 71 98197-1680
             </a>
-            <a href="mailto:contato@slimecode.com.br" className="flex items-center gap-1.5 hover:text-[#39ff14]">
+            <a href="mailto:contato@slimecode.com.br" className="flex items-center gap-1.5 hover:text-[#3ddc84]">
               <Mail className="h-4 w-4" /> contato@slimecode.com.br
             </a>
-            <a href="https://instagram.com/slimecode" className="flex items-center gap-1.5 hover:text-[#39ff14]">
+            <a href="https://instagram.com/slimecode" className="flex items-center gap-1.5 hover:text-[#3ddc84]">
               <Instagram className="h-4 w-4" /> @slimecode
             </a>
           </div>

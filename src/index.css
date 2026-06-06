@@ -72,20 +72,20 @@
     --popover: 150 25% 5%;
     --popover-foreground: 111 25% 95%;
 
-    --primary: 111 100% 54%;
-    --primary-foreground: 213 33% 3%;
+    --primary: 145 63% 49%;
+    --primary-foreground: 213 33% 4%;
 
     --secondary: 150 20% 10%;
     --secondary-foreground: 111 25% 95%;
 
     --muted: 150 18% 12%;
-    --muted-foreground: 111 12% 65%;
+    --muted-foreground: 111 12% 68%;
 
-    --accent: 111 100% 54%;
-    --accent-foreground: 213 33% 3%;
+    --accent: 145 58% 52%;
+    --accent-foreground: 213 33% 4%;
 
-    --success: 142 76% 45%;
-    --success-foreground: 213 33% 3%;
+    --success: 142 70% 45%;
+    --success-foreground: 213 33% 4%;
 
     --warning: 38 92% 55%;
     --warning-foreground: 213 33% 3%;
@@ -93,25 +93,25 @@
     --destructive: 0 80% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 111 60% 18%;
-    --input: 111 40% 14%;
-    --ring: 111 100% 54%;
+    --border: 145 35% 18%;
+    --input: 145 30% 14%;
+    --ring: 145 63% 49%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(111 100% 54%) 0%, hsl(150 100% 40%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(111 100% 54%) 0%, hsl(160 90% 45%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(111 100% 54%) 0%, hsl(80 90% 50%) 100%);
-    --shadow-soft: 0 4px 20px -4px hsl(111 100% 54% / 0.35);
-    --shadow-card: 0 0 0 1px hsl(111 100% 54% / 0.1), 0 4px 16px -8px hsl(111 100% 54% / 0.25);
-    --shadow-elevated: 0 0 28px -6px hsl(111 100% 54% / 0.45);
+    --gradient-primary: linear-gradient(135deg, hsl(145 63% 49%) 0%, hsl(160 70% 40%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(145 60% 50%) 0%, hsl(170 65% 42%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(145 63% 49%) 0%, hsl(95 65% 48%) 100%);
+    --shadow-soft: 0 4px 20px -4px hsl(145 63% 49% / 0.28);
+    --shadow-card: 0 0 0 1px hsl(145 63% 49% / 0.08), 0 4px 16px -8px hsl(145 63% 49% / 0.2);
+    --shadow-elevated: 0 0 26px -8px hsl(145 63% 49% / 0.4);
 
     --sidebar-background: 213 33% 4%;
     --sidebar-foreground: 111 25% 95%;
-    --sidebar-primary: 111 100% 54%;
-    --sidebar-primary-foreground: 213 33% 3%;
+    --sidebar-primary: 145 63% 49%;
+    --sidebar-primary-foreground: 213 33% 4%;
     --sidebar-accent: 150 20% 10%;
     --sidebar-accent-foreground: 111 25% 95%;
-    --sidebar-border: 111 60% 18%;
-    --sidebar-ring: 111 100% 54%;
+    --sidebar-border: 145 35% 18%;
+    --sidebar-ring: 145 63% 49%;
   }
 
   .theme-cyber body {
@@ -247,30 +247,30 @@
   }
 
   .slime-neon {
-    color: #39ff14;
+    color: #3ddc84;
   }
 
   .slime-text-glow {
-    text-shadow: 0 0 12px rgba(57, 255, 20, 0.55), 0 0 32px rgba(57, 255, 20, 0.25);
+    text-shadow: 0 0 12px rgba(61, 220, 132, 0.55), 0 0 32px rgba(61, 220, 132, 0.25);
   }
 
   .slime-glow-btn {
-    box-shadow: 0 0 0 rgba(57, 255, 20, 0);
+    box-shadow: 0 0 0 rgba(61, 220, 132, 0);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
   .slime-glow-btn:hover {
-    box-shadow: 0 0 18px rgba(57, 255, 20, 0.65), 0 0 40px rgba(57, 255, 20, 0.35);
+    box-shadow: 0 0 18px rgba(61, 220, 132, 0.65), 0 0 40px rgba(61, 220, 132, 0.35);
     transform: translateY(-2px);
   }
 
   .slime-card {
     background: linear-gradient(180deg, rgba(13, 20, 13, 0.7) 0%, rgba(5, 8, 5, 0.85) 100%);
-    border: 1px solid rgba(57, 255, 20, 0.35);
+    border: 1px solid rgba(61, 220, 132, 0.35);
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   }
   .slime-card:hover {
-    border-color: rgba(57, 255, 20, 0.9);
-    box-shadow: 0 0 24px rgba(57, 255, 20, 0.25);
+    border-color: rgba(61, 220, 132, 0.9);
+    box-shadow: 0 0 24px rgba(61, 220, 132, 0.25);
     transform: translateY(-4px);
   }
 
@@ -289,15 +289,15 @@
   }
   .slime-outline-text {
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(57, 255, 20, 0.85);
+    -webkit-text-stroke: 1.5px rgba(61, 220, 132, 0.85);
   }
   .slime-input {
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(57, 255, 20, 0.35);
+    border: 1px solid rgba(61, 220, 132, 0.35);
   }
   .slime-input:focus {
     outline: none;
-    border-color: rgba(57, 255, 20, 0.9);
-    box-shadow: 0 0 12px rgba(57, 255, 20, 0.3);
+    border-color: rgba(61, 220, 132, 0.9);
+    box-shadow: 0 0 12px rgba(61, 220, 132, 0.3);
   }
 }

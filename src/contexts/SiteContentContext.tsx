@@ -15,6 +15,8 @@ export interface SiteContent {
   heroDescription: string;
   games: CourseContent;
   design: CourseContent;
+  /** Arbitrary text overrides keyed by a stable id (used by the <T> component) */
+  texts: Record<string, string>;
 }
 
 const STORAGE_KEY = "slime_site_content";
@@ -38,12 +40,15 @@ const defaultContent: SiteContent = {
     description:
       "O aluno domina as ferramentas do mercado criativo, da edição de imagem e vídeo à criação de identidades visuais profissionais.",
   },
+  texts: {},
 };
 
 interface SiteContentContextType {
   content: SiteContent;
   updateContent: (patch: Partial<SiteContent>) => void;
   updateCourse: (key: "games" | "design", patch: Partial<CourseContent>) => void;
+  getText: (id: string, fallback: string) => string;
+  setText: (id: string, value: string) => void;
   resetContent: () => void;
 }
 
@@ -64,6 +69,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
           ...parsed,
           games: { ...defaultContent.games, ...(parsed.games || {}) },
           design: { ...defaultContent.design, ...(parsed.design || {}) },
+          texts: { ...defaultContent.texts, ...(parsed.texts || {}) },
         });
       } catch {
         /* ignore */
@@ -82,6 +88,12 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const updateCourse = (key: "games" | "design", patch: Partial<CourseContent>) =>
     persist({ ...content, [key]: { ...content[key], ...patch } });
 
+  const getText = (id: string, fallback: string) =>
+    content.texts[id] ?? fallback;
+
+  const setText = (id: string, value: string) =>
+    persist({ ...content, texts: { ...content.texts, [id]: value } });
+
   const resetContent = () => {
     localStorage.removeItem(STORAGE_KEY);
     setContent(defaultContent);
@@ -89,7 +101,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
 
   return (
     <SiteContentContext.Provider
-      value={{ content, updateContent, updateCourse, resetContent }}
+      value={{ content, updateContent, updateCourse, getText, setText, resetContent }}
     >
       {children}
     </SiteContentContext.Provider>

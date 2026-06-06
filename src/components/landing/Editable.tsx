@@ -1,6 +1,39 @@
 import { useRef, useState, ReactNode } from "react";
 import { Pencil, Play, ImagePlus, X, Video } from "lucide-react";
-import { getYoutubeId } from "@/contexts/SiteContentContext";
+import { getYoutubeId, useSiteContent } from "@/contexts/SiteContentContext";
+import { useLMS } from "@/contexts/LMSContext";
+
+/* ---------- Generic editable text bound to the content store ----------
+   Any text wrapped in <T id="unique-id">Default text</T> becomes editable
+   by an admin and persists site-wide. */
+export function T({
+  id,
+  children,
+  as = "span",
+  className,
+  multiline,
+}: {
+  id: string;
+  children: string;
+  as?: "span" | "h1" | "h2" | "h3" | "p";
+  className?: string;
+  multiline?: boolean;
+}) {
+  const { currentUser } = useLMS();
+  const { getText, setText } = useSiteContent();
+  const canEdit = currentUser?.role === "admin";
+  return (
+    <EditableText
+      as={as}
+      className={className}
+      multiline={multiline}
+      canEdit={canEdit}
+      value={getText(id, children)}
+      onChange={(v) => setText(id, v)}
+    />
+  );
+}
+
 
 /* ---------- Editable text ---------- */
 export function EditableText({
@@ -36,7 +69,7 @@ export function EditableText({
         type="button"
         onClick={handleEdit}
         aria-label="Editar texto"
-        className="mt-1 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border border-[#39ff14]/50 bg-black/70 text-[#39ff14] opacity-70 transition-opacity hover:opacity-100"
+        className="mt-1 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border border-[#3ddc84]/50 bg-black/70 text-[#3ddc84] opacity-70 transition-opacity hover:opacity-100"
       >
         <Pencil className="h-3.5 w-3.5" />
       </button>
@@ -93,7 +126,7 @@ export function EditableImage({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg border border-[#39ff14]/60 bg-black/80 px-3 py-1.5 text-xs font-semibold text-[#39ff14] hover:bg-black"
+            className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg border border-[#3ddc84]/60 bg-black/80 px-3 py-1.5 text-xs font-semibold text-[#3ddc84] hover:bg-black"
           >
             <ImagePlus className="h-3.5 w-3.5" /> Trocar imagem
           </button>
@@ -135,8 +168,8 @@ export function EditableVideo({
 
   return (
     <div className={className}>
-      <div className="absolute -inset-4 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
-      <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[#39ff14]/40 bg-black">
+      <div className="absolute -inset-4 rounded-3xl bg-[#3ddc84]/10 blur-2xl" />
+      <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[#3ddc84]/40 bg-black">
         {playing && id ? (
           <iframe
             className="h-full w-full"
@@ -164,7 +197,7 @@ export function EditableVideo({
               </div>
             )}
             <span className="absolute inset-0 flex items-center justify-center">
-              <span className="grid h-20 w-20 place-items-center rounded-full bg-[#39ff14] text-black shadow-[0_0_30px_rgba(57,255,20,0.6)] transition-transform group-hover:scale-110">
+              <span className="grid h-20 w-20 place-items-center rounded-full bg-[#3ddc84] text-black shadow-[0_0_30px_rgba(61,220,132,0.6)] transition-transform group-hover:scale-110">
                 <Play className="h-9 w-9 translate-x-0.5 fill-black" />
               </span>
             </span>
@@ -186,7 +219,7 @@ export function EditableVideo({
         <button
           type="button"
           onClick={handleEdit}
-          className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg border border-[#39ff14]/60 bg-black/80 px-3 py-1.5 text-xs font-semibold text-[#39ff14] hover:bg-black"
+          className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-lg border border-[#3ddc84]/60 bg-black/80 px-3 py-1.5 text-xs font-semibold text-[#3ddc84] hover:bg-black"
         >
           <Pencil className="h-3.5 w-3.5" /> Editar vídeo
         </button>

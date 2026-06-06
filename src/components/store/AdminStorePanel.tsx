@@ -38,7 +38,7 @@ const emptyForm: FormState = {
   highlights: "",
 };
 
-// "Preto:#0a0a0a, Verde:#39ff14" -> ProductColor[]
+// "Preto:#0a0a0a, Verde:#3ddc84" -> ProductColor[]
 function parseColors(raw: string): ProductColor[] {
   return raw
     .split(",")
@@ -46,7 +46,7 @@ function parseColors(raw: string): ProductColor[] {
     .filter(Boolean)
     .map((c) => {
       const [name, hex] = c.split(":").map((x) => x.trim());
-      return { name: name || hex, hex: hex || "#39ff14" };
+      return { name: name || hex, hex: hex || "#3ddc84" };
     });
 }
 
@@ -129,7 +129,7 @@ export default function AdminStorePanel() {
             <button
               type="button"
               onClick={resetForm}
-              className="flex items-center gap-1 text-xs text-white/50 hover:text-[#39ff14]"
+              className="flex items-center gap-1 text-xs text-white/50 hover:text-[#3ddc84]"
             >
               <X className="h-4 w-4" /> Cancelar
             </button>
@@ -268,7 +268,7 @@ export default function AdminStorePanel() {
           <input
             value={form.colors}
             onChange={(e) => set({ colors: e.target.value })}
-            placeholder="Preto:#0a0a0a, Verde Neon:#39ff14"
+            placeholder="Preto:#0a0a0a, Verde Neon:#3ddc84"
             className={inputCls}
           />
         </div>
@@ -289,7 +289,7 @@ export default function AdminStorePanel() {
 
         <button
           type="submit"
-          className="slime-glow-btn flex w-full items-center justify-center gap-2 rounded-xl bg-[#39ff14] px-6 py-3.5 font-bold text-black"
+          className="slime-glow-btn flex w-full items-center justify-center gap-2 rounded-xl bg-[#3ddc84] px-6 py-3.5 font-bold text-black"
         >
           {editingId ? <Save className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
           Salvar Produto
@@ -351,7 +351,7 @@ export default function AdminStorePanel() {
                       <button
                         onClick={() => startEdit(p)}
                         aria-label="Editar"
-                        className="grid h-8 w-8 place-items-center rounded-lg border border-[#39ff14]/40 text-[#39ff14] transition-colors hover:bg-[#39ff14]/10"
+                        className="grid h-8 w-8 place-items-center rounded-lg border border-[#3ddc84]/40 text-[#3ddc84] transition-colors hover:bg-[#3ddc84]/10"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
