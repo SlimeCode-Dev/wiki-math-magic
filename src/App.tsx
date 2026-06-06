@@ -54,10 +54,13 @@ function AppRoutes() {
 
   return (
     <Routes>
+      {/* Landing Page */}
+      <Route path="/" element={<Landing />} />
+
       {/* Login */}
-      <Route 
-        path="/" 
-        element={currentUser ? <Navigate to={`/${currentUser.role}`} replace /> : <Login />} 
+      <Route
+        path="/login"
+        element={currentUser ? <Navigate to={`/${currentUser.role}`} replace /> : <Login />}
       />
 
       {/* Admin Routes */}
