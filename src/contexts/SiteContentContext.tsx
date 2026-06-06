@@ -40,6 +40,7 @@ const defaultContent: SiteContent = {
     description:
       "O aluno domina as ferramentas do mercado criativo, da edição de imagem e vídeo à criação de identidades visuais profissionais.",
   },
+  texts: {},
 };
 
 interface SiteContentContextType {
