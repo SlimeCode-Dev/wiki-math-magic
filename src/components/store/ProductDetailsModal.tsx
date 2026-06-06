@@ -57,7 +57,7 @@ export default function ProductDetailsModal({
         <button
           onClick={onClose}
           aria-label="Fechar"
-          className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full border border-[#39ff14]/40 bg-black/70 text-white/80 transition-colors hover:text-[#39ff14]"
+          className="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-full border border-[#3ddc84]/40 bg-black/70 text-white/80 transition-colors hover:text-[#3ddc84]"
         >
           <X className="h-5 w-5" />
         </button>
@@ -82,7 +82,7 @@ export default function ProductDetailsModal({
 
           {/* Info */}
           <div className="flex flex-col p-6 md:py-8 md:pr-8">
-            <span className="mb-3 inline-flex w-fit rounded-full border border-[#39ff14]/40 px-3 py-1 text-[11px] font-semibold slime-neon">
+            <span className="mb-3 inline-flex w-fit rounded-full border border-[#3ddc84]/40 px-3 py-1 text-[11px] font-semibold slime-neon">
               {product.category}
             </span>
             <h2 className="text-2xl font-extrabold text-white md:text-3xl">
@@ -145,8 +145,8 @@ export default function ProductDetailsModal({
                       onClick={() => setSize(s)}
                       className={`min-w-[44px] rounded-lg border px-3 py-2 text-sm font-bold transition-all ${
                         size === s
-                          ? "border-[#39ff14] bg-[#39ff14] text-black shadow-[0_0_14px_rgba(57,255,20,0.4)]"
-                          : "border-white/20 text-white/70 hover:border-[#39ff14] hover:text-[#39ff14]"
+                          ? "border-[#3ddc84] bg-[#3ddc84] text-black shadow-[0_0_14px_rgba(61,220,132,0.4)]"
+                          : "border-white/20 text-white/70 hover:border-[#3ddc84] hover:text-[#3ddc84]"
                       }`}
                     >
                       {s}
@@ -171,7 +171,7 @@ export default function ProductDetailsModal({
                       aria-label={c.name}
                       className={`grid h-9 w-9 place-items-center rounded-full border-2 transition-all ${
                         color === c.name
-                          ? "border-[#39ff14] shadow-[0_0_14px_rgba(57,255,20,0.5)]"
+                          ? "border-[#3ddc84] shadow-[0_0_14px_rgba(61,220,132,0.5)]"
                           : "border-white/20 hover:border-white/50"
                       }`}
                       style={{ backgroundColor: c.hex }}
