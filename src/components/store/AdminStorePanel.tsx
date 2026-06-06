@@ -3,6 +3,7 @@ import { Pencil, Trash2, Plus, Save, ImageIcon, X } from "lucide-react";
 import {
   Product,
   ProductCategory,
+  ProductColor,
   PRODUCT_CATEGORIES,
   formatPrice,
   PLACEHOLDER_IMAGE,
@@ -13,19 +14,52 @@ interface FormState {
   name: string;
   category: ProductCategory;
   price: string;
+  oldPrice: string;
   image: string;
   shopeeLink: string;
   description: string;
+  sizes: string;
+  colors: string;
+  stock: string;
+  highlights: string;
 }
 
 const emptyForm: FormState = {
   name: "",
   category: "Camisas Personalizadas",
   price: "",
+  oldPrice: "",
   image: "",
   shopeeLink: "",
   description: "",
+  sizes: "",
+  colors: "",
+  stock: "",
+  highlights: "",
 };
+
+// "Preto:#0a0a0a, Verde:#39ff14" -> ProductColor[]
+function parseColors(raw: string): ProductColor[] {
+  return raw
+    .split(",")
+    .map((c) => c.trim())
+    .filter(Boolean)
+    .map((c) => {
+      const [name, hex] = c.split(":").map((x) => x.trim());
+      return { name: name || hex, hex: hex || "#39ff14" };
+    });
+}
+
+function colorsToString(colors?: ProductColor[]): string {
+  return (colors || []).map((c) => `${c.name}:${c.hex}`).join(", ");
+}
+
+function splitList(raw: string): string[] {
+  return raw
+    .split(",")
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
 
 export default function AdminStorePanel() {
   const { products, addProduct, updateProduct, deleteProduct } = useStore();
@@ -45,9 +79,14 @@ export default function AdminStorePanel() {
       name: p.name,
       category: p.category,
       price: String(p.price),
+      oldPrice: p.oldPrice ? String(p.oldPrice) : "",
       image: p.image,
       shopeeLink: p.shopeeLink,
       description: p.description,
+      sizes: (p.sizes || []).join(", "),
+      colors: colorsToString(p.colors),
+      stock: typeof p.stock === "number" ? String(p.stock) : "",
+      highlights: (p.highlights || []).join(", "),
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -58,9 +97,14 @@ export default function AdminStorePanel() {
       name: form.name.trim(),
       category: form.category,
       price: parseFloat(form.price) || 0,
+      oldPrice: form.oldPrice ? parseFloat(form.oldPrice) : undefined,
       image: form.image.trim(),
       shopeeLink: form.shopeeLink.trim(),
       description: form.description.trim(),
+      sizes: splitList(form.sizes),
+      colors: parseColors(form.colors),
+      stock: form.stock ? parseInt(form.stock, 10) : undefined,
+      highlights: splitList(form.highlights),
     };
     if (editingId) updateProduct(editingId, payload);
     else addProduct(payload);
@@ -122,18 +166,48 @@ export default function AdminStorePanel() {
           </select>
         </div>
 
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-white/60">
+              Preço (R$)
+            </label>
+            <input
+              required
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.price}
+              onChange={(e) => set({ price: e.target.value })}
+              placeholder="0.00"
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-white/60">
+              Preço antigo (R$)
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.oldPrice}
+              onChange={(e) => set({ oldPrice: e.target.value })}
+              placeholder="opcional"
+              className={inputCls}
+            />
+          </div>
+        </div>
+
         <div>
           <label className="mb-1 block text-xs font-semibold text-white/60">
-            Preço (R$)
+            Estoque (quantidade)
           </label>
           <input
-            required
             type="number"
-            step="0.01"
             min="0"
-            value={form.price}
-            onChange={(e) => set({ price: e.target.value })}
-            placeholder="0.00"
+            value={form.stock}
+            onChange={(e) => set({ stock: e.target.value })}
+            placeholder="opcional"
             className={inputCls}
           />
         </div>
@@ -174,6 +248,44 @@ export default function AdminStorePanel() {
             className={inputCls}
           />
         </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold text-white/60">
+            Tamanhos (separados por vírgula)
+          </label>
+          <input
+            value={form.sizes}
+            onChange={(e) => set({ sizes: e.target.value })}
+            placeholder="P, M, G, GG"
+            className={inputCls}
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold text-white/60">
+            Cores (nome:hex, separadas por vírgula)
+          </label>
+          <input
+            value={form.colors}
+            onChange={(e) => set({ colors: e.target.value })}
+            placeholder="Preto:#0a0a0a, Verde Neon:#39ff14"
+            className={inputCls}
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold text-white/60">
+            Destaques (separados por vírgula)
+          </label>
+          <input
+            value={form.highlights}
+            onChange={(e) => set({ highlights: e.target.value })}
+            placeholder="100% algodão, Estampa exclusiva"
+            className={inputCls}
+          />
+        </div>
+
+
 
         <button
           type="submit"

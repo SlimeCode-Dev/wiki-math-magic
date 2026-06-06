@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Search, ArrowLeft, ShieldCheck, Store as StoreIcon } from "lucide-react";
+import { Search, ArrowLeft, ShieldCheck, Store as StoreIcon, Sparkles } from "lucide-react";
 import { useLMS } from "@/contexts/LMSContext";
 import { useStore, PRODUCT_CATEGORIES, Product } from "@/contexts/StoreContext";
 import ProductCard from "@/components/store/ProductCard";
@@ -50,36 +50,83 @@ export default function Loja() {
         </div>
       </header>
 
-      {/* Title */}
-      <section className="mx-auto max-w-7xl px-4 pt-10 md:px-8">
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <div>
-            <h1 className="text-3xl font-extrabold md:text-4xl">
-              LOJA <span className="slime-neon">SLIME CODE</span>
-            </h1>
-            <p className="mt-2 text-white/60">
-              Produtos gamer e tech com a identidade Slime Code.
-            </p>
-          </div>
+      {/* Banner */}
+      <section className="mx-auto max-w-7xl px-4 pt-8 md:px-8">
+        <div className="relative overflow-hidden rounded-3xl border border-[#39ff14]/30 bg-gradient-to-br from-[#0d1a0d] via-[#0a0a0a] to-[#0a0a0a] p-8 md:p-12">
+          {/* Glow blobs */}
+          <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#39ff14]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 left-10 h-56 w-56 rounded-full bg-[#39ff14]/10 blur-3xl" />
+          {/* Grid overlay */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "linear-gradient(#39ff14 1px, transparent 1px), linear-gradient(90deg, #39ff14 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
 
-          {isAdmin && (
-            <button
-              onClick={() => setAdminMode((v) => !v)}
-              className="flex items-center gap-2 rounded-xl border border-[#39ff14] px-4 py-2.5 text-sm font-bold text-[#39ff14] transition-all hover:bg-[#39ff14]/10"
-            >
-              {adminMode ? (
-                <>
-                  <StoreIcon className="h-4 w-4" /> Ver Vitrine
-                </>
-              ) : (
-                <>
-                  <ShieldCheck className="h-4 w-4" /> Admin Store
-                </>
-              )}
-            </button>
-          )}
+          <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#39ff14]/50 bg-black/40 px-4 py-1.5 text-xs font-semibold slime-neon backdrop-blur">
+                <Sparkles className="h-3.5 w-3.5" /> COLEÇÃO GAMER & TECH
+              </span>
+              <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-5xl">
+                LOJA <span className="slime-neon">SLIME CODE</span>
+              </h1>
+              <p className="mt-4 max-w-lg text-white/70">
+                Camisas personalizadas, mochilas, mouse pads e PCs montados com a
+                identidade neon da Slime Code. Estilo, performance e qualidade
+                para o seu setup.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href="#produtos"
+                  className="slime-glow-btn inline-flex items-center gap-2 rounded-xl bg-[#39ff14] px-6 py-3 font-bold text-black"
+                >
+                  <StoreIcon className="h-5 w-5" /> Ver produtos
+                </a>
+                {isAdmin && (
+                  <button
+                    onClick={() => setAdminMode((v) => !v)}
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#39ff14] px-6 py-3 font-bold text-[#39ff14] transition-all hover:bg-[#39ff14]/10"
+                  >
+                    {adminMode ? (
+                      <>
+                        <StoreIcon className="h-5 w-5" /> Ver Vitrine
+                      </>
+                    ) : (
+                      <>
+                        <ShieldCheck className="h-5 w-5" /> Admin Store
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 lg:gap-6">
+              {[
+                { value: "100%", label: "Tema Gamer" },
+                { value: "Frete", label: "Para todo BR" },
+                { value: "24h", label: "Atendimento" },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl border border-[#39ff14]/20 bg-black/40 px-4 py-4 text-center backdrop-blur"
+                >
+                  <p className="text-xl font-extrabold slime-neon md:text-2xl">
+                    {s.value}
+                  </p>
+                  <p className="mt-1 text-[11px] text-white/60">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
+
 
       {adminMode && isAdmin ? (
         <section className="mx-auto max-w-7xl px-4 py-10 md:px-8">
@@ -88,7 +135,13 @@ export default function Loja() {
       ) : (
         <>
           {/* Secondary header: search + pills */}
-          <section className="mx-auto max-w-7xl px-4 pt-8 md:px-8">
+          <section id="produtos" className="mx-auto max-w-7xl px-4 pt-10 md:px-8">
+            <div className="mb-5 flex items-center gap-3">
+              <h2 className="text-2xl font-extrabold md:text-3xl">
+                Nossos <span className="slime-neon">Produtos</span>
+              </h2>
+              <span className="h-px flex-1 bg-[#39ff14]/20" />
+            </div>
             <div className="relative mb-6 max-w-md">
               <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/40" />
               <input

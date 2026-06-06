@@ -1,5 +1,5 @@
-import { X, ShoppingCart, MessageCircle } from "lucide-react";
-import { useEffect } from "react";
+import { X, ShoppingCart, MessageCircle, Check, Package } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Product, formatPrice, PLACEHOLDER_IMAGE } from "@/contexts/StoreContext";
 
 export default function ProductDetailsModal({
@@ -9,9 +9,14 @@ export default function ProductDetailsModal({
   product: Product | null;
   onClose: () => void;
 }) {
+  const [size, setSize] = useState<string | null>(null);
+  const [color, setColor] = useState<string | null>(null);
+
   useEffect(() => {
     if (product) {
       document.body.style.overflow = "hidden";
+      setSize(product.sizes?.[0] ?? null);
+      setColor(product.colors?.[0]?.name ?? null);
       return () => {
         document.body.style.overflow = "";
       };
@@ -20,12 +25,24 @@ export default function ProductDetailsModal({
 
   if (!product) return null;
 
+  const discount =
+    product.oldPrice && product.oldPrice > product.price
+      ? Math.round((1 - product.price / product.oldPrice) * 100)
+      : 0;
+
+  const selection = [
+    size ? `Tamanho: ${size}` : null,
+    color ? `Cor: ${color}` : null,
+  ]
+    .filter(Boolean)
+    .join(" | ");
+
   const whatsappHref =
     product.whatsappLink ||
     `https://wa.me/5571981971680?text=${encodeURIComponent(
       `Olá! Tenho interesse no produto: ${product.name} (${formatPrice(
         product.price
-      )})`
+      )})${selection ? ` — ${selection}` : ""}`
     )}`;
 
   return (
@@ -47,7 +64,12 @@ export default function ProductDetailsModal({
 
         <div className="grid gap-6 md:grid-cols-2">
           {/* Image */}
-          <div className="aspect-square overflow-hidden bg-[#1a1a1a] md:rounded-l-3xl">
+          <div className="relative aspect-square overflow-hidden bg-[#1a1a1a] md:rounded-l-3xl">
+            {discount > 0 && (
+              <span className="absolute left-4 top-4 z-10 rounded-full bg-[#ff5722] px-3 py-1 text-xs font-bold text-white shadow-[0_0_18px_rgba(255,87,34,0.5)]">
+                -{discount}%
+              </span>
+            )}
             <img
               src={product.image || PLACEHOLDER_IMAGE}
               alt={product.name}
@@ -66,12 +88,111 @@ export default function ProductDetailsModal({
             <h2 className="text-2xl font-extrabold text-white md:text-3xl">
               {product.name}
             </h2>
-            <p className="mt-3 text-3xl font-extrabold slime-neon">
-              {formatPrice(product.price)}
-            </p>
+
+            <div className="mt-3 flex items-end gap-3">
+              <p className="text-3xl font-extrabold slime-neon">
+                {formatPrice(product.price)}
+              </p>
+              {product.oldPrice && product.oldPrice > product.price && (
+                <p className="mb-1 text-base text-white/40 line-through">
+                  {formatPrice(product.oldPrice)}
+                </p>
+              )}
+            </div>
+
+            {typeof product.stock === "number" && (
+              <p
+                className={`mt-2 flex items-center gap-1.5 text-xs font-semibold ${
+                  product.stock > 0 ? "slime-neon" : "text-red-400"
+                }`}
+              >
+                <Package className="h-4 w-4" />
+                {product.stock > 0
+                  ? `${product.stock} em estoque`
+                  : "Esgotado"}
+              </p>
+            )}
+
             <p className="mt-4 text-sm leading-relaxed text-white/70">
               {product.description}
             </p>
+
+            {/* Highlights */}
+            {product.highlights && product.highlights.length > 0 && (
+              <ul className="mt-4 grid grid-cols-2 gap-2">
+                {product.highlights.map((h) => (
+                  <li
+                    key={h}
+                    className="flex items-center gap-1.5 text-xs text-white/80"
+                  >
+                    <Check className="h-3.5 w-3.5 flex-shrink-0 slime-neon" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Sizes */}
+            {product.sizes && product.sizes.length > 0 && (
+              <div className="mt-5">
+                <p className="mb-2 text-xs font-semibold text-white/60">
+                  Tamanho
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {product.sizes.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setSize(s)}
+                      className={`min-w-[44px] rounded-lg border px-3 py-2 text-sm font-bold transition-all ${
+                        size === s
+                          ? "border-[#39ff14] bg-[#39ff14] text-black shadow-[0_0_14px_rgba(57,255,20,0.4)]"
+                          : "border-white/20 text-white/70 hover:border-[#39ff14] hover:text-[#39ff14]"
+                      }`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Colors */}
+            {product.colors && product.colors.length > 0 && (
+              <div className="mt-5">
+                <p className="mb-2 text-xs font-semibold text-white/60">
+                  Cor: <span className="text-white/80">{color}</span>
+                </p>
+                <div className="flex flex-wrap gap-2.5">
+                  {product.colors.map((c) => (
+                    <button
+                      key={c.name}
+                      onClick={() => setColor(c.name)}
+                      title={c.name}
+                      aria-label={c.name}
+                      className={`grid h-9 w-9 place-items-center rounded-full border-2 transition-all ${
+                        color === c.name
+                          ? "border-[#39ff14] shadow-[0_0_14px_rgba(57,255,20,0.5)]"
+                          : "border-white/20 hover:border-white/50"
+                      }`}
+                      style={{ backgroundColor: c.hex }}
+                    >
+                      {color === c.name && (
+                        <Check
+                          className="h-4 w-4"
+                          style={{
+                            color:
+                              c.hex.toLowerCase() === "#f5f5f5" ||
+                              c.hex.toLowerCase() === "#39ff14"
+                                ? "#0a0a0a"
+                                : "#39ff14",
+                          }}
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Purchase area */}
             <div className="mt-7 space-y-3">

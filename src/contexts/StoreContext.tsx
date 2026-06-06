@@ -13,15 +13,26 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   "PCs Montados",
 ];
 
+export interface ProductColor {
+  name: string;
+  hex: string;
+}
+
 export interface Product {
   id: string;
   name: string;
   category: ProductCategory;
   price: number;
+  oldPrice?: number;
   image: string;
   shopeeLink: string;
   whatsappLink?: string;
   description: string;
+  sizes?: string[];
+  colors?: ProductColor[];
+  stock?: number;
+  highlights?: string[];
+  featured?: boolean;
 }
 
 const STORAGE_KEY = "slime_store_products";
@@ -37,20 +48,39 @@ const defaultProducts: Product[] = [
     name: "Camisa Gamer Slime Code Neon",
     category: "Camisas Personalizadas",
     price: 89.9,
+    oldPrice: 119.9,
     image: "https://placehold.co/600x600/1a1a1a/39ff14?text=Camisa+Gamer",
     shopeeLink: "https://shopee.com.br",
     description:
-      "Camisa 100% algodão com estampa exclusiva Slime Code em verde neon. Tecido premium, confortável e ideal para o dia a dia gamer. Disponível em vários tamanhos.",
+      "Camisa 100% algodão com estampa exclusiva Slime Code em verde neon. Tecido premium, confortável e ideal para o dia a dia gamer. Disponível em vários tamanhos e cores.",
+    sizes: ["P", "M", "G", "GG"],
+    colors: [
+      { name: "Preto", hex: "#0a0a0a" },
+      { name: "Verde Neon", hex: "#39ff14" },
+      { name: "Cinza Chumbo", hex: "#3a3a3a" },
+      { name: "Branco", hex: "#f5f5f5" },
+    ],
+    stock: 42,
+    highlights: ["100% algodão", "Estampa exclusiva", "Modelagem unissex"],
+    featured: true,
   },
   {
     id: "prod-2",
     name: "Mochila Tech Anti-Furto",
     category: "Mochilas",
     price: 249.9,
+    oldPrice: 299.9,
     image: "https://placehold.co/600x600/1a1a1a/39ff14?text=Mochila+Tech",
     shopeeLink: "https://shopee.com.br",
     description:
       "Mochila resistente à água com compartimento acolchoado para notebook até 17\", porta USB externa e fecho anti-furto. Perfeita para levar seu setup com estilo.",
+    colors: [
+      { name: "Preto", hex: "#0a0a0a" },
+      { name: "Grafite", hex: "#2c2c2c" },
+    ],
+    stock: 18,
+    highlights: ["Impermeável", "Porta USB", "Compartimento p/ notebook 17\""],
+    featured: true,
   },
   {
     id: "prod-3",
@@ -61,16 +91,27 @@ const defaultProducts: Product[] = [
     shopeeLink: "https://shopee.com.br",
     description:
       "Mouse pad gamer estendido (90x40cm) com iluminação RGB nas bordas, base antiderrapante e superfície de alta precisão para máxima performance nos games.",
+    sizes: ["Médio (45x40)", "Grande (90x40)"],
+    colors: [
+      { name: "Preto RGB", hex: "#0a0a0a" },
+      { name: "Verde Neon", hex: "#39ff14" },
+    ],
+    stock: 60,
+    highlights: ["Iluminação RGB", "Base antiderrapante", "Costura reforçada"],
   },
   {
     id: "prod-4",
     name: "PC Gamer Slime Ultra RTX",
     category: "PCs Montados",
     price: 6499.0,
+    oldPrice: 7299.0,
     image: "https://placehold.co/600x600/1a1a1a/39ff14?text=PC+Gamer",
     shopeeLink: "https://shopee.com.br",
     description:
       "PC Gamer completo: Ryzen 7, 32GB RAM, SSD 1TB NVMe, placa de vídeo RTX dedicada e gabinete com iluminação RGB. Montado e testado pela equipe Slime Code.",
+    highlights: ["Ryzen 7", "32GB RAM", "SSD 1TB NVMe", "RTX dedicada"],
+    stock: 5,
+    featured: true,
   },
 ];
 
@@ -88,6 +129,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>(defaultProducts);
 
   useEffect(() => {
+    const VERSION_KEY = "slime_store_version";
+    const CURRENT_VERSION = "2";
+    const storedVersion = localStorage.getItem(VERSION_KEY);
+
+    if (storedVersion !== CURRENT_VERSION) {
+      // New product fields added — refresh with enriched defaults
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
+      localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+      setProducts(defaultProducts);
+      return;
+    }
+
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
