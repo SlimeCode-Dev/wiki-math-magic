@@ -1,6 +1,39 @@
 import { useRef, useState, ReactNode } from "react";
 import { Pencil, Play, ImagePlus, X, Video } from "lucide-react";
-import { getYoutubeId } from "@/contexts/SiteContentContext";
+import { getYoutubeId, useSiteContent } from "@/contexts/SiteContentContext";
+import { useLMS } from "@/contexts/LMSContext";
+
+/* ---------- Generic editable text bound to the content store ----------
+   Any text wrapped in <T id="unique-id">Default text</T> becomes editable
+   by an admin and persists site-wide. */
+export function T({
+  id,
+  children,
+  as = "span",
+  className,
+  multiline,
+}: {
+  id: string;
+  children: string;
+  as?: "span" | "h1" | "h2" | "h3" | "p";
+  className?: string;
+  multiline?: boolean;
+}) {
+  const { currentUser } = useLMS();
+  const { getText, setText } = useSiteContent();
+  const canEdit = currentUser?.role === "admin";
+  return (
+    <EditableText
+      as={as}
+      className={className}
+      multiline={multiline}
+      canEdit={canEdit}
+      value={getText(id, children)}
+      onChange={(v) => setText(id, v)}
+    />
+  );
+}
+
 
 /* ---------- Editable text ---------- */
 export function EditableText({
