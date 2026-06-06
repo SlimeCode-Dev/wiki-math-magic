@@ -139,21 +139,18 @@ export default function CourseDetail({ course }: { course: CourseData }) {
                 className="relative w-full rounded-3xl border border-[#3ddc84]/40 object-cover"
               />
             </div>
-            <p className="mt-6 text-lg text-white/75">{intro}</p>
+            <T as="p" className="mt-6 text-lg text-white/75" id={`course.${slug}.intro`} multiline>{intro}</T>
           </Reveal>
 
           <Reveal>
-            <h2 className="text-2xl font-extrabold uppercase md:text-3xl">
-              {toolsHeading.split(" ").slice(0, -1).join(" ")}{" "}
-              <span className="slime-neon">
-                {toolsHeading.split(" ").slice(-1)}
-              </span>
+            <h2 className="text-2xl font-extrabold uppercase md:text-3xl slime-neon">
+              <T id={`course.${slug}.toolsHeading`}>{toolsHeading}</T>
             </h2>
             <div className="mt-6 space-y-6">
-              {tools.map((t) => (
-                <div key={t.name}>
-                  <h3 className="text-xl font-bold slime-neon">{t.name}</h3>
-                  <p className="mt-1 text-white/70">{t.desc}</p>
+              {tools.map((t, i) => (
+                <div key={i}>
+                  <T as="h3" className="text-xl font-bold slime-neon" id={`course.${slug}.tool.${i}.name`}>{t.name}</T>
+                  <T as="p" className="mt-1 text-white/70" id={`course.${slug}.tool.${i}.desc`} multiline>{t.desc}</T>
                 </div>
               ))}
             </div>
