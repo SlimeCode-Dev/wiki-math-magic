@@ -23,6 +23,8 @@ import {
   Mail,
   Instagram,
   Globe,
+  CheckCircle2,
+  Users,
 } from "lucide-react";
 
 // 🔁 Substitua estas URLs pelas suas próprias imagens depois.
