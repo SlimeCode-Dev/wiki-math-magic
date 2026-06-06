@@ -8,7 +8,21 @@ import { StudentProgressBar } from '@/components/StudentProgressBar';
 export default function AlunoDashboard() {
   const { currentUser, getMaterialsByTurma, submissions, getTurmaById, getUserById, materialProgress } = useLMS();
 
-  if (!currentUser || !currentUser.turmaId) return null;
+  if (!currentUser) return null;
+
+  if (!currentUser.turmaId) {
+    return (
+      <MainLayout title="Minha Área">
+        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-card p-10 text-center">
+          <BookOpen className="h-10 w-10 text-muted-foreground" />
+          <h2 className="text-lg font-semibold text-foreground">Nenhuma turma atribuída</h2>
+          <p className="max-w-md text-sm text-muted-foreground">
+            Você ainda não foi vinculado a uma turma. Entre em contato com a administração para liberar seu acesso aos materiais.
+          </p>
+        </div>
+      </MainLayout>
+    );
+  }
 
   const turma = getTurmaById(currentUser.turmaId);
   const materials = getMaterialsByTurma(currentUser.turmaId);
