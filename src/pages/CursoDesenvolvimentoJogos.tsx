@@ -1,5 +1,6 @@
 import { Gamepad2 } from "lucide-react";
 import CourseDetail, { type CourseData } from "./CourseDetail";
+import { useSiteContent } from "@/contexts/SiteContentContext";
 import courseGames from "@/assets/course-games.jpg";
 
 const course: CourseData = {
@@ -57,5 +58,10 @@ const course: CourseData = {
 };
 
 export default function CursoDesenvolvimentoJogos() {
-  return <CourseDetail course={course} />;
+  const { content } = useSiteContent();
+  return (
+    <CourseDetail
+      course={{ ...course, banner: content.games.image, title: content.games.title.toUpperCase() }}
+    />
+  );
 }

@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LMSProvider, useLMS } from "@/contexts/LMSContext";
+import { SiteContentProvider } from "@/contexts/SiteContentContext";
 
 // Pages
 import Login from "./pages/Login";
@@ -104,9 +105,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <LMSProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <SiteContentProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </SiteContentProvider>
       </LMSProvider>
     </TooltipProvider>
   </QueryClientProvider>

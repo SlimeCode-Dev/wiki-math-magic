@@ -27,10 +27,9 @@ import {
   Users,
 } from "lucide-react";
 
-// 🔁 Substitua estas URLs pelas suas próprias imagens depois.
-import heroGraphic from "@/assets/hero-graphic.jpg";
-import courseGames from "@/assets/course-games.jpg";
-import courseDesign from "@/assets/course-design.jpg";
+import { useLMS } from "@/contexts/LMSContext";
+import { useSiteContent } from "@/contexts/SiteContentContext";
+import { EditableText, EditableImage, EditableVideo } from "@/components/landing/Editable";
 
 /* ------------------------------ Helpers ------------------------------ */
 
@@ -215,6 +214,10 @@ function Header() {
 }
 
 function Hero() {
+  const { currentUser } = useLMS();
+  const { content, updateContent } = useSiteContent();
+  const canEdit = currentUser?.role === "admin";
+
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
       <Reveal>
@@ -222,12 +225,21 @@ function Hero() {
           CURSO DE PROGRAMAÇÃO DE JOGOS E DESIGN GRÁFICO
         </span>
         <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-6xl">
-          DESENVOLVIMENTO DE JOGOS E{" "}
-          <span className="slime-neon slime-text-glow">DESIGN</span>
+          <EditableText
+            as="span"
+            canEdit={canEdit}
+            value={content.heroTitle}
+            onChange={(v) => updateContent({ heroTitle: v })}
+          />
         </h1>
         <p className="mt-5 max-w-md text-white/70">
-          Aprenda a criar jogos e artes digitais do zero ao avançado com projetos
-          reais e mentores experientes.
+          <EditableText
+            as="span"
+            multiline
+            canEdit={canEdit}
+            value={content.heroDescription}
+            onChange={(v) => updateContent({ heroDescription: v })}
+          />
         </p>
         <div className="mt-8 flex flex-col gap-4 sm:flex-row">
           <a
@@ -246,20 +258,17 @@ function Hero() {
       </Reveal>
 
       <Reveal delay={0.15}>
-        <div className="relative">
-          <div className="absolute -inset-4 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
-          <img
-            src={heroGraphic}
-            alt="Mascote Slime Code desenvolvendo jogos"
-            width={1024}
-            height={1024}
-            className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
-          />
-        </div>
+        <EditableVideo
+          className="relative"
+          canEdit={canEdit}
+          url={content.heroVideoUrl}
+          onChange={(v) => updateContent({ heroVideoUrl: v })}
+        />
       </Reveal>
     </section>
   );
 }
+
 
 function Marquee() {
   const items = [
@@ -287,40 +296,46 @@ function Marquee() {
 
 function CourseFeature({
   reverse,
-  image,
+  courseKey,
   alt,
   badge,
   age,
   icon,
-  title,
-  subtitle,
-  description,
   learn,
   to,
 }: {
   reverse?: boolean;
-  image: string;
+  courseKey: "games" | "design";
   alt: string;
   badge: string;
   age: string;
   icon: ReactNode;
-  title: string;
-  subtitle: string;
-  description: string;
   learn: string[];
   to: string;
 }) {
+  const { currentUser } = useLMS();
+  const { content, updateCourse } = useSiteContent();
+  const canEdit = currentUser?.role === "admin";
+  const course = content[courseKey];
+
   return (
     <div className="grid items-center gap-8 md:grid-cols-2">
       <Reveal className={reverse ? "md:order-2" : ""}>
         <div className="relative">
           <div className="absolute -inset-3 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
-          <img
-            src={image}
+          <EditableImage
+            canEdit={canEdit}
+            src={course.image}
             alt={alt}
-            loading="lazy"
-            className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
-          />
+            onChange={(img) => updateCourse(courseKey, { image: img })}
+          >
+            <img
+              src={course.image}
+              alt={alt}
+              loading="lazy"
+              className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
+            />
+          </EditableImage>
         </div>
       </Reveal>
 
@@ -335,9 +350,28 @@ function CourseFeature({
             </span>
           </div>
 
-          <h3 className="text-2xl font-extrabold md:text-3xl">{title}</h3>
-          <p className="mt-1 font-semibold slime-neon">{subtitle}</p>
-          <p className="mt-4 text-white/70">{description}</p>
+          <h3 className="text-2xl font-extrabold md:text-3xl">
+            <EditableText
+              canEdit={canEdit}
+              value={course.title}
+              onChange={(v) => updateCourse(courseKey, { title: v })}
+            />
+          </h3>
+          <p className="mt-1 font-semibold slime-neon">
+            <EditableText
+              canEdit={canEdit}
+              value={course.subtitle}
+              onChange={(v) => updateCourse(courseKey, { subtitle: v })}
+            />
+          </p>
+          <p className="mt-4 text-white/70">
+            <EditableText
+              canEdit={canEdit}
+              multiline
+              value={course.description}
+              onChange={(v) => updateCourse(courseKey, { description: v })}
+            />
+          </p>
 
           <ul className="mt-6 space-y-3">
             {learn.map((item) => (
@@ -360,6 +394,7 @@ function CourseFeature({
   );
 }
 
+
 function Apresentacao() {
   return (
     <section id="apresentacao" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
@@ -376,14 +411,11 @@ function Apresentacao() {
       <div className="space-y-16">
         <CourseFeature
           to="/cursos/desenvolvimento-de-jogos"
-          image={courseGames}
+          courseKey="games"
           alt="Aluno criando jogos com a Slime Code"
           badge="DESENVOLVIMENTO DE JOGOS"
           age="A partir de 10 anos"
           icon={<Gamepad2 className="h-4 w-4" />}
-          title="Desenvolvimento de Jogos"
-          subtitle="CRIE SEUS JOGOS. CONSTRUA MUNDOS."
-          description="Do zero ao avançado: o aluno aprende lógica de programação criando seus próprios jogos 2D e 3D com projetos reais a cada aula."
           learn={[
             "Lógica de programação e pensamento computacional",
             "Criação de jogos 2D com Construct 3",
@@ -396,14 +428,11 @@ function Apresentacao() {
         <CourseFeature
           to="/cursos/design-grafico"
           reverse
-          image={courseDesign}
+          courseKey="design"
           alt="Aluno criando design gráfico com a Slime Code"
           badge="DESIGN GRÁFICO"
           age="A partir de 14 anos"
           icon={<Palette className="h-4 w-4" />}
-          title="Design Gráfico"
-          subtitle="CRIE. COMUNIQUE. IMPACTE."
-          description="O aluno domina as ferramentas do mercado criativo, da edição de imagem e vídeo à criação de identidades visuais profissionais."
           learn={[
             "Edição e tratamento de imagem no Photoshop",
             "Criação vetorial e logotipos no Illustrator",
