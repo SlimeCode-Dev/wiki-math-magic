@@ -69,6 +69,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
           ...parsed,
           games: { ...defaultContent.games, ...(parsed.games || {}) },
           design: { ...defaultContent.design, ...(parsed.design || {}) },
+          texts: { ...defaultContent.texts, ...(parsed.texts || {}) },
         });
       } catch {
         /* ignore */
@@ -87,6 +88,12 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const updateCourse = (key: "games" | "design", patch: Partial<CourseContent>) =>
     persist({ ...content, [key]: { ...content[key], ...patch } });
 
+  const getText = (id: string, fallback: string) =>
+    content.texts[id] ?? fallback;
+
+  const setText = (id: string, value: string) =>
+    persist({ ...content, texts: { ...content.texts, [id]: value } });
+
   const resetContent = () => {
     localStorage.removeItem(STORAGE_KEY);
     setContent(defaultContent);
@@ -94,7 +101,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
 
   return (
     <SiteContentContext.Provider
-      value={{ content, updateContent, updateCourse, resetContent }}
+      value={{ content, updateContent, updateCourse, getText, setText, resetContent }}
     >
       {children}
     </SiteContentContext.Provider>
