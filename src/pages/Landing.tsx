@@ -65,6 +65,11 @@ const navLinks = [
   { label: "CONTATO", href: "#contato" },
 ];
 
+const courseMenu = [
+  { label: "Desenvolvimento de Jogos", to: "/cursos/desenvolvimento-de-jogos" },
+  { label: "Design Gráfico", to: "/cursos/design-grafico" },
+];
+
 /* ------------------------------ Sections ------------------------------ */
 
 function Header() {
@@ -89,7 +94,30 @@ function Header() {
         {/* Center nav */}
         <nav className="hidden items-center gap-7 lg:flex">
           {navLinks.map((l) =>
-            l.isRoute ? (
+            l.dropdown ? (
+              <div key={l.label} className="group relative">
+                <a
+                  href={l.href}
+                  className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14] group-hover:text-[#39ff14]"
+                >
+                  {l.label}
+                  <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
+                </a>
+                <div className="invisible absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                  <div className="overflow-hidden rounded-2xl border border-[#39ff14]/30 bg-black/95 p-2 shadow-[0_0_30px_rgba(57,255,20,0.15)] backdrop-blur-md">
+                    {courseMenu.map((c) => (
+                      <Link
+                        key={c.to}
+                        to={c.to}
+                        className="block rounded-xl px-4 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-[#39ff14]/10 hover:text-[#39ff14]"
+                      >
+                        {c.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : l.isRoute ? (
               <Link
                 key={l.label}
                 to={l.href}
@@ -104,11 +132,11 @@ function Header() {
                 className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14]"
               >
                 {l.label}
-                {l.dropdown && <ChevronDown className="h-4 w-4" />}
               </a>
             )
           )}
         </nav>
+
 
         {/* Right actions */}
         <div className="flex items-center gap-4">
@@ -137,7 +165,23 @@ function Header() {
       {open && (
         <div className="flex flex-col gap-4 border-t border-[#39ff14]/20 bg-black/95 px-4 py-5 lg:hidden">
           {navLinks.map((l) =>
-            l.isRoute ? (
+            l.dropdown ? (
+              <div key={l.label} className="flex flex-col gap-2">
+                <span className="text-sm font-medium text-white/80">{l.label}</span>
+                <div className="ml-3 flex flex-col gap-2 border-l border-[#39ff14]/20 pl-3">
+                  {courseMenu.map((c) => (
+                    <Link
+                      key={c.to}
+                      to={c.to}
+                      onClick={() => setOpen(false)}
+                      className="text-sm text-white/70 hover:text-[#39ff14]"
+                    >
+                      {c.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : l.isRoute ? (
               <Link
                 key={l.label}
                 to={l.href}
@@ -252,6 +296,7 @@ function CourseFeature({
   subtitle,
   description,
   learn,
+  to,
 }: {
   reverse?: boolean;
   image: string;
@@ -263,6 +308,7 @@ function CourseFeature({
   subtitle: string;
   description: string;
   learn: string[];
+  to: string;
 }) {
   return (
     <div className="grid items-center gap-8 md:grid-cols-2">
@@ -303,7 +349,7 @@ function CourseFeature({
           </ul>
 
           <Link
-            to="/login"
+            to={to}
             className="slime-glow-btn mt-7 inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-7 py-3.5 font-bold text-black"
           >
             Saiba mais
@@ -329,6 +375,7 @@ function Apresentacao() {
 
       <div className="space-y-16">
         <CourseFeature
+          to="/cursos/desenvolvimento-de-jogos"
           image={courseGames}
           alt="Aluno criando jogos com a Slime Code"
           badge="DESENVOLVIMENTO DE JOGOS"
@@ -347,6 +394,7 @@ function Apresentacao() {
         />
 
         <CourseFeature
+          to="/cursos/design-grafico"
           reverse
           image={courseDesign}
           alt="Aluno criando design gráfico com a Slime Code"

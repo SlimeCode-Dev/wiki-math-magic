@@ -8,6 +8,8 @@ import { LMSProvider, useLMS } from "@/contexts/LMSContext";
 // Pages
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
+import CursoDesenvolvimentoJogos from "./pages/CursoDesenvolvimentoJogos";
+import CursoDesignGrafico from "./pages/CursoDesignGrafico";
 import NotFound from "./pages/NotFound";
 
 // Admin Pages
@@ -56,6 +58,10 @@ function AppRoutes() {
     <Routes>
       {/* Landing Page */}
       <Route path="/" element={<Landing />} />
+
+      {/* Course Detail Pages */}
+      <Route path="/cursos/desenvolvimento-de-jogos" element={<CursoDesenvolvimentoJogos />} />
+      <Route path="/cursos/design-grafico" element={<CursoDesignGrafico />} />
 
       {/* Login */}
       <Route
