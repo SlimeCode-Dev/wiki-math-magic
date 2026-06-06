@@ -1,336 +1,584 @@
 import { Link } from "react-router-dom";
+import { useState, ReactNode } from "react";
+import { motion } from "framer-motion";
 import {
-  GraduationCap,
-  Users,
-  Medal,
+  Search,
+  ShoppingBag,
+  ChevronDown,
+  Menu,
+  X,
+  Gamepad2,
+  Boxes,
+  Palette,
+  PenTool,
+  Image as ImageIcon,
+  Film,
+  Figma as FigmaIcon,
+  Layers,
+  Trophy,
+  Target,
+  Plus,
+  Minus,
   Phone,
   Mail,
   Instagram,
   Globe,
-  Video,
-  Palette,
-  Share2,
-  Code2,
-  Box,
-  Brain,
-  Menu,
-  X,
 } from "lucide-react";
-import { useState } from "react";
 
-// 🔁 Substitua estas URLs pelas suas próprias imagens dos mascotes quando quiser.
+// 🔁 Substitua estas URLs pelas suas próprias imagens depois.
+import heroGraphic from "@/assets/hero-graphic.jpg";
 import mascotDesign from "@/assets/mascot-design.jpg";
 import mascotGames from "@/assets/mascot-games.jpg";
 
-const MASCOT_DESIGN_URL = mascotDesign;
-const MASCOT_GAMES_URL = mascotGames;
+/* ------------------------------ Helpers ------------------------------ */
 
-const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "Cursos", href: "#cursos" },
-  { label: "Portal do Aluno", href: "/login", isRoute: true },
-  { label: "Contato", href: "#contato" },
-];
-
-function NavLinks({ onClick }: { onClick?: () => void }) {
+function Reveal({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   return (
-    <>
-      {navItems.map((item) =>
-        item.isRoute ? (
-          <Link
-            key={item.label}
-            to={item.href}
-            onClick={onClick}
-            className="text-white/80 hover:text-[#39ff14] transition-colors"
-          >
-            {item.label}
-          </Link>
-        ) : (
-          <a
-            key={item.label}
-            href={item.href}
-            onClick={onClick}
-            className="text-white/80 hover:text-[#39ff14] transition-colors"
-          >
-            {item.label}
-          </a>
-        )
-      )}
-    </>
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
-function CourseCard({
-  image,
-  title,
-  subtitle,
-  text,
-  tags,
-}: {
-  image: string;
-  title: string;
-  subtitle: string;
-  text: string;
-  tags: { icon: React.ReactNode; label: string }[];
-}) {
-  return (
-    <div className="slime-card rounded-3xl p-6 md:p-8 flex flex-col">
-      <div className="relative mb-6 overflow-hidden rounded-2xl border border-[#39ff14]/30 bg-black/40">
-        <img
-          src={image}
-          alt={`Mascote do curso de ${title}`}
-          loading="lazy"
-          width={768}
-          height={768}
-          className="h-56 w-full object-contain"
-        />
-      </div>
-      <h3 className="slime-font text-2xl md:text-3xl font-bold text-white">{title}</h3>
-      <p className="slime-font slime-neon font-semibold tracking-wide mt-1">{subtitle}</p>
-      <p className="text-white/70 mt-4 leading-relaxed">{text}</p>
+const navLinks = [
+  { label: "HOME", href: "#home" },
+  { label: "CURSOS", href: "#cursos", dropdown: true },
+  { label: "APP ALUNOS", href: "/login", isRoute: true },
+  { label: "LOJA", href: "#loja" },
+  { label: "BLOG", href: "#blog" },
+  { label: "CONTATO", href: "#contato" },
+];
 
-      <div className="flex flex-wrap gap-2 mt-6">
-        {tags.map((tag) => (
-          <span
-            key={tag.label}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[#39ff14]/40 px-3 py-1.5 text-sm text-white/90"
+/* ------------------------------ Sections ------------------------------ */
+
+function Header() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header
+      id="home"
+      className="sticky top-0 z-50 border-b border-[#39ff14]/20 bg-black/80 backdrop-blur-md"
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
+        {/* Logo */}
+        <a href="#home" className="flex items-center gap-2">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#39ff14] font-extrabold text-black">
+            S
+          </span>
+          <span className="text-lg font-extrabold tracking-wide">
+            SLIME <span className="slime-neon">CODE</span>
+          </span>
+        </a>
+
+        {/* Center nav */}
+        <nav className="hidden items-center gap-7 lg:flex">
+          {navLinks.map((l) =>
+            l.isRoute ? (
+              <Link
+                key={l.label}
+                to={l.href}
+                className="text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14]"
+              >
+                {l.label}
+              </Link>
+            ) : (
+              <a
+                key={l.label}
+                href={l.href}
+                className="flex items-center gap-1 text-sm font-medium text-white/80 transition-colors hover:text-[#39ff14]"
+              >
+                {l.label}
+                {l.dropdown && <ChevronDown className="h-4 w-4" />}
+              </a>
+            )
+          )}
+        </nav>
+
+        {/* Right actions */}
+        <div className="flex items-center gap-4">
+          <button aria-label="Buscar" className="text-white/80 hover:text-[#39ff14]">
+            <Search className="h-5 w-5" />
+          </button>
+          <button aria-label="Carrinho" className="text-white/80 hover:text-[#39ff14]">
+            <ShoppingBag className="h-5 w-5" />
+          </button>
+          <Link
+            to="/login"
+            className="slime-glow-btn hidden rounded-xl bg-[#39ff14] px-5 py-2.5 text-sm font-bold text-black sm:inline-flex"
           >
-            <span className="slime-neon">{tag.icon}</span>
-            {tag.label}
+            LOGIN
+          </Link>
+          <button
+            className="text-[#39ff14] lg:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Menu"
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      {open && (
+        <div className="flex flex-col gap-4 border-t border-[#39ff14]/20 bg-black/95 px-4 py-5 lg:hidden">
+          {navLinks.map((l) =>
+            l.isRoute ? (
+              <Link
+                key={l.label}
+                to={l.href}
+                onClick={() => setOpen(false)}
+                className="text-sm font-medium text-white/80 hover:text-[#39ff14]"
+              >
+                {l.label}
+              </Link>
+            ) : (
+              <a
+                key={l.label}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="text-sm font-medium text-white/80 hover:text-[#39ff14]"
+              >
+                {l.label}
+              </a>
+            )
+          )}
+          <Link
+            to="/login"
+            onClick={() => setOpen(false)}
+            className="rounded-xl bg-[#39ff14] px-5 py-2.5 text-center text-sm font-bold text-black"
+          >
+            LOGIN
+          </Link>
+        </div>
+      )}
+    </header>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
+      <Reveal>
+        <span className="inline-block rounded-full border border-[#39ff14]/50 px-4 py-1.5 text-xs font-semibold tracking-wide slime-neon">
+          CURSO DE PROGRAMAÇÃO DE JOGOS E DESIGN GRÁFICO
+        </span>
+        <h1 className="mt-6 text-4xl font-extrabold leading-tight md:text-6xl">
+          DESENVOLVIMENTO DE JOGOS E{" "}
+          <span className="slime-neon slime-text-glow">DESIGN</span>
+        </h1>
+        <p className="mt-5 max-w-md text-white/70">
+          Aprenda a criar jogos e artes digitais do zero ao avançado com projetos
+          reais e mentores experientes.
+        </p>
+        <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+          <a
+            href="#apresentacao"
+            className="slime-glow-btn inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-7 py-3.5 font-bold text-black"
+          >
+            SAIBA MAIS
+          </a>
+          <a
+            href="#contato"
+            className="inline-flex items-center justify-center rounded-xl border border-[#39ff14] px-7 py-3.5 font-semibold text-[#39ff14] transition-colors hover:bg-[#39ff14]/10"
+          >
+            ENTRE EM CONTATO
+          </a>
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.15}>
+        <div className="relative">
+          <div className="absolute -inset-4 rounded-3xl bg-[#39ff14]/10 blur-2xl" />
+          <img
+            src={heroGraphic}
+            alt="Mascote Slime Code desenvolvendo jogos"
+            width={1024}
+            height={1024}
+            className="relative w-full rounded-3xl border border-[#39ff14]/40 object-cover"
+          />
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+function Marquee() {
+  const items = [
+    "CURSO DE DESIGN GRÁFICO",
+    "CURSO DE DESENVOLVIMENTO DE JOGOS",
+    "CURSO DE TECNOLOGIA DA INFORMAÇÃO",
+  ];
+  const sequence = [...items, ...items, ...items, ...items];
+
+  return (
+    <div className="overflow-hidden border-y border-[#39ff14]/20 bg-black/60 py-6">
+      <div className="slime-marquee-track flex w-max items-center gap-8 whitespace-nowrap">
+        {sequence.map((text, i) => (
+          <span key={i} className="flex items-center gap-8">
+            <span className="slime-outline-text text-2xl font-extrabold md:text-4xl">
+              {text}
+            </span>
+            <span className="slime-neon text-2xl md:text-4xl">⊛</span>
           </span>
         ))}
       </div>
-
-      <Link
-        to="/login"
-        className="slime-glow-btn mt-7 inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-6 py-3 font-bold text-black"
-      >
-        Quero esse curso
-      </Link>
     </div>
   );
 }
 
-export default function Landing() {
-  const [menuOpen, setMenuOpen] = useState(false);
+function Apresentacao() {
+  return (
+    <section id="apresentacao" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+      <Reveal className="mx-auto mb-12 max-w-2xl text-center">
+        <h2 className="text-3xl font-extrabold md:text-4xl">
+          SUA JORNADA COMEÇA AQUI!{" "}
+          <span className="slime-neon">CRIE SEUS JOGOS</span>
+        </h2>
+        <p className="mt-4 text-white/70">
+          APRENDA PROGRAMAÇÃO ENQUANTO SE DIVERTE CRIANDO SEUS PRÓPRIOS JOGOS.
+        </p>
+      </Reveal>
 
-  const benefits = [
-    { icon: <GraduationCap className="h-7 w-7" />, label: "Professores Experientes" },
-    { icon: <Users className="h-7 w-7" />, label: "Turmas Reduzidas" },
-    { icon: <Medal className="h-7 w-7" />, label: "Certificado de Conclusão" },
+      <div className="grid auto-rows-[200px] grid-cols-2 gap-4 md:grid-cols-4">
+        <Reveal className="col-span-2 row-span-2">
+          <img
+            src={mascotGames}
+            alt="Aluno feliz criando jogos"
+            loading="lazy"
+            className="h-full w-full rounded-3xl border border-[#39ff14]/30 object-cover"
+          />
+        </Reveal>
+        <Reveal delay={0.1} className="col-span-2">
+          <div className="flex h-full items-center justify-center rounded-3xl slime-card p-6 text-center">
+            <p className="text-xl font-bold">
+              Projetos <span className="slime-neon">reais</span> desde a primeira aula
+            </p>
+          </div>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <img
+            src={mascotDesign}
+            alt="Aluno criando design gráfico"
+            loading="lazy"
+            className="h-full w-full rounded-3xl border border-[#39ff14]/30 object-cover"
+          />
+        </Reveal>
+        <Reveal delay={0.2}>
+          <div className="flex h-full items-center justify-center rounded-3xl bg-[#39ff14] p-6 text-center">
+            <p className="text-2xl font-extrabold text-black">+100 alunos</p>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Ferramentas() {
+  const tools = [
+    { name: "UNITY", icon: <Gamepad2 className="h-6 w-6" />, desc: "Criação de sistemas, programação, física, iluminação. Desenvolvimento 2D e 3D." },
+    { name: "CONSTRUCT 3", icon: <Boxes className="h-6 w-6" />, desc: "Plataforma de criação de jogos baseada em HTML5. Lógica visual." },
+    { name: "BLENDER", icon: <Layers className="h-6 w-6" />, desc: "Software de criação 3D para modelagem, texturização e animação." },
+    { name: "UX / UI", icon: <Target className="h-6 w-6" />, desc: "Design de experiência e interface do usuário com navegação clara." },
+    { name: "PHOTOSHOP", icon: <ImageIcon className="h-6 w-6" />, desc: "Edição de imagem, criação de texturas e artes digitais." },
+    { name: "ILLUSTRATOR", icon: <PenTool className="h-6 w-6" />, desc: "Ferramenta de criação vetorial para logotipos e identidades visuais." },
+    { name: "PREMIERE & AFTER EFFECTS", icon: <Film className="h-6 w-6" />, desc: "Edição de vídeos, efeitos visuais e motion design." },
+    { name: "FIGMA", icon: <FigmaIcon className="h-6 w-6" />, desc: "Ferramenta de design colaborativo focada em UI/UX." },
   ];
 
   return (
-    <div className="slime-scanlines slime-font min-h-screen text-white">
-      {/* Header */}
-      <header
-        id="home"
-        className="sticky top-0 z-50 border-b border-[#39ff14]/20 bg-black/70 backdrop-blur-md"
-      >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-8">
-          <a href="#home" className="flex items-center gap-2">
-            <Box className="h-7 w-7 slime-neon slime-text-glow" />
-            <span className="text-xl font-bold">
-              Slime<span className="slime-neon">Code</span>
-            </span>
-          </a>
+    <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+      <Reveal className="mb-12 text-center">
+        <h2 className="text-3xl font-extrabold md:text-4xl">
+          FERRAMENTAS <span className="slime-neon">UTILIZADAS</span>
+        </h2>
+      </Reveal>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            <NavLinks />
-          </nav>
-
-          <Link
-            to="/login"
-            className="slime-glow-btn hidden rounded-xl border border-[#39ff14] px-5 py-2.5 font-semibold text-[#39ff14] md:inline-flex"
-          >
-            Acesso ao Portal
-          </Link>
-
-          <button
-            className="md:hidden text-[#39ff14]"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Abrir menu"
-          >
-            {menuOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
-          </button>
-        </div>
-
-        {menuOpen && (
-          <div className="flex flex-col gap-4 border-t border-[#39ff14]/20 bg-black/90 px-4 py-5 md:hidden">
-            <NavLinks onClick={() => setMenuOpen(false)} />
-            <Link
-              to="/login"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-xl border border-[#39ff14] px-5 py-2.5 text-center font-semibold text-[#39ff14]"
-            >
-              Acesso ao Portal
-            </Link>
-          </div>
-        )}
-      </header>
-
-      {/* Hero */}
-      <section className="relative mx-auto max-w-7xl px-4 pt-16 pb-20 md:px-8 md:pt-24">
-        <div className="relative mx-auto max-w-3xl text-center">
-          {/* Badge flutuante */}
-          <div className="pointer-events-none absolute -top-6 right-0 md:-top-4 md:-right-4">
-            <span className="slime-glow-btn inline-block -rotate-12 rounded-lg bg-[#39ff14] px-4 py-2 text-sm font-extrabold text-black shadow-lg">
-              50% de Desconto
-            </span>
-          </div>
-
-          <p className="slime-neon mb-4 text-sm font-semibold uppercase tracking-[0.2em]">
-            Transforme Sua Criatividade Em Futuro
-          </p>
-          <h1 className="text-4xl font-bold leading-tight md:text-6xl">
-            CURSOS QUE PREPARAM PARA O{" "}
-            <span className="slime-neon slime-text-glow">AMANHÃ</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl text-white/70">
-            Aprenda design e desenvolvimento de jogos com projetos reais, mentores
-            experientes e uma metodologia feita para você criar de verdade.
-          </p>
-
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href="#oferta"
-              className="slime-glow-btn inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-8 py-4 text-lg font-bold text-black"
-            >
-              Garantir Minha Vaga
-            </a>
-            <a
-              href="#cursos"
-              className="inline-flex items-center justify-center rounded-xl border border-white/20 px-8 py-4 text-lg font-semibold text-white hover:border-[#39ff14] hover:text-[#39ff14] transition-colors"
-            >
-              Ver Cursos
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Cursos */}
-      <section id="cursos" className="mx-auto max-w-7xl px-4 py-16 md:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold md:text-4xl">
-            Nossos <span className="slime-neon">Cursos</span>
-          </h2>
-          <p className="mt-3 text-white/60">Escolha sua área e comece a criar hoje.</p>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-2">
-          <CourseCard
-            image={MASCOT_DESIGN_URL}
-            title="Design Gráfico"
-            subtitle="CRIE. COMUNIQUE. IMPACTE."
-            text="Domine a edição de vídeo, de imagem, criação de identidade visual e muito mais!"
-            tags={[
-              { icon: <Video className="h-4 w-4" />, label: "Edição de Vídeo" },
-              { icon: <Palette className="h-4 w-4" />, label: "Identidade Visual" },
-              { icon: <Share2 className="h-4 w-4" />, label: "Social Media" },
-            ]}
-          />
-          <CourseCard
-            image={MASCOT_GAMES_URL}
-            title="Desenvolvimento de Jogos"
-            subtitle="CRIE SEUS JOGOS. CONSTRUA MUNDOS."
-            text="Aprenda do zero ao avançado e desenvolva seus próprios jogos com projetos reais!"
-            tags={[
-              { icon: <Code2 className="h-4 w-4" />, label: "Programação em C#" },
-              { icon: <Box className="h-4 w-4" />, label: "Criação 2D e 3D" },
-              { icon: <Brain className="h-4 w-4" />, label: "Lógica" },
-            ]}
-          />
-        </div>
-      </section>
-
-      {/* Diferenciais */}
-      <section className="border-y border-[#39ff14]/20 bg-black/40">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-3 md:px-8">
-          {benefits.map((b) => (
-            <div key={b.label} className="flex items-center justify-center gap-4 text-center">
-              <span className="slime-neon slime-text-glow">{b.icon}</span>
-              <span className="text-lg font-semibold">{b.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Oferta / CTA final */}
-      <section id="oferta" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
-        <div className="slime-card mx-auto max-w-3xl rounded-3xl px-6 py-14 text-center">
-          <p className="text-white/70">Invista no seu futuro a partir de</p>
-          <p className="slime-neon slime-text-glow mt-2 text-6xl font-bold md:text-7xl">
-            R$ 220,00
-          </p>
-          <p className="mt-4 text-lg font-semibold text-white/90">
-            Para os <span className="slime-neon">30 primeiros</span> alunos
-          </p>
-          <a
-            href="https://wa.me/5571981971680"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="slime-glow-btn mt-8 inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-8 py-4 text-lg font-bold text-black"
-          >
-            Falar com Atendimento
-          </a>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer id="contato" className="border-t border-[#39ff14]/20 bg-black/70">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-3 md:px-8">
-          <div>
-            <div className="flex items-center gap-2">
-              <Box className="h-6 w-6 slime-neon" />
-              <span className="text-lg font-bold">
-                Slime<span className="slime-neon">Code</span>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {tools.map((t, i) => (
+          <Reveal key={t.name} delay={(i % 4) * 0.08}>
+            <div className="slime-card h-full rounded-2xl p-6">
+              <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#39ff14]/40 slime-neon">
+                {t.icon}
               </span>
+              <h3 className="text-lg font-bold slime-neon">{t.name}</h3>
+              <p className="mt-2 text-sm text-white/70">{t.desc}</p>
             </div>
-            <p className="mt-3 text-sm text-white/60">
-              Cursos de tecnologia que preparam para o amanhã.
-            </p>
-          </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
 
+function Modulos() {
+  const modules = [
+    { title: "CONSTRUCT V3", sub: "Lógica Visual e Jogos 2D" },
+    { title: "UNITY V3", sub: "Programação Aplicada e Jogos 3D" },
+    { title: "BLENDER V2", sub: "Modelagem 3D, Cenários e Animações" },
+    { title: "UX/UI", sub: "Experiência de Foco no Usuário" },
+    { title: "PHOTOSHOP V3", sub: "Artes, Texturas e Criação de Elementos" },
+  ];
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+
+  return (
+    <section className="mx-auto max-w-4xl px-4 py-20 md:px-8">
+      <Reveal className="mb-12 text-center">
+        <h2 className="text-2xl font-extrabold md:text-3xl">
+          A IMPORTÂNCIA DE UM CURSO DE DESENVOLVIMENTO DE JOGOS NA{" "}
+          <span className="slime-neon">SLIME CODE</span>
+        </h2>
+      </Reveal>
+
+      <div className="space-y-3">
+        {modules.map((m, i) => {
+          const isOpen = openIdx === i;
+          return (
+            <Reveal key={m.title} delay={i * 0.05}>
+              <div className="slime-card overflow-hidden rounded-2xl">
+                <button
+                  onClick={() => setOpenIdx(isOpen ? null : i)}
+                  className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                >
+                  <span className="text-lg font-bold">
+                    {m.title}{" "}
+                    <span className="font-normal text-white/50">| {m.sub}</span>
+                  </span>
+                  <span className="slime-neon">
+                    {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                  </span>
+                </button>
+                {isOpen && (
+                  <div className="px-6 pb-5 text-white/70">
+                    Trilha completa de <strong className="slime-neon">{m.sub}</strong>, com
+                    aulas práticas, projetos guiados e desafios para fixar o aprendizado.
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function Beneficios() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+      <Reveal className="mb-12 text-center">
+        <h2 className="text-3xl font-extrabold md:text-4xl">
+          SOBRE O <span className="slime-neon">CURSO</span>
+        </h2>
+      </Reveal>
+      <div className="grid gap-6 md:grid-cols-2">
+        <Reveal>
+          <div className="slime-card h-full rounded-3xl p-8">
+            <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[#39ff14]/40 slime-neon">
+              <Trophy className="h-7 w-7" />
+            </span>
+            <h3 className="text-xl font-bold slime-neon">APRENDIZADO PROGRESSIVO</h3>
+            <p className="mt-2 text-white/70">Do básico ao avançado.</p>
+          </div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <div className="slime-card h-full rounded-3xl p-8">
+            <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[#39ff14]/40 slime-neon">
+              <Target className="h-7 w-7" />
+            </span>
+            <h3 className="text-xl font-bold slime-neon">AULAS PRÁTICAS E OBJETIVAS</h3>
+            <p className="mt-2 text-white/70">Aprenda fazendo, com foco no que importa.</p>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Contato() {
+  const [sent, setSent] = useState(false);
+
+  return (
+    <section id="contato" className="mx-auto max-w-3xl px-4 py-20 md:px-8">
+      <Reveal className="mb-10 text-center">
+        <h2 className="text-3xl font-extrabold md:text-4xl">
+          FALE <span className="slime-neon">CONOSCO</span>
+        </h2>
+        <p className="mt-3 text-white/70">
+          Entre em contato para tirar dúvidas ou saber mais sobre o curso.
+        </p>
+      </Reveal>
+
+      <Reveal delay={0.1}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setSent(true);
+          }}
+          className="slime-card space-y-4 rounded-3xl p-6 md:p-8"
+        >
+          <input
+            required
+            type="text"
+            placeholder="Seu Nome"
+            className="slime-input w-full rounded-xl px-4 py-3 text-white placeholder:text-white/40"
+          />
+          <input
+            required
+            type="email"
+            placeholder="Seu Email"
+            className="slime-input w-full rounded-xl px-4 py-3 text-white placeholder:text-white/40"
+          />
+          <textarea
+            required
+            rows={5}
+            placeholder="Digite sua mensagem"
+            className="slime-input w-full rounded-xl px-4 py-3 text-white placeholder:text-white/40"
+          />
+          <button
+            type="submit"
+            className="slime-glow-btn w-full rounded-xl bg-[#39ff14] px-6 py-3.5 font-bold text-black"
+          >
+            ENVIAR MENSAGEM
+          </button>
+          {sent && (
+            <p className="text-center text-sm slime-neon">
+              Mensagem enviada! Em breve entraremos em contato.
+            </p>
+          )}
+        </form>
+      </Reveal>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer id="blog" className="border-t border-[#39ff14]/20 bg-black/80">
+      {/* Newsletter */}
+      <div className="border-b border-[#39ff14]/20">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 py-12 text-center md:flex-row md:justify-between md:px-8 md:text-left">
+          <h3 className="max-w-md text-2xl font-extrabold">
+            SIGN UP TODAY TO GET THE LATEST{" "}
+            <span className="slime-neon">INSPIRATION</span>
+          </h3>
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex w-full max-w-md gap-3"
+          >
+            <input
+              type="email"
+              placeholder="Email"
+              className="slime-input w-full rounded-xl px-4 py-3 text-white placeholder:text-white/40"
+            />
+            <button className="slime-glow-btn whitespace-nowrap rounded-xl bg-[#39ff14] px-5 py-3 font-bold text-black">
+              SUBSCRIBE NOW
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Columns */}
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-4 md:px-8">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#39ff14] font-extrabold text-black">
+              S
+            </span>
+            <span className="font-extrabold">
+              SLIME <span className="slime-neon">CODE</span>
+            </span>
+          </div>
+          <p className="mt-4 text-sm text-white/60">
+            Cursos de tecnologia, jogos e design que preparam para o amanhã.
+          </p>
+        </div>
+
+        <div>
+          <h4 className="mb-4 font-bold slime-neon">SOBRE O CURSO</h4>
+          <ul className="space-y-2 text-sm text-white/70">
+            <li><a href="#cursos" className="hover:text-[#39ff14]">Cursos</a></li>
+            <li><a href="#apresentacao" className="hover:text-[#39ff14]">Metodologia</a></li>
+            <li><a href="#contato" className="hover:text-[#39ff14]">Contato</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-4 font-bold slime-neon">PÁGINAS ÚTEIS</h4>
+          <ul className="space-y-2 text-sm text-white/70">
+            <li><a href="#" className="hover:text-[#39ff14]">Termos de Uso</a></li>
+            <li><a href="#" className="hover:text-[#39ff14]">Política de Privacidade</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-4 font-bold slime-neon">BAIXE O APP</h4>
           <div className="space-y-3">
-            <h4 className="font-semibold slime-neon">Contato</h4>
-            <a
-              href="tel:+5571981971680"
-              className="flex items-center gap-2 text-white/80 hover:text-[#39ff14] transition-colors"
-            >
+            <a href="#" className="flex items-center gap-3 rounded-xl border border-[#39ff14]/40 px-4 py-2.5">
+              <Globe className="h-6 w-6 slime-neon" />
+              <span className="text-sm">
+                <span className="block text-[10px] text-white/50">GET IT ON</span>
+                Google Play
+              </span>
+            </a>
+            <a href="#" className="flex items-center gap-3 rounded-xl border border-[#39ff14]/40 px-4 py-2.5">
+              <ShoppingBag className="h-6 w-6 slime-neon" />
+              <span className="text-sm">
+                <span className="block text-[10px] text-white/50">DOWNLOAD ON THE</span>
+                App Store
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom contact */}
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-6 text-sm text-white/50 md:flex-row md:justify-between md:px-8">
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <a href="tel:+5571981971680" className="flex items-center gap-1.5 hover:text-[#39ff14]">
               <Phone className="h-4 w-4" /> 71 98197-1680
             </a>
-            <a
-              href="mailto:contato@slimecode.com.br"
-              className="flex items-center gap-2 text-white/80 hover:text-[#39ff14] transition-colors"
-            >
+            <a href="mailto:contato@slimecode.com.br" className="flex items-center gap-1.5 hover:text-[#39ff14]">
               <Mail className="h-4 w-4" /> contato@slimecode.com.br
             </a>
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="font-semibold slime-neon">Redes</h4>
-            <a
-              href="https://instagram.com/slimecode"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-white/80 hover:text-[#39ff14] transition-colors"
-            >
+            <a href="https://instagram.com/slimecode" className="flex items-center gap-1.5 hover:text-[#39ff14]">
               <Instagram className="h-4 w-4" /> @slimecode
             </a>
-            <a
-              href="https://slimecode.com.br"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-white/80 hover:text-[#39ff14] transition-colors"
-            >
-              <Globe className="h-4 w-4" /> slimecode.com.br
-            </a>
           </div>
+          <span>© {new Date().getFullYear()} Slime Code · slimecode.com.br</span>
         </div>
-        <div className="border-t border-white/10 py-5 text-center text-sm text-white/50">
-          © {new Date().getFullYear()} Slime Code. Todos os direitos reservados.
-        </div>
-      </footer>
+      </div>
+    </footer>
+  );
+}
+
+/* ------------------------------ Page ------------------------------ */
+
+export default function Landing() {
+  return (
+    <div className="slime-scanlines slime-font min-h-screen text-white">
+      <Header />
+      <Hero />
+      <Marquee />
+      <Apresentacao />
+      <Ferramentas />
+      <Modulos />
+      <Beneficios />
+      <Contato />
+      <Footer />
     </div>
   );
 }
