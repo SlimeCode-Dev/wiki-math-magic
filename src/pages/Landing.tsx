@@ -296,6 +296,7 @@ function CourseFeature({
   subtitle,
   description,
   learn,
+  to,
 }: {
   reverse?: boolean;
   image: string;
@@ -307,6 +308,7 @@ function CourseFeature({
   subtitle: string;
   description: string;
   learn: string[];
+  to: string;
 }) {
   return (
     <div className="grid items-center gap-8 md:grid-cols-2">
@@ -347,7 +349,7 @@ function CourseFeature({
           </ul>
 
           <Link
-            to="/login"
+            to={to}
             className="slime-glow-btn mt-7 inline-flex items-center justify-center rounded-xl bg-[#39ff14] px-7 py-3.5 font-bold text-black"
           >
             Saiba mais
@@ -373,6 +375,7 @@ function Apresentacao() {
 
       <div className="space-y-16">
         <CourseFeature
+          to="/cursos/desenvolvimento-de-jogos"
           image={courseGames}
           alt="Aluno criando jogos com a Slime Code"
           badge="DESENVOLVIMENTO DE JOGOS"
@@ -391,6 +394,7 @@ function Apresentacao() {
         />
 
         <CourseFeature
+          to="/cursos/design-grafico"
           reverse
           image={courseDesign}
           alt="Aluno criando design gráfico com a Slime Code"
