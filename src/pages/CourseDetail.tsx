@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { T } from "@/components/landing/Editable";
 import {
   ArrowLeft,
   Home,
@@ -27,6 +28,7 @@ export interface CourseModule {
 }
 
 export interface CourseData {
+  slug: string;
   title: string;
   banner: string;
   age: string;
@@ -60,7 +62,7 @@ function Reveal({
 }
 
 export default function CourseDetail({ course }: { course: CourseData }) {
-  const { title, banner, age, intro, toolsHeading, tools, modules, Icon } = course;
+  const { slug, title, banner, age, intro, toolsHeading, tools, modules, Icon } = course;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -117,7 +119,7 @@ export default function CourseDetail({ course }: { course: CourseData }) {
               </span>
             </h1>
             <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-[#3ddc84] px-3 py-1 text-xs font-bold text-black">
-              <Users className="h-3.5 w-3.5" /> {age}
+              <Users className="h-3.5 w-3.5" /> <T id={`course.${slug}.age`}>{age}</T>
             </span>
           </Reveal>
         </div>
@@ -137,21 +139,18 @@ export default function CourseDetail({ course }: { course: CourseData }) {
                 className="relative w-full rounded-3xl border border-[#3ddc84]/40 object-cover"
               />
             </div>
-            <p className="mt-6 text-lg text-white/75">{intro}</p>
+            <T as="p" className="mt-6 text-lg text-white/75" id={`course.${slug}.intro`} multiline>{intro}</T>
           </Reveal>
 
           <Reveal>
-            <h2 className="text-2xl font-extrabold uppercase md:text-3xl">
-              {toolsHeading.split(" ").slice(0, -1).join(" ")}{" "}
-              <span className="slime-neon">
-                {toolsHeading.split(" ").slice(-1)}
-              </span>
+            <h2 className="text-2xl font-extrabold uppercase md:text-3xl slime-neon">
+              <T id={`course.${slug}.toolsHeading`}>{toolsHeading}</T>
             </h2>
             <div className="mt-6 space-y-6">
-              {tools.map((t) => (
-                <div key={t.name}>
-                  <h3 className="text-xl font-bold slime-neon">{t.name}</h3>
-                  <p className="mt-1 text-white/70">{t.desc}</p>
+              {tools.map((t, i) => (
+                <div key={i}>
+                  <T as="h3" className="text-xl font-bold slime-neon" id={`course.${slug}.tool.${i}.name`}>{t.name}</T>
+                  <T as="p" className="mt-1 text-white/70" id={`course.${slug}.tool.${i}.desc`} multiline>{t.desc}</T>
                 </div>
               ))}
             </div>
@@ -160,12 +159,12 @@ export default function CourseDetail({ course }: { course: CourseData }) {
           {/* Fale conosco */}
           <Reveal>
             <div className="slime-card rounded-3xl p-6 md:p-8">
-              <h2 className="text-2xl font-extrabold uppercase">
-                FALE <span className="slime-neon">CONOSCO</span>
+              <h2 className="text-2xl font-extrabold uppercase slime-neon">
+                <T id="course.faleConosco.title">FALE CONOSCO</T>
               </h2>
-              <p className="mt-2 text-white/60">
+              <T as="p" className="mt-2 text-white/60" id="course.faleConosco.subtitle" multiline>
                 Entre em contato para tirar dúvidas ou saber mais sobre o curso.
-              </p>
+              </T>
               <form
                 className="mt-6 grid gap-4 sm:grid-cols-2"
                 onSubmit={(e) => e.preventDefault()}
@@ -209,23 +208,21 @@ export default function CourseDetail({ course }: { course: CourseData }) {
             </div>
 
             {modules.map((m, i) => (
-              <Reveal key={m.title} delay={i * 0.05}>
+              <Reveal key={i} delay={i * 0.05}>
                 <div className="slime-card rounded-2xl p-5">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-bold uppercase">{m.title}</span>
+                    <T as="span" className="text-sm font-bold uppercase" id={`course.${slug}.module.${i}.title`}>{m.title}</T>
                     <ChevronRight className="h-4 w-4 slime-neon" />
                   </div>
-                  <span className="mt-2 inline-block rounded-full border border-[#3ddc84]/40 px-2.5 py-0.5 text-[11px] font-semibold slime-neon">
-                    {m.tag}
-                  </span>
+                  <T as="span" className="mt-2 inline-block rounded-full border border-[#3ddc84]/40 px-2.5 py-0.5 text-[11px] font-semibold slime-neon" id={`course.${slug}.module.${i}.tag`}>{m.tag}</T>
                   <ul className="mt-3 space-y-2">
-                    {m.points.map((p) => (
+                    {m.points.map((p, j) => (
                       <li
-                        key={p}
+                        key={j}
                         className="flex items-start gap-2 text-sm text-white/75"
                       >
                         <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 slime-neon" />
-                        <span>{p}</span>
+                        <T as="span" id={`course.${slug}.module.${i}.point.${j}`}>{p}</T>
                       </li>
                     ))}
                   </ul>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, ArrowLeft, ShieldCheck, Store as StoreIcon, Sparkles } from "lucide-react";
 import { useLMS } from "@/contexts/LMSContext";
 import { useStore, PRODUCT_CATEGORIES, Product } from "@/contexts/StoreContext";
+import { T } from "@/components/landing/Editable";
 import ProductCard from "@/components/store/ProductCard";
 import ProductDetailsModal from "@/components/store/ProductDetailsModal";
 import AdminStorePanel from "@/components/store/AdminStorePanel";
@@ -69,22 +70,22 @@ export default function Loja() {
           <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
             <div className="max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#3ddc84]/50 bg-black/40 px-4 py-1.5 text-xs font-semibold slime-neon backdrop-blur">
-                <Sparkles className="h-3.5 w-3.5" /> COLEÇÃO GAMER & TECH
+                <Sparkles className="h-3.5 w-3.5" /> <T id="loja.banner.badge">COLEÇÃO GAMER & TECH</T>
               </span>
-              <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-5xl">
-                LOJA <span className="slime-neon">SLIME CODE</span>
+              <h1 className="mt-5 text-4xl font-extrabold leading-tight md:text-5xl slime-neon">
+                <T id="loja.banner.title">LOJA SLIME CODE</T>
               </h1>
-              <p className="mt-4 max-w-lg text-white/70">
+              <T as="p" className="mt-4 max-w-lg text-white/70" id="loja.banner.description" multiline>
                 Camisas personalizadas, mochilas, mouse pads e PCs montados com a
                 identidade neon da Slime Code. Estilo, performance e qualidade
                 para o seu setup.
-              </p>
+              </T>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
                   href="#produtos"
                   className="slime-glow-btn inline-flex items-center gap-2 rounded-xl bg-[#3ddc84] px-6 py-3 font-bold text-black"
                 >
-                  <StoreIcon className="h-5 w-5" /> Ver produtos
+                  <StoreIcon className="h-5 w-5" /> <T id="loja.banner.cta">Ver produtos</T>
                 </a>
                 {isAdmin && (
                   <button
@@ -137,8 +138,8 @@ export default function Loja() {
           {/* Secondary header: search + pills */}
           <section id="produtos" className="mx-auto max-w-7xl px-4 pt-10 md:px-8">
             <div className="mb-5 flex items-center gap-3">
-              <h2 className="text-2xl font-extrabold md:text-3xl">
-                Nossos <span className="slime-neon">Produtos</span>
+              <h2 className="text-2xl font-extrabold md:text-3xl slime-neon">
+                <T id="loja.produtos.heading">Nossos Produtos</T>
               </h2>
               <span className="h-px flex-1 bg-[#3ddc84]/20" />
             </div>

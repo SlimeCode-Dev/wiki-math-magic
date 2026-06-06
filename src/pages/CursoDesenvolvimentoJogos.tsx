@@ -4,6 +4,7 @@ import { useSiteContent } from "@/contexts/SiteContentContext";
 import courseGames from "@/assets/course-games.jpg";
 
 const course: CourseData = {
+  slug: "jogos",
   title: "DESENVOLVIMENTO DE JOGOS",
   banner: courseGames,
   age: "A partir de 10 anos",
