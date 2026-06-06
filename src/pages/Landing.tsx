@@ -464,7 +464,7 @@ function Ferramentas() {
     <section className="mx-auto max-w-7xl px-4 py-20 md:px-8">
       <Reveal className="mb-12 text-center">
         <h2 className="text-3xl font-extrabold md:text-4xl">
-          FERRAMENTAS <span className="slime-neon">UTILIZADAS</span>
+          <T id="tools.title1">FERRAMENTAS </T><span className="slime-neon"><T id="tools.title2">UTILIZADAS</T></span>
         </h2>
       </Reveal>
 
@@ -475,8 +475,8 @@ function Ferramentas() {
               <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#3ddc84]/40 slime-neon">
                 {t.icon}
               </span>
-              <h3 className="text-lg font-bold slime-neon">{t.name}</h3>
-              <p className="mt-2 text-sm text-white/70">{t.desc}</p>
+              <h3 className="text-lg font-bold slime-neon"><T id={`tool.${i}.name`}>{t.name}</T></h3>
+              <p className="mt-2 text-sm text-white/70"><T id={`tool.${i}.desc`} multiline>{t.desc}</T></p>
             </div>
           </Reveal>
         ))}
