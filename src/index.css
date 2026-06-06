@@ -61,6 +61,63 @@
     --sidebar-ring: 238 84% 60%;
   }
 
+  /* ===== Cyberpunk theme (matches Slime Code site identity) ===== */
+  .theme-cyber {
+    --background: 213 33% 3%;
+    --foreground: 111 30% 96%;
+
+    --card: 150 25% 5%;
+    --card-foreground: 111 25% 95%;
+
+    --popover: 150 25% 5%;
+    --popover-foreground: 111 25% 95%;
+
+    --primary: 111 100% 54%;
+    --primary-foreground: 213 33% 3%;
+
+    --secondary: 150 20% 10%;
+    --secondary-foreground: 111 25% 95%;
+
+    --muted: 150 18% 12%;
+    --muted-foreground: 111 12% 65%;
+
+    --accent: 111 100% 54%;
+    --accent-foreground: 213 33% 3%;
+
+    --success: 142 76% 45%;
+    --success-foreground: 213 33% 3%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 213 33% 3%;
+
+    --destructive: 0 80% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 111 60% 18%;
+    --input: 111 40% 14%;
+    --ring: 111 100% 54%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(111 100% 54%) 0%, hsl(150 100% 40%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(111 100% 54%) 0%, hsl(160 90% 45%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(111 100% 54%) 0%, hsl(80 90% 50%) 100%);
+    --shadow-soft: 0 4px 20px -4px hsl(111 100% 54% / 0.35);
+    --shadow-card: 0 0 0 1px hsl(111 100% 54% / 0.1), 0 4px 16px -8px hsl(111 100% 54% / 0.25);
+    --shadow-elevated: 0 0 28px -6px hsl(111 100% 54% / 0.45);
+
+    --sidebar-background: 213 33% 4%;
+    --sidebar-foreground: 111 25% 95%;
+    --sidebar-primary: 111 100% 54%;
+    --sidebar-primary-foreground: 213 33% 3%;
+    --sidebar-accent: 150 20% 10%;
+    --sidebar-accent-foreground: 111 25% 95%;
+    --sidebar-border: 111 60% 18%;
+    --sidebar-ring: 111 100% 54%;
+  }
+
+  .theme-cyber body {
+    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  }
+
   .dark {
     --background: 224 71% 4%;
     --foreground: 210 20% 98%;
