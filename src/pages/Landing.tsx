@@ -665,24 +665,24 @@ function Footer() {
             </span>
           </div>
           <p className="mt-4 text-sm text-white/60">
-            Cursos de tecnologia, jogos e design que preparam para o amanhã.
+            <T id="footer.about" multiline>Cursos de tecnologia, jogos e design que preparam para o amanhã.</T>
           </p>
         </div>
 
         <div>
-          <h4 className="mb-4 font-bold slime-neon">SOBRE O CURSO</h4>
+          <h4 className="mb-4 font-bold slime-neon"><T id="footer.col1.title">SOBRE O CURSO</T></h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><a href="#cursos" className="hover:text-[#3ddc84]">Cursos</a></li>
-            <li><a href="#apresentacao" className="hover:text-[#3ddc84]">Metodologia</a></li>
-            <li><a href="#contato" className="hover:text-[#3ddc84]">Contato</a></li>
+            <li><a href="#cursos" className="hover:text-[#3ddc84]"><T id="footer.col1.l1">Cursos</T></a></li>
+            <li><a href="#apresentacao" className="hover:text-[#3ddc84]"><T id="footer.col1.l2">Metodologia</T></a></li>
+            <li><a href="#contato" className="hover:text-[#3ddc84]"><T id="footer.col1.l3">Contato</T></a></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="mb-4 font-bold slime-neon">PÁGINAS ÚTEIS</h4>
+          <h4 className="mb-4 font-bold slime-neon"><T id="footer.col2.title">PÁGINAS ÚTEIS</T></h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><a href="#" className="hover:text-[#3ddc84]">Termos de Uso</a></li>
-            <li><a href="#" className="hover:text-[#3ddc84]">Política de Privacidade</a></li>
+            <li><a href="#" className="hover:text-[#3ddc84]"><T id="footer.col2.l1">Termos de Uso</T></a></li>
+            <li><a href="#" className="hover:text-[#3ddc84]"><T id="footer.col2.l2">Política de Privacidade</T></a></li>
           </ul>
         </div>
 
