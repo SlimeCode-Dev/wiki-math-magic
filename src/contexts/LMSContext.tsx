@@ -48,6 +48,12 @@ interface LMSContextType {
   // Progress
   toggleMaterialProgress: (studentId: string, materialId: string) => void;
   getStudentProgress: (studentId: string) => MaterialProgress[];
+  // Game time (lan house)
+  gameTimeTransactions: GameTimeTransaction[];
+  addGameTime: (userId: string, minutes: number, amountPaid: number, note?: string) => void;
+  removeGameTime: (userId: string, minutes: number, note?: string) => void;
+  getUserTimeBalance: (userId: string) => number;
+  getUserTimeTransactions: (userId: string) => GameTimeTransaction[];
 }
 
 const LMSContext = createContext<LMSContextType | undefined>(undefined);
