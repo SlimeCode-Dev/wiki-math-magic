@@ -40,6 +40,11 @@ const adminNav: NavItem[] = [
   { title: 'Vídeo-aulas', url: '/admin/videos', icon: Video },
   { title: 'Entregas', url: '/admin/entregas', icon: Upload },
   { title: 'Financeiro', url: '/admin/financeiro', icon: CreditCard },
+  { title: 'Lan House (Tempo)', url: '/vendedor', icon: Gamepad2 },
+];
+
+const vendedorNav: NavItem[] = [
+  { title: 'Lan House (Tempo)', url: '/vendedor', icon: Gamepad2 },
 ];
 
 const professorNav: NavItem[] = [
