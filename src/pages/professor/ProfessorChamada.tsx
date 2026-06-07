@@ -203,65 +203,96 @@ export default function ProfessorChamada() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm divide-y divide-border">
-                {students.map(student => {
-                  const isPresent = attendance[student.id] ?? true;
+              {/* Spreadsheet-style attendance sheet */}
+              <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
+                {/* Date header (like a spreadsheet title row) */}
+                <div className="flex items-center gap-2 bg-muted/60 border-b border-border px-4 py-3">
+                  <Calendar className="h-4 w-4 text-primary" />
+                  <span className="font-semibold text-foreground capitalize">
+                    {format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                  </span>
+                </div>
 
-                  return (
-                    <div key={student.id} className="p-4 space-y-3 hover:bg-muted/30 transition-colors">
-                      <div className="flex items-center justify-between gap-3">
+                {/* Column headers */}
+                <div className="hidden sm:grid grid-cols-[2.5rem_1fr_13rem_1fr] items-center gap-3 bg-muted/30 border-b border-border px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <span>#</span>
+                  <span>Aluno</span>
+                  <span className="text-center">Presença</span>
+                  <span>Observação</span>
+                </div>
+
+                {/* Rows */}
+                <div className="divide-y divide-border">
+                  {students.map((student, index) => {
+                    const isPresent = attendance[student.id] ?? true;
+
+                    return (
+                      <div
+                        key={student.id}
+                        className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[2.5rem_1fr_13rem_1fr] items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors"
+                      >
+                        {/* Index */}
+                        <span className="text-sm tabular-nums text-muted-foreground">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+
+                        {/* Name */}
                         <button
                           type="button"
                           onClick={() => setDetailStudentId(student.id)}
-                          className="flex items-center gap-3 text-left group"
+                          className="flex items-center gap-3 text-left group min-w-0"
                         >
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full gradient-primary">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full gradient-primary">
                             <span className="text-sm font-medium text-primary-foreground">
                               {student.name.charAt(0)}
                             </span>
                           </div>
-                          <div>
-                            <p className="font-medium text-foreground group-hover:text-primary transition-colors">
+                          <div className="min-w-0">
+                            <p className="font-medium text-foreground truncate group-hover:text-primary transition-colors">
                               {student.name}
                             </p>
-                            <p className="text-xs text-muted-foreground">{student.email}</p>
+                            <p className="text-xs text-muted-foreground truncate">{student.email}</p>
                           </div>
                         </button>
 
-                        <div className="flex items-center gap-2">
+                        {/* Status toggle */}
+                        <div className="col-start-2 sm:col-start-3 flex items-center justify-start sm:justify-center gap-2">
                           <Button
                             variant={isPresent ? 'default' : 'outline'}
                             size="sm"
-                            className={isPresent ? 'bg-success hover:bg-success/90 text-success-foreground' : ''}
+                            className={`flex-1 sm:flex-none ${isPresent ? 'bg-success hover:bg-success/90 text-success-foreground' : ''}`}
                             onClick={() => { if (!isPresent) toggleAttendance(student.id); }}
                           >
-                            <Check className="h-4 w-4" />
+                            <Check className="h-4 w-4 sm:mr-1" />
+                            <span className="sm:inline">Presente</span>
                           </Button>
                           <Button
                             variant={!isPresent ? 'default' : 'outline'}
                             size="sm"
-                            className={!isPresent ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' : ''}
+                            className={`flex-1 sm:flex-none ${!isPresent ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' : ''}`}
                             onClick={() => { if (isPresent) toggleAttendance(student.id); }}
                           >
-                            <X className="h-4 w-4" />
+                            <X className="h-4 w-4 sm:mr-1" />
+                            <span className="sm:inline">Ausente</span>
                           </Button>
                         </div>
-                      </div>
 
-                      <div className="flex items-center gap-2 pl-13">
-                        <MessageSquare className="h-4 w-4 text-muted-foreground shrink-0" />
-                        <Input
-                          value={notes[student.id] || ''}
-                          onChange={(e) =>
-                            setNotes(prev => ({ ...prev, [student.id]: e.target.value }))
-                          }
-                          placeholder="Observação sobre o aluno (opcional)"
-                          className="h-9 text-sm"
-                        />
+                        {/* Note */}
+                        <div className="col-start-2 sm:col-start-4 flex items-center gap-2">
+                          <MessageSquare className="h-4 w-4 text-muted-foreground shrink-0 sm:hidden" />
+                          <Input
+                            value={notes[student.id] || ''}
+                            onChange={(e) =>
+                              setNotes(prev => ({ ...prev, [student.id]: e.target.value }))
+                            }
+                            placeholder="Observação (opcional)"
+                            className="h-9 text-sm"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </>
           ) : selectedTurma ? (
