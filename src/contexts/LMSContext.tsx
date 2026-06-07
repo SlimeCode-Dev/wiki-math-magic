@@ -586,6 +586,7 @@ export function LMSProvider({ children }: { children: ReactNode }) {
   return (
     <LMSContext.Provider value={{
       currentUser,
+      isInitialized,
       users: data.users,
       turmas: data.turmas,
       materials: data.materials,
