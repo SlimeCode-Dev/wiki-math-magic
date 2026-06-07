@@ -702,6 +702,11 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       getStudentAttendance,
       toggleMaterialProgress,
       getStudentProgress,
+      gameTimeTransactions: data.gameTimeTransactions,
+      addGameTime,
+      removeGameTime,
+      getUserTimeBalance,
+      getUserTimeTransactions,
     }}>
       {children}
     </LMSContext.Provider>
