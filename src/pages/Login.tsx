@@ -63,6 +63,7 @@ export default function Login() {
     { role: 'Admin', email: 'admin@codeschool.com', password: 'admin123' },
     { role: 'Professor', email: 'maria@codeschool.com', password: 'prof123' },
     { role: 'Aluno', email: 'ana@codeschool.com', password: 'aluno123' },
+    { role: 'Vendedor', email: 'vendas@code.com', password: 'vendas123' },
   ];
 
   return (
