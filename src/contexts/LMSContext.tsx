@@ -641,6 +641,8 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       deleteAnnouncement,
       addAttendanceRecord,
       getAttendanceByTurmaAndDate,
+      getAttendanceByTurma,
+      getStudentAttendance,
       toggleMaterialProgress,
       getStudentProgress,
     }}>
