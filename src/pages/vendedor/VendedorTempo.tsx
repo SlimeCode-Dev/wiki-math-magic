@@ -58,8 +58,6 @@ export default function VendedorTempo() {
   const [newName, setNewName] = useState('');
   const [newCpf, setNewCpf] = useState('');
 
-  if (!currentUser) return null;
-
   // Players pool = students + walk-in clients (alunos are included automatically)
   const players = useMemo(
     () =>
@@ -76,6 +74,8 @@ export default function VendedorTempo() {
       (u) => u.name.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q)
     );
   }, [players, search]);
+
+  if (!currentUser) return null;
 
   const selected: User | undefined = selectedId ? getUserById(selectedId) : undefined;
   const balance = selectedId ? getUserTimeBalance(selectedId) : 0;
