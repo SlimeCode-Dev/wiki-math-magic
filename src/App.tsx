@@ -39,6 +39,9 @@ import AlunoDashboard from "./pages/aluno/AlunoDashboard";
 import AlunoMateriais from "./pages/aluno/AlunoMateriais";
 import AlunoEntregas from "./pages/aluno/AlunoEntregas";
 
+// Vendedor Pages
+import VendedorTempo from "./pages/vendedor/VendedorTempo";
+
 const queryClient = new QueryClient();
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles: string[] }) {
