@@ -231,6 +231,17 @@ export default function ProfessorVideos() {
           </div>
         )}
       </div>
+
+      {previewVideo && (
+        <FilePreviewModal
+          open={!!previewVideo}
+          onOpenChange={(o) => !o && setPreviewVideo(null)}
+          fileName={previewVideo.title}
+          fileType="video"
+          videoUrl={previewVideo.videoUrl}
+          title={previewVideo.title}
+        />
+      )}
     </MainLayout>
   );
 }
