@@ -3,6 +3,7 @@ import { User, Turma, Material, StudentSubmission, Payment, LMSData, UserRole, A
 
 interface LMSContextType {
   currentUser: User | null;
+  isInitialized: boolean;
   users: User[];
   turmas: Turma[];
   materials: Material[];
