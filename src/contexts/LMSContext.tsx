@@ -3,6 +3,7 @@ import { User, Turma, Material, StudentSubmission, Payment, LMSData, UserRole, A
 
 interface LMSContextType {
   currentUser: User | null;
+  isInitialized: boolean;
   users: User[];
   turmas: Turma[];
   materials: Material[];
@@ -179,6 +180,7 @@ const initialData: LMSData = {
 export function LMSProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [data, setData] = useState<LMSData>(initialData);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Load data and session from localStorage on mount
   useEffect(() => {
@@ -192,6 +194,7 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       localStorage.setItem(DATA_VERSION_KEY, CURRENT_DATA_VERSION.toString());
       localStorage.removeItem(SESSION_KEY);
       setData(initialData);
+      setIsInitialized(true);
       return;
     }
     
@@ -217,6 +220,8 @@ export function LMSProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem(SESSION_KEY);
       }
     }
+
+    setIsInitialized(true);
   }, []);
 
   // Save data to localStorage whenever it changes
@@ -581,6 +586,7 @@ export function LMSProvider({ children }: { children: ReactNode }) {
   return (
     <LMSContext.Provider value={{
       currentUser,
+      isInitialized,
       users: data.users,
       turmas: data.turmas,
       materials: data.materials,
