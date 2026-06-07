@@ -39,6 +39,7 @@ export default function ProfessorVideos() {
   const [title, setTitle] = useState('');
   const [turmaId, setTurmaId] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [previewVideo, setPreviewVideo] = useState<Material | null>(null);
 
   if (!currentUser) return null;
 
