@@ -180,6 +180,7 @@ const initialData: LMSData = {
 export function LMSProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [data, setData] = useState<LMSData>(initialData);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Load data and session from localStorage on mount
   useEffect(() => {
