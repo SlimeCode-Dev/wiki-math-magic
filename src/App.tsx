@@ -65,7 +65,7 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode;
 }
 
 function AppRoutes() {
-  const { currentUser } = useLMS();
+  const { currentUser, isInitialized } = useLMS();
 
   return (
     <Routes>
@@ -82,7 +82,7 @@ function AppRoutes() {
       {/* Login */}
       <Route
         path="/login"
-        element={currentUser ? <Navigate to={`/${currentUser.role}`} replace /> : <Login />}
+        element={isInitialized && currentUser ? <Navigate to={`/${currentUser.role}`} replace /> : <Login />}
       />
 
       {/* Admin Routes */}
