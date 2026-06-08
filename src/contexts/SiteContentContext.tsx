@@ -52,6 +52,45 @@ const defaultContent: SiteContent = {
     description:
       "O aluno domina as ferramentas do mercado criativo, da edição de imagem e vídeo à criação de identidades visuais profissionais.",
   },
+  blog: [
+    {
+      id: "blog-1",
+      category: "portfolio",
+      title: "Jogo 2D feito pela turma",
+      description: "Projeto de plataforma criado pelos alunos no módulo de Construct 3.",
+      image: courseGames,
+    },
+    {
+      id: "blog-2",
+      category: "portfolio",
+      title: "Identidade visual de aluno",
+      description: "Logotipo e identidade visual desenvolvidos no curso de Design Gráfico.",
+      image: courseDesign,
+    },
+    {
+      id: "blog-3",
+      category: "curiosidade",
+      title: "Você sabia? Teoria das cores",
+      description:
+        "Cores complementares criam contraste e chamam atenção — essenciais no design gráfico.",
+      image: courseDesign,
+    },
+    {
+      id: "blog-4",
+      category: "curiosidade",
+      title: "Game design: o loop de gameplay",
+      description:
+        "Bons jogos têm um ciclo de ações recompensadoras que mantêm o jogador engajado.",
+      image: courseGames,
+    },
+    {
+      id: "blog-5",
+      category: "video",
+      title: "Turma em aula prática",
+      description: "Veja um pouco do dia a dia dos alunos durante as aulas.",
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    },
+  ],
   texts: {},
 };
 
