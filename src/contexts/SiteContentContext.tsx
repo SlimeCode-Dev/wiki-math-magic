@@ -9,12 +9,24 @@ export interface CourseContent {
   description: string;
 }
 
+export type BlogCategory = "portfolio" | "curiosidade" | "video";
+
+export interface BlogItem {
+  id: string;
+  category: BlogCategory;
+  title: string;
+  description: string;
+  image?: string; // Base64 or URL (used for portfolio / curiosidade)
+  videoUrl?: string; // YouTube link (used for video)
+}
+
 export interface SiteContent {
   heroVideoUrl: string;
   heroTitle: string;
   heroDescription: string;
   games: CourseContent;
   design: CourseContent;
+  blog: BlogItem[];
   /** Arbitrary text overrides keyed by a stable id (used by the <T> component) */
   texts: Record<string, string>;
 }
