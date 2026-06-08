@@ -149,6 +149,24 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const setText = (id: string, value: string) =>
     persist({ ...content, texts: { ...content.texts, [id]: value } });
 
+  const addBlogItem = (item: Omit<BlogItem, "id">) =>
+    persist({
+      ...content,
+      blog: [
+        { ...item, id: `blog-${Math.random().toString(36).slice(2, 9)}` },
+        ...content.blog,
+      ],
+    });
+
+  const updateBlogItem = (id: string, patch: Partial<BlogItem>) =>
+    persist({
+      ...content,
+      blog: content.blog.map((b) => (b.id === id ? { ...b, ...patch } : b)),
+    });
+
+  const removeBlogItem = (id: string) =>
+    persist({ ...content, blog: content.blog.filter((b) => b.id !== id) });
+
   const resetContent = () => {
     localStorage.removeItem(STORAGE_KEY);
     setContent(defaultContent);
@@ -156,7 +174,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
 
   return (
     <SiteContentContext.Provider
-      value={{ content, updateContent, updateCourse, getText, setText, resetContent }}
+      value={{ content, updateContent, updateCourse, getText, setText, addBlogItem, updateBlogItem, removeBlogItem, resetContent }}
     >
       {children}
     </SiteContentContext.Provider>
