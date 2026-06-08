@@ -631,9 +631,170 @@ function Contato() {
   );
 }
 
+function Blog() {
+  const { currentUser } = useLMS();
+  const { content, addBlogItem, updateBlogItem, removeBlogItem } = useSiteContent();
+  const canEdit = currentUser?.role === "admin";
+
+  const [filter, setFilter] = useState<"all" | BlogCategory>("all");
+
+  const categories: { key: "all" | BlogCategory; label: string; icon: ReactNode }[] = [
+    { key: "all", label: "Tudo", icon: <Layers className="h-4 w-4" /> },
+    { key: "portfolio", label: "Portfólio dos Alunos", icon: <Trophy className="h-4 w-4" /> },
+    { key: "curiosidade", label: "Curiosidades", icon: <Lightbulb className="h-4 w-4" /> },
+    { key: "video", label: "Vídeos da Turma", icon: <Film className="h-4 w-4" /> },
+  ];
+
+  const items =
+    filter === "all" ? content.blog : content.blog.filter((b) => b.category === filter);
+
+  const handleAdd = (category: BlogCategory) => {
+    const title = window.prompt("Título:");
+    if (!title || !title.trim()) return;
+    const description = window.prompt("Descrição:") || "";
+    if (category === "video") {
+      const videoUrl = window.prompt("Cole o link do vídeo do YouTube:") || "";
+      if (!getYoutubeId(videoUrl)) {
+        window.alert("Link do YouTube inválido.");
+        return;
+      }
+      addBlogItem({ category, title: title.trim(), description, videoUrl: videoUrl.trim() });
+    } else {
+      addBlogItem({ category, title: title.trim(), description });
+    }
+  };
+
+  const catLabel: Record<BlogCategory, string> = {
+    portfolio: "Portfólio",
+    curiosidade: "Curiosidade",
+    video: "Vídeo",
+  };
+
+  return (
+    <section id="blog" className="mx-auto max-w-7xl px-4 py-20 md:px-8">
+      <Reveal className="mb-10 text-center">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[#3ddc84]/50 px-4 py-1.5 text-xs font-semibold slime-neon">
+          <Newspaper className="h-4 w-4" /> <T id="blog.badge">BLOG SLIME CODE</T>
+        </span>
+        <h2 className="mt-5 text-3xl font-extrabold md:text-4xl">
+          <T id="blog.title1">NOVIDADES E </T>
+          <span className="slime-neon"><T id="blog.title2">PORTFÓLIO</T></span>
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-white/70">
+          <T id="blog.subtitle" multiline>
+            Trabalhos dos alunos, curiosidades de design e jogos, e momentos da turma em aula.
+          </T>
+        </p>
+      </Reveal>
+
+      {/* Filters */}
+      <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
+        {categories.map((c) => (
+          <button
+            key={c.key}
+            onClick={() => setFilter(c.key)}
+            className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold transition-colors ${
+              filter === c.key
+                ? "border-[#3ddc84] bg-[#3ddc84] text-black"
+                : "border-[#3ddc84]/40 text-white/80 hover:bg-[#3ddc84]/10 hover:text-[#3ddc84]"
+            }`}
+          >
+            {c.icon} {c.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Admin add buttons */}
+      {canEdit && (
+        <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
+          {(["portfolio", "curiosidade", "video"] as BlogCategory[]).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => handleAdd(cat)}
+              className="inline-flex items-center gap-2 rounded-xl border border-dashed border-[#3ddc84]/60 px-4 py-2 text-sm font-semibold text-[#3ddc84] hover:bg-[#3ddc84]/10"
+            >
+              <PlusCircle className="h-4 w-4" /> Adicionar {catLabel[cat]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {items.length === 0 ? (
+        <p className="text-center text-white/50">Nenhum item nesta categoria ainda.</p>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((item, i) => (
+            <Reveal key={item.id} delay={(i % 3) * 0.08}>
+              <article className="slime-card group relative flex h-full flex-col overflow-hidden rounded-3xl">
+                {item.category === "video" ? (
+                  <EditableVideo
+                    className="relative"
+                    canEdit={canEdit}
+                    url={item.videoUrl || ""}
+                    onChange={(v) => updateBlogItem(item.id, { videoUrl: v })}
+                  />
+                ) : (
+                  <EditableImage
+                    canEdit={canEdit}
+                    src={item.image || ""}
+                    alt={item.title}
+                    onChange={(img) => updateBlogItem(item.id, { image: img })}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      loading="lazy"
+                      className="h-48 w-full object-cover"
+                    />
+                  </EditableImage>
+                )}
+
+                <div className="flex flex-1 flex-col p-6">
+                  <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-[#3ddc84]/50 px-3 py-1 text-[11px] font-bold uppercase tracking-wide slime-neon">
+                    {catLabel[item.category]}
+                  </span>
+                  <h3 className="text-lg font-bold text-white">
+                    <EditableText
+                      canEdit={canEdit}
+                      value={item.title}
+                      onChange={(v) => updateBlogItem(item.id, { title: v })}
+                    />
+                  </h3>
+                  <p className="mt-2 text-sm text-white/70">
+                    <EditableText
+                      canEdit={canEdit}
+                      multiline
+                      value={item.description}
+                      onChange={(v) => updateBlogItem(item.id, { description: v })}
+                    />
+                  </p>
+                </div>
+
+                {canEdit && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm("Remover este item do blog?")) removeBlogItem(item.id);
+                    }}
+                    aria-label="Remover item"
+                    className="absolute bottom-3 right-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-500/50 bg-black/80 text-red-400 hover:bg-red-500/10"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function Footer() {
   return (
-    <footer id="blog" className="border-t border-[#3ddc84]/20 bg-black/80">
+    <footer className="border-t border-[#3ddc84]/20 bg-black/80">
+
       {/* Newsletter */}
       <div className="border-b border-[#3ddc84]/20">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 py-12 text-center md:flex-row md:justify-between md:px-8 md:text-left">
