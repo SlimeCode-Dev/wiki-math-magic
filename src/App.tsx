@@ -82,6 +82,8 @@ function AppRoutes() {
       {/* Course Detail Pages */}
       <Route path="/cursos/desenvolvimento-de-jogos" element={<CursoDesenvolvimentoJogos />} />
       <Route path="/cursos/design-grafico" element={<CursoDesignGrafico />} />
+      <Route path="/galeria-jogos" element={<GaleriaJogos />} />
+
 
       {/* Login */}
       <Route
