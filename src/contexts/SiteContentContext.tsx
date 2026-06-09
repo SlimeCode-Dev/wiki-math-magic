@@ -155,6 +155,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
           games: { ...defaultContent.games, ...(parsed.games || {}) },
           design: { ...defaultContent.design, ...(parsed.design || {}) },
           blog: Array.isArray(parsed.blog) ? parsed.blog : defaultContent.blog,
+          gameGallery: Array.isArray(parsed.gameGallery) ? parsed.gameGallery : defaultContent.gameGallery,
           texts: { ...defaultContent.texts, ...(parsed.texts || {}) },
         });
       } catch {
