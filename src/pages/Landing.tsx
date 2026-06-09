@@ -740,12 +740,26 @@ function Blog() {
                     alt={item.title}
                     onChange={(img) => updateBlogItem(item.id, { image: img })}
                   >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      loading="lazy"
-                      className="h-48 w-full object-cover"
-                    />
+                    {item.category === "portfolio" && !canEdit ? (
+                      <Link to="/galeria-jogos" className="group/link block">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          loading="lazy"
+                          className="h-48 w-full object-cover transition-transform group-hover/link:scale-105"
+                        />
+                        <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-[#3ddc84] px-3 py-1 text-[11px] font-bold text-black opacity-0 transition-opacity group-hover/link:opacity-100">
+                          Ver galeria
+                        </span>
+                      </Link>
+                    ) : (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        loading="lazy"
+                        className="h-48 w-full object-cover"
+                      />
+                    )}
                   </EditableImage>
                 )}
 
