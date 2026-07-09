@@ -688,6 +688,22 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       .filter(t => t.userId === userId)
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
+  const importGameTransactions = (txs: GameTimeTransaction[]) => {
+    if (!txs.length) return 0;
+    let added = 0;
+    setData(prev => {
+      const existingIds = new Set(prev.gameTimeTransactions.map(t => t.id));
+      const toAdd = txs.filter(t => t.id && !existingIds.has(t.id));
+      added = toAdd.length;
+      if (!toAdd.length) return prev;
+      const merged = [...toAdd, ...prev.gameTimeTransactions].sort((a, b) =>
+        b.createdAt.localeCompare(a.createdAt)
+      );
+      return { ...prev, gameTimeTransactions: merged };
+    });
+    return added;
+  };
+
   const getGameSession = (userId: string) =>
     (data.gameSessions || []).find(s => s.userId === userId);
 
