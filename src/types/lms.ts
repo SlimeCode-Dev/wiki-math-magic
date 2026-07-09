@@ -93,6 +93,14 @@ export interface GameTimeTransaction {
   createdAt: string;
 }
 
+export interface GameSession {
+  userId: string;
+  status: 'running' | 'paused';
+  remainingSeconds: number; // remaining time settled at lastUpdatedAt
+  lastStartedAt?: string; // ISO timestamp when the timer was last set to running
+  updatedAt: string;
+}
+
 export interface LMSData {
   users: User[];
   turmas: Turma[];
@@ -103,6 +111,25 @@ export interface LMSData {
   submissions: StudentSubmission[];
   payments: Payment[];
   gameTimeTransactions: GameTimeTransaction[];
+  gameSessions: GameSession[];
+}
+
+// Price for lan house game time: R$5 per hour
+export const GAME_TIME_PRICE_PER_HOUR = 5;
+
+// Converts a paid amount (BRL) into minutes of game time
+export function amountToMinutes(amount: number): number {
+  return Math.round((amount / GAME_TIME_PRICE_PER_HOUR) * 60);
+}
+
+// Computes live remaining seconds for a session at a given moment
+export function getSessionRemainingSeconds(session: GameSession | undefined, now: number = Date.now()): number {
+  if (!session) return 0;
+  if (session.status === 'running' && session.lastStartedAt) {
+    const elapsed = Math.floor((now - new Date(session.lastStartedAt).getTime()) / 1000);
+    return Math.max(0, session.remainingSeconds - elapsed);
+  }
+  return Math.max(0, session.remainingSeconds);
 }
 
 // Helper to detect file type from extension
