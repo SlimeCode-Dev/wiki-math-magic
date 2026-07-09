@@ -749,6 +749,34 @@ export function LMSProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  // ===== Expenses =====
+  const addExpense = (expense: Omit<Expense, 'id' | 'createdBy'>) => {
+    const newExpense: Expense = {
+      ...expense,
+      id: generateId(),
+      createdBy: currentUser?.id || 'system',
+    };
+    setData(prev => ({ ...prev, expenses: [newExpense, ...(prev.expenses || [])] }));
+  };
+
+  const deleteExpense = (id: string) => {
+    setData(prev => ({ ...prev, expenses: (prev.expenses || []).filter(e => e.id !== id) }));
+  };
+
+  const importExpenses = (expenses: Expense[]) => {
+    let added = 0;
+    setData(prev => {
+      const existing = prev.expenses || [];
+      const ids = new Set(existing.map(e => e.id));
+      const toAdd = expenses.filter(e => !ids.has(e.id));
+      added = toAdd.length;
+      return { ...prev, expenses: [...toAdd, ...existing] };
+    });
+    return added;
+  };
+
+
+
 
 
 
@@ -807,6 +835,10 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       getGameSession,
       startGameSession,
       pauseGameSession,
+      expenses: data.expenses || [],
+      addExpense,
+      deleteExpense,
+      importExpenses,
     }}>
       {children}
     </LMSContext.Provider>
