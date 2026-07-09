@@ -134,11 +134,15 @@ export default function VendedorTempo() {
       email,
       password: '',
       cpf: newCpf.trim() || undefined,
+      phone: newPhone.trim() || undefined,
+      address: newAddress.trim() || undefined,
       role: 'cliente',
     });
     toast.success('Cliente cadastrado');
     setNewName('');
     setNewCpf('');
+    setNewPhone('');
+    setNewAddress('');
     setNewOpen(false);
   };
 
