@@ -623,6 +623,24 @@ export function LMSProvider({ children }: { children: ReactNode }) {
   };
 
   // Game time (lan house)
+  // Adjusts the live session for a user by a delta (in seconds), preserving running state
+  const adjustSession = (sessions: GameSession[], userId: string, deltaSeconds: number): GameSession[] => {
+    const now = new Date().toISOString();
+    const existing = sessions.find(s => s.userId === userId);
+    const settled = getSessionRemainingSeconds(existing, Date.now());
+    const nextRemaining = Math.max(0, settled + deltaSeconds);
+    const running = existing?.status === 'running' && nextRemaining > 0;
+    const updated: GameSession = {
+      userId,
+      status: running ? 'running' : 'paused',
+      remainingSeconds: nextRemaining,
+      lastStartedAt: running ? now : undefined,
+      updatedAt: now,
+    };
+    const others = sessions.filter(s => s.userId !== userId);
+    return [...others, updated];
+  };
+
   const addGameTime = (userId: string, minutes: number, amountPaid: number, note?: string) => {
     if (minutes <= 0) return;
     const tx: GameTimeTransaction = {
@@ -634,7 +652,11 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       note,
       createdAt: new Date().toISOString(),
     };
-    setData(prev => ({ ...prev, gameTimeTransactions: [tx, ...prev.gameTimeTransactions] }));
+    setData(prev => ({
+      ...prev,
+      gameTimeTransactions: [tx, ...prev.gameTimeTransactions],
+      gameSessions: adjustSession(prev.gameSessions || [], userId, minutes * 60),
+    }));
   };
 
   const removeGameTime = (userId: string, minutes: number, note?: string) => {
@@ -648,7 +670,11 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       note,
       createdAt: new Date().toISOString(),
     };
-    setData(prev => ({ ...prev, gameTimeTransactions: [tx, ...prev.gameTimeTransactions] }));
+    setData(prev => ({
+      ...prev,
+      gameTimeTransactions: [tx, ...prev.gameTimeTransactions],
+      gameSessions: adjustSession(prev.gameSessions || [], userId, -Math.abs(minutes) * 60),
+    }));
   };
 
   const getUserTimeBalance = (userId: string) =>
@@ -660,6 +686,47 @@ export function LMSProvider({ children }: { children: ReactNode }) {
     data.gameTimeTransactions
       .filter(t => t.userId === userId)
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+  const getGameSession = (userId: string) =>
+    (data.gameSessions || []).find(s => s.userId === userId);
+
+  const startGameSession = (userId: string) => {
+    setData(prev => {
+      const sessions = prev.gameSessions || [];
+      const existing = sessions.find(s => s.userId === userId);
+      const settled = getSessionRemainingSeconds(existing, Date.now());
+      if (settled <= 0) return prev; // nothing to run
+      const now = new Date().toISOString();
+      const updated: GameSession = {
+        userId,
+        status: 'running',
+        remainingSeconds: settled,
+        lastStartedAt: now,
+        updatedAt: now,
+      };
+      return { ...prev, gameSessions: [...sessions.filter(s => s.userId !== userId), updated] };
+    });
+  };
+
+  const pauseGameSession = (userId: string) => {
+    setData(prev => {
+      const sessions = prev.gameSessions || [];
+      const existing = sessions.find(s => s.userId === userId);
+      if (!existing) return prev;
+      const settled = getSessionRemainingSeconds(existing, Date.now());
+      const now = new Date().toISOString();
+      const updated: GameSession = {
+        userId,
+        status: 'paused',
+        remainingSeconds: settled,
+        lastStartedAt: undefined,
+        updatedAt: now,
+      };
+      return { ...prev, gameSessions: [...sessions.filter(s => s.userId !== userId), updated] };
+    });
+  };
+
+
 
 
 
