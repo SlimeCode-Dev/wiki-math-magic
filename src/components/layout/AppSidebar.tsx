@@ -41,10 +41,12 @@ const adminNav: NavItem[] = [
   { title: 'Entregas', url: '/admin/entregas', icon: Upload },
   { title: 'Financeiro', url: '/admin/financeiro', icon: CreditCard },
   { title: 'Lan House (Tempo)', url: '/vendedor', icon: Gamepad2 },
+  { title: 'Tempos em andamento', url: '/vendedor/ativos', icon: Timer },
 ];
 
 const vendedorNav: NavItem[] = [
   { title: 'Lan House (Tempo)', url: '/vendedor', icon: Gamepad2 },
+  { title: 'Tempos em andamento', url: '/vendedor/ativos', icon: Timer },
 ];
 
 const professorNav: NavItem[] = [
