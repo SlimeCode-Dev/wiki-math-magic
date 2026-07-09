@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Check, X, Save, Users, History, ClipboardList, MessageSquare } from 'lucide-react';
+import { Calendar, Check, X, Save, Users, History, ClipboardList, MessageSquare, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { useLMS } from '@/contexts/LMSContext';
 import { Button } from '@/components/ui/button';
