@@ -75,6 +75,8 @@ export default function VendedorTempo() {
   const [newOpen, setNewOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newCpf, setNewCpf] = useState('');
+  const [newPhone, setNewPhone] = useState('');
+  const [newAddress, setNewAddress] = useState('');
 
   // Players pool = students + walk-in clients
   const players = useMemo(
