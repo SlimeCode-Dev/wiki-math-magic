@@ -193,6 +193,7 @@ const initialData: LMSData = {
   attendanceRecords: [],
   materialProgress: [],
   gameTimeTransactions: [],
+  gameSessions: [],
 };
 
 export function LMSProvider({ children }: { children: ReactNode }) {
