@@ -47,6 +47,7 @@ export default function VendedorTempo() {
     addGameTime,
     removeGameTime,
     getUserTimeTransactions,
+    importGameTransactions,
     getUserById,
     getGameSession,
     startGameSession,
