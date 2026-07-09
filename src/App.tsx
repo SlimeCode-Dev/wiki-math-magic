@@ -42,6 +42,7 @@ import AlunoEntregas from "./pages/aluno/AlunoEntregas";
 
 // Vendedor Pages
 import VendedorTempo from "./pages/vendedor/VendedorTempo";
+import VendedorAtivos from "./pages/vendedor/VendedorAtivos";
 
 const queryClient = new QueryClient();
 
