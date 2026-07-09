@@ -47,6 +47,8 @@ export default function ProfessorChamada() {
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [detailStudentId, setDetailStudentId] = useState<string | null>(null);
+  const [historyMonth, setHistoryMonth] = useState<Date>(new Date());
+  const [selectedHistoryDate, setSelectedHistoryDate] = useState<string | null>(null);
 
   if (!currentUser) return null;
 
