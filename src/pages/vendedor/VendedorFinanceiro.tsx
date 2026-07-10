@@ -447,11 +447,11 @@ export default function VendedorFinanceiro() {
         </p>
       </div>
 
-      {/* ===== Today's detailed history ===== */}
-      <div className="rounded-2xl border border-border bg-card p-5">
-        <h3 className="font-semibold text-foreground mb-1 capitalize">
-          {format(today, "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
-        </h3>
+      {/* ===== Professional financial history table ===== */}
+      <FinancialTable />
+    </MainLayout>
+  );
+}
         <p className="text-sm text-muted-foreground mb-4">Movimentações do dia</p>
 
         {/* Revenue - lan house */}
