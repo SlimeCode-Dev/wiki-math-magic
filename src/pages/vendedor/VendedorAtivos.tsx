@@ -28,7 +28,6 @@ export default function VendedorAtivos() {
     pauseGameSession,
     addGameTime,
     removeGameTime,
-    assignComputer,
   } = useLMS();
 
   const [now, setNow] = useState(Date.now());
