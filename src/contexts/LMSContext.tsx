@@ -656,6 +656,7 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       remainingSeconds: nextRemaining,
       lastStartedAt: running ? now : undefined,
       updatedAt: now,
+      computerId: existing?.computerId,
     };
     const others = sessions.filter(s => s.userId !== userId);
     return [...others, updated];
