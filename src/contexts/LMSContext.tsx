@@ -662,7 +662,7 @@ export function LMSProvider({ children }: { children: ReactNode }) {
     return [...others, updated];
   };
 
-  const addGameTime = (userId: string, minutes: number, amountPaid: number, note?: string) => {
+  const addGameTime = (userId: string, minutes: number, amountPaid: number, note?: string, opts?: { computerId?: string; paymentMethod?: string; operation?: string }) => {
     if (minutes <= 0) return;
     const tx: GameTimeTransaction = {
       id: generateId(),
@@ -672,6 +672,9 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       amountPaid,
       note,
       createdAt: new Date().toISOString(),
+      computerId: opts?.computerId,
+      paymentMethod: opts?.paymentMethod,
+      operation: opts?.operation || 'Adição de tempo',
     };
     setData(prev => ({
       ...prev,
