@@ -743,6 +743,7 @@ export function LMSProvider({ children }: { children: ReactNode }) {
         remainingSeconds: settled,
         lastStartedAt: now,
         updatedAt: now,
+        computerId: existing?.computerId,
       };
       return { ...prev, gameSessions: [...sessions.filter(s => s.userId !== userId), updated] };
     });
@@ -761,8 +762,104 @@ export function LMSProvider({ children }: { children: ReactNode }) {
         remainingSeconds: settled,
         lastStartedAt: undefined,
         updatedAt: now,
+        computerId: existing?.computerId,
       };
       return { ...prev, gameSessions: [...sessions.filter(s => s.userId !== userId), updated] };
+    });
+  };
+
+  // Finishes a session: settles remaining time to 0, records the finalization, frees the computer
+  const finishGameSession = (userId: string) => {
+    setData(prev => {
+      const sessions = prev.gameSessions || [];
+      const existing = sessions.find(s => s.userId === userId);
+      const settled = getSessionRemainingSeconds(existing, Date.now());
+      const now = new Date().toISOString();
+      let txs = prev.gameTimeTransactions;
+      if (settled > 0) {
+        const mins = Math.ceil(settled / 60);
+        txs = [{
+          id: generateId(),
+          userId,
+          sellerId: currentUser?.id || '',
+          minutes: -mins,
+          amountPaid: 0,
+          note: 'Sessão finalizada',
+          createdAt: now,
+          computerId: existing?.computerId,
+          operation: 'Finalização',
+        }, ...txs];
+      }
+      return {
+        ...prev,
+        gameTimeTransactions: txs,
+        gameSessions: sessions.filter(s => s.userId !== userId),
+      };
+    });
+  };
+
+  // ===== Computers =====
+  const getSessionByComputer = (computerId: string) =>
+    (data.gameSessions || []).find(s => s.computerId === computerId);
+
+  const addComputer = (name?: string) => {
+    setData(prev => {
+      const list = prev.computers || [];
+      const nextNum = list.length + 1;
+      const computer: Computer = {
+        id: generateId(),
+        name: name?.trim() || `PC${String(nextNum).padStart(2, '0')}`,
+        createdAt: new Date().toISOString(),
+      };
+      return { ...prev, computers: [...list, computer] };
+    });
+  };
+
+  const removeComputer = (id: string) => {
+    setData(prev => ({
+      ...prev,
+      computers: (prev.computers || []).filter(c => c.id !== id),
+      gameSessions: (prev.gameSessions || []).map(s =>
+        s.computerId === id ? { ...s, computerId: undefined } : s
+      ),
+    }));
+  };
+
+  const renameComputer = (id: string, name: string) => {
+    setData(prev => ({
+      ...prev,
+      computers: (prev.computers || []).map(c => (c.id === id ? { ...c, name: name.trim() || c.name } : c)),
+    }));
+  };
+
+  // Seats a player at a computer (or clears the seat with computerId=undefined)
+  const assignComputer = (userId: string, computerId: string | undefined) => {
+    setData(prev => {
+      const sessions = prev.gameSessions || [];
+      const existing = sessions.find(s => s.userId === userId);
+      // free the computer from any other player first
+      let cleared = sessions;
+      if (computerId) {
+        cleared = sessions.map(s =>
+          s.userId !== userId && s.computerId === computerId ? { ...s, computerId: undefined } : s
+        );
+      }
+      const now = new Date().toISOString();
+      if (existing) {
+        return {
+          ...prev,
+          gameSessions: cleared.map(s => (s.userId === userId ? { ...s, computerId } : s)),
+        };
+      }
+      // create a paused session shell so the seat is tracked even with no time yet
+      const shell: GameSession = {
+        userId,
+        status: 'paused',
+        remainingSeconds: 0,
+        updatedAt: now,
+        computerId,
+      };
+      return { ...prev, gameSessions: [...cleared, shell] };
     });
   };
 
