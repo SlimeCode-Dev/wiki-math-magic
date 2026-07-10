@@ -77,6 +77,19 @@ export default function VendedorAtivos() {
     setQuickAmount((p) => ({ ...p, [userId]: '' }));
   };
 
+  const handleRemove = (userId: string) => {
+    const mins = parseInt(quickRemove[userId] || '', 10);
+    if (isNaN(mins) || mins <= 0) {
+      toast.error('Informe os minutos a retirar');
+      return;
+    }
+    removeGameTime(userId, mins, 'Retirada de tempo');
+    toast.success(`-${mins} min removidos`);
+    setQuickRemove((p) => ({ ...p, [userId]: '' }));
+  };
+
+
+
   return (
     <MainLayout title="Sessões em tempo real">
       <div className="space-y-6">
