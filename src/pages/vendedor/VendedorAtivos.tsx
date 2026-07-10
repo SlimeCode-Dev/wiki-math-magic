@@ -131,10 +131,10 @@ export default function VendedorAtivos() {
                     <TimeBadge session={session} now={now} className="text-3xl" />
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2 mb-2">
+                  <div className="grid grid-cols-1 gap-2 mb-2">
                     {running ? (
                       <Button size="sm" variant="outline" onClick={() => pauseGameSession(user!.id)}>
-                        <Pause className="h-4 w-4" />
+                        <Pause className="h-4 w-4" /> Pausar
                       </Button>
                     ) : (
                       <Button
@@ -147,34 +147,36 @@ export default function VendedorAtivos() {
                           startGameSession(user!.id);
                         }}
                       >
-                        <Play className="h-4 w-4" />
+                        <Play className="h-4 w-4" /> Iniciar
                       </Button>
                     )}
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      className="col-span-2"
-                      onClick={() => {
-                        finishGameSession(user!.id);
-                        assignComputer(user!.id, undefined);
-                        toast.success('Sessão finalizada');
-                      }}
-                    >
-                      <StopCircle className="h-4 w-4" /> Finalizar
-                    </Button>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mb-2">
                     <Input
                       value={quickAmount[user!.id] || ''}
                       onChange={(e) =>
                         setQuickAmount((p) => ({ ...p, [user!.id]: e.target.value }))
                       }
-                      placeholder="R$ tempo"
+                      placeholder="R$ adicionar"
                       inputMode="decimal"
                       className="h-9"
                     />
                     <Button size="sm" onClick={() => handleAdd(user!.id, session.computerId)}>
                       <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      value={quickRemove[user!.id] || ''}
+                      onChange={(e) =>
+                        setQuickRemove((p) => ({ ...p, [user!.id]: e.target.value }))
+                      }
+                      placeholder="Min. retirar"
+                      inputMode="numeric"
+                      className="h-9"
+                    />
+                    <Button size="sm" variant="destructive" onClick={() => handleRemove(user!.id)}>
+                      <Minus className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
