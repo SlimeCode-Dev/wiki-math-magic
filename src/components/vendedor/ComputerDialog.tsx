@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Play, Pause, StopCircle, Plus, UserPlus, X, Clock, DollarSign, History, Trash2 } from 'lucide-react';
+import { Play, Pause, StopCircle, Plus, Minus, UserPlus, X, Clock, DollarSign, History, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLMS } from '@/contexts/LMSContext';
 import {
