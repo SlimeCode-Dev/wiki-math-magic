@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, Turma, Material, StudentSubmission, Payment, LMSData, UserRole, Announcement, AttendanceRecord, MaterialProgress, GameTimeTransaction, GameSession, Expense, amountToMinutes, getSessionRemainingSeconds } from '@/types/lms';
+import { User, Turma, Material, StudentSubmission, Payment, LMSData, UserRole, Announcement, AttendanceRecord, MaterialProgress, GameTimeTransaction, GameSession, Expense, Computer, amountToMinutes, getSessionRemainingSeconds } from '@/types/lms';
 
 interface LMSContextType {
   currentUser: User | null;
@@ -50,7 +50,7 @@ interface LMSContextType {
   // Game time (lan house)
   gameTimeTransactions: GameTimeTransaction[];
   gameSessions: GameSession[];
-  addGameTime: (userId: string, minutes: number, amountPaid: number, note?: string) => void;
+  addGameTime: (userId: string, minutes: number, amountPaid: number, note?: string, opts?: { computerId?: string; paymentMethod?: string; operation?: string }) => void;
   removeGameTime: (userId: string, minutes: number, note?: string) => void;
   getUserTimeBalance: (userId: string) => number;
   getUserTimeTransactions: (userId: string) => GameTimeTransaction[];
@@ -58,6 +58,14 @@ interface LMSContextType {
   getGameSession: (userId: string) => GameSession | undefined;
   startGameSession: (userId: string) => void;
   pauseGameSession: (userId: string) => void;
+  finishGameSession: (userId: string) => void;
+  // Computers (lan house machines)
+  computers: Computer[];
+  addComputer: (name?: string) => void;
+  removeComputer: (id: string) => void;
+  renameComputer: (id: string, name: string) => void;
+  assignComputer: (userId: string, computerId: string | undefined) => void;
+  getSessionByComputer: (computerId: string) => GameSession | undefined;
   // Expenses (company financial control)
   expenses: Expense[];
   addExpense: (expense: Omit<Expense, 'id' | 'createdBy'>) => void;
@@ -70,7 +78,7 @@ const LMSContext = createContext<LMSContextType | undefined>(undefined);
 const STORAGE_KEY = 'lms_data';
 const SESSION_KEY = 'lms_session';
 const DATA_VERSION_KEY = 'lms_data_version';
-const CURRENT_DATA_VERSION = 7; // Increment for new features
+const CURRENT_DATA_VERSION = 8; // Increment for new features
 
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
@@ -205,6 +213,11 @@ const initialData: LMSData = {
   gameTimeTransactions: [],
   gameSessions: [],
   expenses: [],
+  computers: Array.from({ length: 10 }, (_, i) => ({
+    id: `pc-${i + 1}`,
+    name: `PC${String(i + 1).padStart(2, '0')}`,
+    createdAt: '2026-01-01T00:00:00.000Z',
+  })),
 };
 
 export function LMSProvider({ children }: { children: ReactNode }) {
@@ -643,12 +656,13 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       remainingSeconds: nextRemaining,
       lastStartedAt: running ? now : undefined,
       updatedAt: now,
+      computerId: existing?.computerId,
     };
     const others = sessions.filter(s => s.userId !== userId);
     return [...others, updated];
   };
 
-  const addGameTime = (userId: string, minutes: number, amountPaid: number, note?: string) => {
+  const addGameTime = (userId: string, minutes: number, amountPaid: number, note?: string, opts?: { computerId?: string; paymentMethod?: string; operation?: string }) => {
     if (minutes <= 0) return;
     const tx: GameTimeTransaction = {
       id: generateId(),
@@ -658,6 +672,9 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       amountPaid,
       note,
       createdAt: new Date().toISOString(),
+      computerId: opts?.computerId,
+      paymentMethod: opts?.paymentMethod,
+      operation: opts?.operation || 'Adição de tempo',
     };
     setData(prev => ({
       ...prev,
@@ -726,6 +743,7 @@ export function LMSProvider({ children }: { children: ReactNode }) {
         remainingSeconds: settled,
         lastStartedAt: now,
         updatedAt: now,
+        computerId: existing?.computerId,
       };
       return { ...prev, gameSessions: [...sessions.filter(s => s.userId !== userId), updated] };
     });
@@ -744,8 +762,104 @@ export function LMSProvider({ children }: { children: ReactNode }) {
         remainingSeconds: settled,
         lastStartedAt: undefined,
         updatedAt: now,
+        computerId: existing?.computerId,
       };
       return { ...prev, gameSessions: [...sessions.filter(s => s.userId !== userId), updated] };
+    });
+  };
+
+  // Finishes a session: settles remaining time to 0, records the finalization, frees the computer
+  const finishGameSession = (userId: string) => {
+    setData(prev => {
+      const sessions = prev.gameSessions || [];
+      const existing = sessions.find(s => s.userId === userId);
+      const settled = getSessionRemainingSeconds(existing, Date.now());
+      const now = new Date().toISOString();
+      let txs = prev.gameTimeTransactions;
+      if (settled > 0) {
+        const mins = Math.ceil(settled / 60);
+        txs = [{
+          id: generateId(),
+          userId,
+          sellerId: currentUser?.id || '',
+          minutes: -mins,
+          amountPaid: 0,
+          note: 'Sessão finalizada',
+          createdAt: now,
+          computerId: existing?.computerId,
+          operation: 'Finalização',
+        }, ...txs];
+      }
+      return {
+        ...prev,
+        gameTimeTransactions: txs,
+        gameSessions: sessions.filter(s => s.userId !== userId),
+      };
+    });
+  };
+
+  // ===== Computers =====
+  const getSessionByComputer = (computerId: string) =>
+    (data.gameSessions || []).find(s => s.computerId === computerId);
+
+  const addComputer = (name?: string) => {
+    setData(prev => {
+      const list = prev.computers || [];
+      const nextNum = list.length + 1;
+      const computer: Computer = {
+        id: generateId(),
+        name: name?.trim() || `PC${String(nextNum).padStart(2, '0')}`,
+        createdAt: new Date().toISOString(),
+      };
+      return { ...prev, computers: [...list, computer] };
+    });
+  };
+
+  const removeComputer = (id: string) => {
+    setData(prev => ({
+      ...prev,
+      computers: (prev.computers || []).filter(c => c.id !== id),
+      gameSessions: (prev.gameSessions || []).map(s =>
+        s.computerId === id ? { ...s, computerId: undefined } : s
+      ),
+    }));
+  };
+
+  const renameComputer = (id: string, name: string) => {
+    setData(prev => ({
+      ...prev,
+      computers: (prev.computers || []).map(c => (c.id === id ? { ...c, name: name.trim() || c.name } : c)),
+    }));
+  };
+
+  // Seats a player at a computer (or clears the seat with computerId=undefined)
+  const assignComputer = (userId: string, computerId: string | undefined) => {
+    setData(prev => {
+      const sessions = prev.gameSessions || [];
+      const existing = sessions.find(s => s.userId === userId);
+      // free the computer from any other player first
+      let cleared = sessions;
+      if (computerId) {
+        cleared = sessions.map(s =>
+          s.userId !== userId && s.computerId === computerId ? { ...s, computerId: undefined } : s
+        );
+      }
+      const now = new Date().toISOString();
+      if (existing) {
+        return {
+          ...prev,
+          gameSessions: cleared.map(s => (s.userId === userId ? { ...s, computerId } : s)),
+        };
+      }
+      // create a paused session shell so the seat is tracked even with no time yet
+      const shell: GameSession = {
+        userId,
+        status: 'paused',
+        remainingSeconds: 0,
+        updatedAt: now,
+        computerId,
+      };
+      return { ...prev, gameSessions: [...cleared, shell] };
     });
   };
 
@@ -835,6 +949,13 @@ export function LMSProvider({ children }: { children: ReactNode }) {
       getGameSession,
       startGameSession,
       pauseGameSession,
+      finishGameSession,
+      computers: data.computers || [],
+      addComputer,
+      removeComputer,
+      renameComputer,
+      assignComputer,
+      getSessionByComputer,
       expenses: data.expenses || [],
       addExpense,
       deleteExpense,

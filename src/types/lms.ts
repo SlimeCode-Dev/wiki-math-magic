@@ -93,6 +93,9 @@ export interface GameTimeTransaction {
   amountPaid: number; // value paid for this addition (0 for removals)
   note?: string;
   createdAt: string;
+  computerId?: string; // computer where the operation happened
+  paymentMethod?: string; // Dinheiro, Pix, Cartão, etc.
+  operation?: string; // human label: "Adição de tempo", "Início", "Finalização"...
 }
 
 export interface GameSession {
@@ -101,7 +104,17 @@ export interface GameSession {
   remainingSeconds: number; // remaining time settled at lastUpdatedAt
   lastStartedAt?: string; // ISO timestamp when the timer was last set to running
   updatedAt: string;
+  computerId?: string; // computer this player is seated at
 }
+
+// A physical computer in the lan house
+export interface Computer {
+  id: string;
+  name: string; // e.g. PC01
+  createdAt: string;
+}
+
+export const PAYMENT_METHODS = ['Dinheiro', 'Pix', 'Cartão de Débito', 'Cartão de Crédito', 'Outro'] as const;
 
 // Company expense (money going out) for financial control
 export interface Expense {
@@ -138,6 +151,7 @@ export interface LMSData {
   gameTimeTransactions: GameTimeTransaction[];
   gameSessions: GameSession[];
   expenses: Expense[];
+  computers: Computer[];
 }
 
 // Price for lan house game time: R$5 per hour
@@ -146,6 +160,11 @@ export const GAME_TIME_PRICE_PER_HOUR = 5;
 // Converts a paid amount (BRL) into minutes of game time
 export function amountToMinutes(amount: number): number {
   return Math.round((amount / GAME_TIME_PRICE_PER_HOUR) * 60);
+}
+
+// Converts minutes of game time into the BRL value it represents
+export function minutesToAmount(minutes: number): number {
+  return (minutes / 60) * GAME_TIME_PRICE_PER_HOUR;
 }
 
 // Computes live remaining seconds for a session at a given moment
@@ -157,6 +176,35 @@ export function getSessionRemainingSeconds(session: GameSession | undefined, now
   }
   return Math.max(0, session.remainingSeconds);
 }
+
+export type TimeStatus = 'green' | 'yellow' | 'orange' | 'red' | 'ended';
+
+// Smart time indicator: color thresholds based on remaining seconds
+export function getTimeStatus(remainingSeconds: number, hasSession = true): TimeStatus {
+  if (!hasSession) return 'ended';
+  if (remainingSeconds <= 0) return 'ended';
+  if (remainingSeconds > 1200) return 'green'; // > 20 min
+  if (remainingSeconds > 600) return 'yellow'; // 20–10 min
+  if (remainingSeconds > 300) return 'orange'; // 10–5 min
+  return 'red'; // < 5 min
+}
+
+// Tailwind text color classes for each time status (functional status colors)
+export const TIME_STATUS_TEXT: Record<TimeStatus, string> = {
+  green: 'text-success',
+  yellow: 'text-yellow-400',
+  orange: 'text-orange-400',
+  red: 'text-destructive',
+  ended: 'text-muted-foreground',
+};
+
+export const TIME_STATUS_DOT: Record<TimeStatus, string> = {
+  green: 'bg-success',
+  yellow: 'bg-yellow-400',
+  orange: 'bg-orange-400',
+  red: 'bg-destructive',
+  ended: 'bg-muted-foreground/40',
+};
 
 // Helper to detect file type from extension
 export function getFileTypeFromName(fileName: string): FileType {

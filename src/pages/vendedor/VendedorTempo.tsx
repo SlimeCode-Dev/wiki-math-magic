@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
-import { Gamepad2, Plus, Minus, Search, UserPlus, Clock, DollarSign, X, Play, Pause } from 'lucide-react';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { Monitor, UserPlus, X, Plus, Settings2, Trash2, Play, Pause } from 'lucide-react';
 import { toast } from 'sonner';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { useLMS } from '@/contexts/LMSContext';
@@ -14,116 +14,72 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { User, GAME_TIME_PRICE_PER_HOUR, amountToMinutes, getSessionRemainingSeconds } from '@/types/lms';
-import { LancamentosCalendar } from '@/components/vendedor/LancamentosCalendar';
-
-function formatMinutes(total: number) {
-  const sign = total < 0 ? '-' : '';
-  const abs = Math.abs(total);
-  const h = Math.floor(abs / 60);
-  const m = abs % 60;
-  if (h > 0) return `${sign}${h}h${m > 0 ? ` ${m}min` : ''}`;
-  return `${sign}${m}min`;
-}
-
-function formatClock(totalSeconds: number) {
-  const abs = Math.max(0, Math.floor(totalSeconds));
-  const h = Math.floor(abs / 3600);
-  const m = Math.floor((abs % 3600) / 60);
-  const s = abs % 60;
-  const pad = (n: number) => n.toString().padStart(2, '0');
-  return h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
-}
-
-function formatCurrency(value: number) {
-  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
+import {
+  Computer,
+  getSessionRemainingSeconds,
+  getTimeStatus,
+  TIME_STATUS_DOT,
+} from '@/types/lms';
+import { DashboardStats } from '@/components/vendedor/DashboardStats';
+import { TimeBadge } from '@/components/vendedor/TimeBadge';
+import { ComputerDialog } from '@/components/vendedor/ComputerDialog';
+import { useLanHouseMetrics } from '@/hooks/useLanHouseMetrics';
+import { cn } from '@/lib/utils';
 
 export default function VendedorTempo() {
   const {
     currentUser,
-    users,
+    computers,
     addUser,
-    addGameTime,
-    removeGameTime,
-    getUserTimeTransactions,
-    importGameTransactions,
+    addComputer,
+    removeComputer,
+    getSessionByComputer,
     getUserById,
-    getGameSession,
-    startGameSession,
-    pauseGameSession,
   } = useLMS();
 
-  const [search, setSearch] = useState('');
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  // ticking clock to refresh countdowns every second
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  // Add time form
-  const [addHours, setAddHours] = useState('');
-  const [addMinutes, setAddMinutes] = useState('');
-  const [amountPaid, setAmountPaid] = useState('');
-  const [addNote, setAddNote] = useState('');
+  const metrics = useLanHouseMetrics(now);
 
-  // Remove time form
-  const [removeMinutes, setRemoveMinutes] = useState('');
-
-  // New customer dialog
+  const [selectedComputer, setSelectedComputer] = useState<Computer | null>(null);
   const [newOpen, setNewOpen] = useState(false);
+  const [manageOpen, setManageOpen] = useState(false);
+
+  // new customer
   const [newName, setNewName] = useState('');
   const [newCpf, setNewCpf] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newAddress, setNewAddress] = useState('');
 
-  // Players pool = students + walk-in clients
-  const players = useMemo(
-    () => users.filter((u) => u.role === 'aluno' || u.role === 'cliente'),
-    [users]
-  );
-
-  const remainingFor = (userId: string) => getSessionRemainingSeconds(getGameSession(userId), now);
-  const isRunning = (userId: string) => getGameSession(userId)?.status === 'running';
-
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    const list = players.filter(
-      (u) => !q || u.name.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q)
-    );
-    // Running timers first, ordered by who finishes soonest; then by remaining time
-    return [...list].sort((a, b) => {
-      const ra = isRunning(a.id);
-      const rb = isRunning(b.id);
-      if (ra && rb) return remainingFor(a.id) - remainingFor(b.id);
-      if (ra) return -1;
-      if (rb) return 1;
-      const remA = remainingFor(a.id);
-      const remB = remainingFor(b.id);
-      if (remB !== remA) return remB - remA;
-      return a.name.localeCompare(b.name);
+  // Threshold notifications (10 / 5 / 1 min)
+  const notified = useRef<Record<string, Set<number>>>({});
+  useEffect(() => {
+    computers.forEach((c) => {
+      const s = getSessionByComputer(c.id);
+      if (!s || s.status !== 'running') return;
+      const rem = getSessionRemainingSeconds(s, now);
+      const player = getUserById(s.userId);
+      const key = c.id;
+      if (!notified.current[key]) notified.current[key] = new Set();
+      const set = notified.current[key];
+      [600, 300, 60].forEach((th) => {
+        if (rem <= th && rem > th - 1 && !set.has(th)) {
+          set.add(th);
+          const mins = th / 60;
+          toast.warning(`${c.name} • ${player?.name || 'Jogador'}: faltam ${mins} min`);
+        }
+      });
+      if (rem <= 0 && !set.has(0)) {
+        set.add(0);
+        toast.error(`${c.name} • ${player?.name || 'Jogador'}: tempo encerrado`);
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [players, search, now]);
-
-  if (!currentUser) return null;
-
-  const selected: User | undefined = selectedId ? getUserById(selectedId) : undefined;
-  const selectedRemaining = selectedId ? remainingFor(selectedId) : 0;
-  const selectedRunning = selectedId ? isRunning(selectedId) : false;
-  const transactions = selectedId ? getUserTimeTransactions(selectedId) : [];
-
-  // preview minutes computed from the amount typed (auto mode)
-  const previewMinutes = useMemo(() => {
-    const manual = (parseInt(addHours) || 0) * 60 + (parseInt(addMinutes) || 0);
-    if (manual > 0) return manual;
-    const value = parseFloat(amountPaid.replace(',', '.'));
-    if (!isNaN(value) && value > 0) return amountToMinutes(value);
-    return 0;
-  }, [addHours, addMinutes, amountPaid]);
+  }, [now]);
 
   const handleCreateCustomer = () => {
     if (!newName.trim()) {
@@ -148,249 +104,87 @@ export default function VendedorTempo() {
     setNewOpen(false);
   };
 
-  const handleAddTime = () => {
-    if (!selectedId) return;
-    const value = parseFloat(amountPaid.replace(',', '.'));
-    const manual = (parseInt(addHours) || 0) * 60 + (parseInt(addMinutes) || 0);
-    // Auto mode: only the value is provided -> derive minutes
-    const mins = manual > 0 ? manual : (!isNaN(value) && value > 0 ? amountToMinutes(value) : 0);
-    if (mins <= 0) {
-      toast.error('Informe o valor pago ou o tempo a adicionar');
-      return;
-    }
-    if (isNaN(value) || value < 0) {
-      toast.error('Informe o valor pago');
-      return;
-    }
-    addGameTime(selectedId, mins, value, addNote.trim() || undefined);
-    toast.success(`Adicionado ${formatMinutes(mins)} • ${formatCurrency(value)} pago`);
-    setAddHours('');
-    setAddMinutes('');
-    setAmountPaid('');
-    setAddNote('');
-  };
+  if (!currentUser) return null;
 
-  const handleRemoveTime = () => {
-    if (!selectedId) return;
-    const mins = parseInt(removeMinutes) || 0;
-    if (mins <= 0) {
-      toast.error('Informe os minutos a retirar');
-      return;
-    }
-    removeGameTime(selectedId, mins, 'Retirada de tempo');
-    toast.success(`Retirado ${formatMinutes(mins)}`);
-    setRemoveMinutes('');
-  };
+  const sortedComputers = useMemo(
+    () => [...computers].sort((a, b) => a.name.localeCompare(a.name === b.name ? a.name : b.name, 'pt-BR', { numeric: true })),
+    [computers]
+  );
 
   return (
-    <MainLayout title="Lan House — Controle de Tempo">
-      <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
-        {/* Player list */}
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-foreground flex items-center gap-2">
-              <Gamepad2 className="h-5 w-5 text-primary" /> Jogadores
-            </h2>
+    <MainLayout title="Lan House — Painel de Computadores">
+      <div className="space-y-6">
+        <DashboardStats metrics={metrics} />
+
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <h2 className="font-semibold text-foreground flex items-center gap-2">
+            <Monitor className="h-5 w-5 text-primary" /> Computadores
+          </h2>
+          <div className="flex gap-2">
             <Button size="sm" variant="outline" onClick={() => setNewOpen(true)}>
-              <UserPlus className="h-4 w-4" /> Novo
+              <UserPlus className="h-4 w-4" /> Novo cliente
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => setManageOpen(true)}>
+              <Settings2 className="h-4 w-4" /> Gerenciar PCs
             </Button>
           </div>
-          <div className="relative mb-3">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-          <div className="space-y-1 max-h-[65vh] overflow-y-auto">
-            {filtered.length === 0 && (
-              <p className="text-sm text-muted-foreground p-3">Nenhum jogador encontrado.</p>
-            )}
-            {filtered.map((u) => {
-              const remaining = remainingFor(u.id);
-              const running = isRunning(u.id);
-              const ending = running && remaining <= 300; // <=5min warning
-              return (
-                <button
-                  key={u.id}
-                  onClick={() => setSelectedId(u.id)}
-                  className={`w-full text-left px-3 py-2 rounded-xl border transition-colors flex items-center justify-between gap-2 ${
-                    selectedId === u.id
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  <div className="min-w-0 flex items-center gap-2">
-                    <span
-                      className={`h-2 w-2 rounded-full shrink-0 ${
-                        running ? (ending ? 'bg-destructive animate-pulse' : 'bg-success animate-pulse') : 'bg-muted-foreground/40'
-                      }`}
-                    />
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-foreground">{u.name}</p>
-                      <p className="text-xs text-muted-foreground capitalize">
-                        {running ? 'Em andamento' : u.role}
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className={`text-sm font-semibold tabular-nums whitespace-nowrap ${
-                      remaining <= 0
-                        ? 'text-muted-foreground'
-                        : ending
-                        ? 'text-destructive'
-                        : running
-                        ? 'text-success'
-                        : 'text-foreground'
-                    }`}
-                  >
-                    {formatClock(remaining)}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
         </div>
 
-        {/* Selected player panel */}
-        <div className="space-y-6">
-          {!selected ? (
-            <div className="rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
-              <Gamepad2 className="h-10 w-10 mx-auto mb-3 opacity-50" />
-              Selecione um jogador para controlar o tempo.
-            </div>
-          ) : (
-            <>
-              {/* Balance / timer card */}
-              <div className="rounded-2xl border border-border bg-card p-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{selected.name}</p>
-                    <p className={`text-4xl font-bold tabular-nums flex items-center gap-2 ${
-                      selectedRunning
-                        ? selectedRemaining <= 300 ? 'text-destructive' : 'text-success'
-                        : 'text-foreground'
-                    }`}>
-                      <Clock className="h-8 w-8 text-primary" />
-                      {formatClock(selectedRemaining)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {selectedRunning ? 'Tempo em andamento' : 'Tempo disponível (pausado)'}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    {selectedRunning ? (
-                      <Button variant="outline" onClick={() => pauseGameSession(selected.id)}>
-                        <Pause className="h-4 w-4" /> Pausar
-                      </Button>
-                    ) : (
-                      <Button
-                        onClick={() => {
-                          if (selectedRemaining <= 0) {
-                            toast.error('Sem tempo disponível. Adicione tempo primeiro.');
-                            return;
-                          }
-                          startGameSession(selected.id);
-                        }}
-                      >
-                        <Play className="h-4 w-4" /> Iniciar
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
+        {/* Computer grid */}
+        <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          {sortedComputers.map((c) => {
+            const session = getSessionByComputer(c.id);
+            const player = session ? getUserById(session.userId) : undefined;
+            const remaining = getSessionRemainingSeconds(session, now);
+            const running = session?.status === 'running' && remaining > 0;
+            const status = getTimeStatus(remaining, !!session);
+            const free = !player;
+            const pulsing = running && remaining <= 120;
 
-              {/* Add / Remove */}
-              <div className="grid gap-6 md:grid-cols-2">
-                {/* Add */}
-                <div className="rounded-2xl border border-border bg-card p-5 space-y-3">
-                  <h3 className="font-semibold text-foreground flex items-center gap-2">
-                    <Plus className="h-4 w-4 text-success" /> Adicionar tempo
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    {formatCurrency(GAME_TIME_PRICE_PER_HOUR)} = 1 hora. Informe apenas o valor pago
-                    que o tempo é calculado automaticamente e somado ao existente.
-                  </p>
-                  <div className="space-y-1">
-                    <Label className="text-xs flex items-center gap-1">
-                      <DollarSign className="h-3 w-3" /> Valor pago (R$) *
-                    </Label>
-                    <Input
-                      value={amountPaid}
-                      onChange={(e) => setAmountPaid(e.target.value)}
-                      placeholder="0,00"
-                      inputMode="decimal"
-                    />
-                  </div>
-                  <details className="text-xs text-muted-foreground">
-                    <summary className="cursor-pointer select-none">Definir tempo manualmente</summary>
-                    <div className="grid grid-cols-2 gap-2 mt-2">
-                      <div className="space-y-1">
-                        <Label className="text-xs">Horas</Label>
-                        <Input type="number" min={0} value={addHours} onChange={(e) => setAddHours(e.target.value)} placeholder="0" />
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs">Minutos</Label>
-                        <Input type="number" min={0} value={addMinutes} onChange={(e) => setAddMinutes(e.target.value)} placeholder="0" />
-                      </div>
-                    </div>
-                  </details>
-                  {previewMinutes > 0 && (
-                    <p className="text-sm text-success font-medium">
-                      → {formatMinutes(previewMinutes)} serão adicionados
-                    </p>
-                  )}
-                  <div className="space-y-1">
-                    <Label className="text-xs">Observação (opcional)</Label>
-                    <Input
-                      value={addNote}
-                      onChange={(e) => setAddNote(e.target.value)}
-                      placeholder="Forma de pagamento, etc."
-                    />
-                  </div>
-                  <Button className="w-full" onClick={handleAddTime}>
-                    <Plus className="h-4 w-4" /> Adicionar e registrar pagamento
-                  </Button>
+            return (
+              <button
+                key={c.id}
+                onClick={() => setSelectedComputer(c)}
+                className={cn(
+                  'text-left rounded-2xl border-2 bg-card p-4 transition-all duration-200 hover:scale-[1.02]',
+                  free
+                    ? 'border-success/40 hover:border-success'
+                    : running
+                    ? 'border-destructive/50 hover:border-destructive'
+                    : 'border-yellow-400/50 hover:border-yellow-400',
+                  pulsing && 'animate-pulse'
+                )}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-mono font-bold text-foreground">{c.name}</span>
+                  <span className={cn('h-2.5 w-2.5 rounded-full', TIME_STATUS_DOT[status], running && 'animate-pulse')} />
                 </div>
-
-                {/* Remove */}
-                <div className="rounded-2xl border border-border bg-card p-5 space-y-3">
-                  <h3 className="font-semibold text-foreground flex items-center gap-2">
-                    <Minus className="h-4 w-4 text-destructive" /> Retirar tempo
-                  </h3>
-                  <div className="space-y-1">
-                    <Label className="text-xs">Minutos a retirar</Label>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={removeMinutes}
-                      onChange={(e) => setRemoveMinutes(e.target.value)}
-                      placeholder="0"
-                    />
-                  </div>
-                  <Button variant="destructive" className="w-full" onClick={handleRemoveTime}>
-                    <Minus className="h-4 w-4" /> Retirar tempo
-                  </Button>
-                  <p className="text-xs text-muted-foreground">
-                    Use para corrigir lançamentos ou encerrar sessão.
-                  </p>
+                <p className="text-sm font-medium truncate text-foreground min-h-[20px]">
+                  {player ? player.name : <span className="text-success">Livre</span>}
+                </p>
+                <div className="mt-2 flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    {running ? <Play className="h-3 w-3" /> : player ? <Pause className="h-3 w-3" /> : null}
+                    {free ? 'Disponível' : running ? 'Em uso' : 'Pausado'}
+                  </span>
+                  {player && <TimeBadge session={session} now={now} className="text-sm" />}
                 </div>
-              </div>
-
-              {/* History */}
-              <LancamentosCalendar
-                transactions={transactions}
-                playerName={selected.name}
-                onImport={importGameTransactions}
-                currentUserId={currentUser.id}
-                playerId={selected.id}
-              />
-            </>
-          )}
+              </button>
+            );
+          })}
         </div>
       </div>
+
+      {/* Computer control dialog */}
+      <ComputerDialog
+        computer={selectedComputer}
+        now={now}
+        onClose={() => setSelectedComputer(null)}
+        onNewCustomer={() => {
+          setSelectedComputer(null);
+          setNewOpen(true);
+        }}
+      />
 
       {/* New customer dialog */}
       <Dialog open={newOpen} onOpenChange={setNewOpen}>
@@ -398,7 +192,7 @@ export default function VendedorTempo() {
           <DialogHeader>
             <DialogTitle>Cadastrar cliente</DialogTitle>
             <DialogDescription>
-              Cadastre um novo jogador. Alunos já aparecem automaticamente na lista.
+              Cadastre um novo jogador. Alunos já aparecem automaticamente.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
@@ -425,6 +219,45 @@ export default function VendedorTempo() {
             </Button>
             <Button onClick={handleCreateCustomer}>
               <UserPlus className="h-4 w-4" /> Cadastrar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage computers dialog */}
+      <Dialog open={manageOpen} onOpenChange={setManageOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Gerenciar computadores</DialogTitle>
+            <DialogDescription>Adicione ou remova máquinas da lan house.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 max-h-[50vh] overflow-y-auto">
+            {sortedComputers.map((c) => {
+              const inUse = !!getSessionByComputer(c.id);
+              return (
+                <div key={c.id} className="flex items-center justify-between border border-border rounded-xl px-3 py-2">
+                  <span className="font-mono">{c.name}</span>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-destructive"
+                    onClick={() => {
+                      if (inUse) {
+                        toast.error('Máquina em uso. Finalize a sessão primeiro.');
+                        return;
+                      }
+                      removeComputer(c.id);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => addComputer()}>
+              <Plus className="h-4 w-4" /> Adicionar computador
             </Button>
           </DialogFooter>
         </DialogContent>
