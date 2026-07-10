@@ -26,8 +26,8 @@ export default function VendedorAtivos() {
     getUserById,
     startGameSession,
     pauseGameSession,
-    finishGameSession,
     addGameTime,
+    removeGameTime,
     assignComputer,
   } = useLMS();
 
