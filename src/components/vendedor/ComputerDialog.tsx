@@ -111,13 +111,18 @@ export function ComputerDialog({ computer, now, onClose, onNewCustomer }: Props)
     setAmountPaid('');
   };
 
-  const handleFinish = () => {
+  const handleRemoveTime = () => {
     if (!player) return;
-    finishGameSession(player.id);
-    assignComputer(player.id, undefined);
-    toast.success('Sessão finalizada • ' + computer.name + ' liberado');
-    onClose();
+    const mins = parseInt(removeMinutes, 10);
+    if (isNaN(mins) || mins <= 0) {
+      toast.error('Informe os minutos a retirar');
+      return;
+    }
+    removeGameTime(player.id, mins, 'Retirada de tempo');
+    toast.success(`-${formatMinutes(mins)} removidos`);
+    setRemoveMinutes('');
   };
+
 
   return (
     <Dialog open={!!computer} onOpenChange={(o) => !o && onClose()}>
