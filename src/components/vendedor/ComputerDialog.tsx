@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Play, Pause, StopCircle, Plus, UserPlus, X, Clock, DollarSign, History, Trash2 } from 'lucide-react';
+import { Play, Pause, Plus, Minus, UserPlus, X, Clock, DollarSign, History, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLMS } from '@/contexts/LMSContext';
 import {
@@ -45,15 +45,16 @@ export function ComputerDialog({ computer, now, onClose, onNewCustomer }: Props)
     getUserById,
     assignComputer,
     addGameTime,
+    removeGameTime,
     startGameSession,
     pauseGameSession,
-    finishGameSession,
     getUserTimeTransactions,
     currentUser,
   } = useLMS();
 
   const [assignId, setAssignId] = useState('');
   const [amountPaid, setAmountPaid] = useState('');
+  const [removeMinutes, setRemoveMinutes] = useState('');
   const [payMethod, setPayMethod] = useState<string>('Dinheiro');
   const [tab, setTab] = useState<'controle' | 'historico'>('controle');
 
@@ -110,13 +111,18 @@ export function ComputerDialog({ computer, now, onClose, onNewCustomer }: Props)
     setAmountPaid('');
   };
 
-  const handleFinish = () => {
+  const handleRemoveTime = () => {
     if (!player) return;
-    finishGameSession(player.id);
-    assignComputer(player.id, undefined);
-    toast.success('Sessão finalizada • ' + computer.name + ' liberado');
-    onClose();
+    const mins = parseInt(removeMinutes, 10);
+    if (isNaN(mins) || mins <= 0) {
+      toast.error('Informe os minutos a retirar');
+      return;
+    }
+    removeGameTime(player.id, mins, 'Retirada de tempo');
+    toast.success(`-${formatMinutes(mins)} removidos`);
+    setRemoveMinutes('');
   };
+
 
   return (
     <Dialog open={!!computer} onOpenChange={(o) => !o && onClose()}>
@@ -198,7 +204,7 @@ export function ComputerDialog({ computer, now, onClose, onNewCustomer }: Props)
                 </div>
 
                 {/* quick actions */}
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   {running ? (
                     <Button variant="outline" onClick={() => pauseGameSession(player.id)}>
                       <Pause className="h-4 w-4" /> Pausar
@@ -216,9 +222,6 @@ export function ComputerDialog({ computer, now, onClose, onNewCustomer }: Props)
                       <Play className="h-4 w-4" /> Iniciar
                     </Button>
                   )}
-                  <Button variant="destructive" onClick={handleFinish}>
-                    <StopCircle className="h-4 w-4" /> Finalizar
-                  </Button>
                 </div>
 
                 {/* add time */}
@@ -264,6 +267,27 @@ export function ComputerDialog({ computer, now, onClose, onNewCustomer }: Props)
                   )}
                   <Button className="w-full" onClick={handleAddTime}>
                     <Plus className="h-4 w-4" /> Adicionar e registrar pagamento
+                  </Button>
+                </div>
+
+                {/* remove time */}
+                <div className="rounded-2xl border border-border p-4 space-y-3">
+                  <p className="text-sm font-semibold flex items-center gap-2">
+                    <Minus className="h-4 w-4 text-destructive" /> Retirar tempo
+                  </p>
+                  <div className="space-y-1">
+                    <Label className="text-xs flex items-center gap-1">
+                      <Clock className="h-3 w-3" /> Minutos a retirar
+                    </Label>
+                    <Input
+                      value={removeMinutes}
+                      onChange={(e) => setRemoveMinutes(e.target.value)}
+                      placeholder="0"
+                      inputMode="numeric"
+                    />
+                  </div>
+                  <Button variant="destructive" className="w-full" onClick={handleRemoveTime}>
+                    <Minus className="h-4 w-4" /> Retirar tempo
                   </Button>
                 </div>
 
