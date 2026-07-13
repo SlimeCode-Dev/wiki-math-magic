@@ -29,7 +29,6 @@ import { cn } from '@/lib/utils';
 export default function VendedorTempo() {
   const {
     currentUser,
-    users,
     computers,
     addUser,
     addComputer,
@@ -37,73 +36,6 @@ export default function VendedorTempo() {
     getSessionByComputer,
     getUserById,
   } = useLMS();
-
-  const [recovering, setRecovering] = useState(false);
-
-  const handleRecoverClients = async () => {
-    setRecovering(true);
-    try {
-      const raw = localStorage.getItem('lms_data');
-      if (!raw) {
-        toast.error('Nenhum dado antigo encontrado neste navegador.');
-        return;
-      }
-      let parsed: any;
-      try {
-        parsed = JSON.parse(raw);
-      } catch {
-        toast.error('Dados antigos corrompidos, não foi possível ler.');
-        return;
-      }
-      const oldClients: any[] = (parsed?.users || []).filter((u: any) => u.role === 'cliente');
-      if (oldClients.length === 0) {
-        toast.error('Nenhum cliente antigo encontrado neste navegador.');
-        return;
-      }
-      const existingKeys = new Set(
-        users
-          .filter((u) => u.role === 'cliente')
-          .map((u) => `${(u.name || '').trim().toLowerCase()}|${(u.cpf || '').trim()}`)
-      );
-      let restored = 0;
-      let skipped = 0;
-      let failed = 0;
-      for (const c of oldClients) {
-        const key = `${(c.name || '').trim().toLowerCase()}|${(c.cpf || '').trim()}`;
-        if (existingKeys.has(key)) {
-          skipped++;
-          continue;
-        }
-        const email = `${(c.name || 'cliente').trim().toLowerCase().replace(/\s+/g, '.')}.${Math.random()
-          .toString(36)
-          .slice(2, 8)}@cliente.local`;
-        const res = await addUser({
-          name: c.name || 'Cliente',
-          email,
-          password: '',
-          cpf: c.cpf || undefined,
-          phone: c.phone || undefined,
-          address: c.address || undefined,
-          role: 'cliente',
-        } as any);
-        if (res?.success) {
-          restored++;
-          existingKeys.add(key);
-        } else {
-          failed++;
-        }
-      }
-      if (restored > 0) {
-        toast.success(`${restored} cliente(s) recuperado(s)${skipped ? `, ${skipped} já existiam` : ''}.`);
-      } else if (skipped > 0 && failed === 0) {
-        toast.info('Todos os clientes antigos já estão cadastrados.');
-      } else {
-        toast.error('Não foi possível recuperar os clientes.');
-      }
-    } finally {
-      setRecovering(false);
-    }
-  };
 
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
@@ -191,9 +123,6 @@ export default function VendedorTempo() {
           <div className="flex gap-2">
             <Button size="sm" variant="outline" onClick={() => setNewOpen(true)}>
               <UserPlus className="h-4 w-4" /> Novo cliente
-            </Button>
-            <Button size="sm" variant="outline" onClick={handleRecoverClients} disabled={recovering}>
-              <UserPlus className="h-4 w-4" /> {recovering ? 'Recuperando...' : 'Recuperar clientes'}
             </Button>
             <Button size="sm" variant="outline" onClick={() => setManageOpen(true)}>
               <Settings2 className="h-4 w-4" /> Gerenciar PCs

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLMS } from '@/contexts/LMSContext';
-import { supabase } from '@/integrations/supabase/client';
 import { Code, Eye, EyeOff, LogIn, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function Login() {
-  const { loginByCredentials } = useLMS();
+  const { loginByCredentials, users } = useLMS();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,7 +34,7 @@ export default function Login() {
       return;
     }
 
-    const result = await loginByCredentials(email, password);
+    const result = loginByCredentials(email, password);
 
     if (!result.success) {
       setError(result.error || 'Erro ao fazer login');
@@ -43,26 +42,17 @@ export default function Login() {
       return;
     }
 
-    // Determine redirect from freshly loaded session role
-    const { data: sess } = await supabase.auth.getSession();
-    const authId = sess.session?.user.id;
-    let role: string | undefined;
-    if (authId) {
-      const { data: roleRow } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', authId)
-        .limit(1)
-        .maybeSingle();
-      role = roleRow?.role;
-    }
+    // Determine redirect from in-memory user data (robust, no localStorage re-read)
+    const user = users.find(
+      (u) => u.email.toLowerCase() === email.toLowerCase()
+    );
     const routes: Record<string, string> = {
       admin: '/admin',
       professor: '/professor',
       aluno: '/aluno',
       vendedor: '/vendedor',
     };
-    navigate(role ? routes[role] || '/' : '/');
+    navigate(user ? routes[user.role] || '/' : '/');
 
     setIsLoading(false);
   };
@@ -187,7 +177,7 @@ export default function Login() {
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Os dados são salvos com segurança na nuvem e sincronizados entre dispositivos.
+          Os dados são salvos localmente no navegador.
         </p>
       </div>
     </div>
