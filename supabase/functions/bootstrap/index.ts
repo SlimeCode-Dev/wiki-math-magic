@@ -14,6 +14,8 @@ type SeedUser = {
 const SEED_USERS: SeedUser[] = [
   { email: 'admslimecode@gmail.com', password: 'slimecode@789', name: 'Slime Code Admin', role: 'admin' },
   { email: 'admin@codeschool.com', password: 'admin123', name: 'Administrador', role: 'admin' },
+  { email: 'maria@codeschool.com', password: 'prof123', name: 'Maria (Professora)', role: 'professor' },
+  { email: 'ana@codeschool.com', password: 'aluno123', name: 'Ana (Aluna)', role: 'aluno' },
   { email: 'vendas@code.com', password: 'vendas123', name: 'Vendedor', role: 'vendedor' },
 ];
 
