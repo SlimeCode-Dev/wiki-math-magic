@@ -36,8 +36,9 @@ export function DatabaseExport() {
     computers,
     gameSessions,
     gameTimeTransactions,
-    getSessionByUser,
   } = useLMS();
+  const getSessionByUser = (userId: string) =>
+    (gameSessions || []).find((s) => s.userId === userId);
 
   const now = Date.now();
 
