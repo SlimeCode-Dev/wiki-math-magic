@@ -78,7 +78,7 @@ const LMSContext = createContext<LMSContextType | undefined>(undefined);
 const STORAGE_KEY = 'lms_data';
 const SESSION_KEY = 'lms_session';
 const DATA_VERSION_KEY = 'lms_data_version';
-const CURRENT_DATA_VERSION = 8; // Increment for new features
+const CURRENT_DATA_VERSION = 9; // Increment for new features
 
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
