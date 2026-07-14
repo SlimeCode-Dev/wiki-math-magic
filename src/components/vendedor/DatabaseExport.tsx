@@ -1,4 +1,4 @@
-import { Download, FileText, FileSpreadsheet, Database } from 'lucide-react';
+import { Download, FileText, Database } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
