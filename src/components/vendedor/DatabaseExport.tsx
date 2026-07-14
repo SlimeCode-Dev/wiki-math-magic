@@ -1,4 +1,5 @@
-import { Download, FileText, Database } from 'lucide-react';
+import { Download, FileText, Database, Upload } from 'lucide-react';
+import { useRef } from 'react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
@@ -185,6 +186,29 @@ export function DatabaseExport() {
     toast.success('Backup completo (JSON) exportado');
   };
 
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleRestore = async (file: File) => {
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      const ls = parsed?.localStorage;
+      if (!ls || typeof ls !== 'object') {
+        toast.error('Arquivo inválido: sem seção localStorage');
+        return;
+      }
+      if (!confirm('Restaurar irá sobrescrever TODOS os dados atuais. Continuar?')) return;
+      Object.entries(ls).forEach(([k, v]) => {
+        const value = typeof v === 'string' ? v : JSON.stringify(v);
+        localStorage.setItem(k, value);
+      });
+      toast.success('Backup restaurado. Recarregando...');
+      setTimeout(() => window.location.reload(), 800);
+    } catch (e) {
+      toast.error('Falha ao ler arquivo JSON');
+    }
+  };
+
   return (
     <div className="flex flex-wrap gap-2">
       <Button size="sm" variant="outline" onClick={handleCSV}>
@@ -196,6 +220,20 @@ export function DatabaseExport() {
       <Button size="sm" variant="outline" onClick={handleJSON}>
         <Database className="h-4 w-4" /> Backup completo
       </Button>
+      <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>
+        <Upload className="h-4 w-4" /> Restaurar backup
+      </Button>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="application/json,.json"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) handleRestore(f);
+          e.target.value = '';
+        }}
+      />
     </div>
   );
 }
