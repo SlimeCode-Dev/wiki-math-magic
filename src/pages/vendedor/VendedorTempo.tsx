@@ -24,6 +24,7 @@ import { DashboardStats } from '@/components/vendedor/DashboardStats';
 import { TimeBadge } from '@/components/vendedor/TimeBadge';
 import { ComputerDialog } from '@/components/vendedor/ComputerDialog';
 import { useLanHouseMetrics } from '@/hooks/useLanHouseMetrics';
+import { DatabaseExport } from '@/components/vendedor/DatabaseExport';
 import { cn } from '@/lib/utils';
 
 export default function VendedorTempo() {
@@ -120,13 +121,14 @@ export default function VendedorTempo() {
           <h2 className="font-semibold text-foreground flex items-center gap-2">
             <Monitor className="h-5 w-5 text-primary" /> Computadores
           </h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             <Button size="sm" variant="outline" onClick={() => setNewOpen(true)}>
               <UserPlus className="h-4 w-4" /> Novo cliente
             </Button>
             <Button size="sm" variant="outline" onClick={() => setManageOpen(true)}>
               <Settings2 className="h-4 w-4" /> Gerenciar PCs
             </Button>
+            <DatabaseExport />
           </div>
         </div>
 
