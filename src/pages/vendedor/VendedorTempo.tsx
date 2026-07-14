@@ -24,6 +24,7 @@ import { DashboardStats } from '@/components/vendedor/DashboardStats';
 import { TimeBadge } from '@/components/vendedor/TimeBadge';
 import { ComputerDialog } from '@/components/vendedor/ComputerDialog';
 import { useLanHouseMetrics } from '@/hooks/useLanHouseMetrics';
+import { DatabaseExport } from '@/components/vendedor/DatabaseExport';
 import { cn } from '@/lib/utils';
 
 export default function VendedorTempo() {
